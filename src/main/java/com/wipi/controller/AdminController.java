@@ -17,11 +17,9 @@ public class AdminController {
 
     private final LogFrontService logFrontService;
 
-    @Operation(summary = "AccessLog 페이징", description = "AccessLog 페이징된 데이터를 조회합니다.")
+    @Operation(summary = "AccessLog 페이징", description = "Admin URL 테스트 입니다. 기능적인 요소는 아닙니다.")
     @PostMapping("/accessLog/paging")
     public RestResult getAccessLogs(@RequestBody AccessLogGetAllParam param){
-
-
         return logFrontService.getAccessLogs(param);
     }
 

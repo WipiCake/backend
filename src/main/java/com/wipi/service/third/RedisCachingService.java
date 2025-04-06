@@ -23,7 +23,7 @@ public class RedisCachingService {
 
     @CachePut(value = "jwtToken", key = "#accessToken")
     public RedisJwtEntity saveJwtCache(String accessToken, RedisJwtEntity jwtEntity) {
-        log.info("JWT 캐싱 저장: {}", jwtEntity);
+        log.info("Jwt accessToken 저장 : {}", jwtEntity);
         return jwtEntity;
     }
 

@@ -57,7 +57,7 @@ public class CustomOauth2UserService extends DefaultOAuth2UserService {
     private UserEntity createAndSaveUser(String name, String email, String provider, String providerId) {
         UserEntity newUser = new UserEntity();
         newUser.setUserId(ServiceUtil.createUserId());
-        newUser.setName(name);
+        newUser.setNickName(name);
         newUser.setRole(defaultRole);
         newUser.setEmail(email);
         newUser.setPassword(null);

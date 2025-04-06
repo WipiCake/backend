@@ -5,19 +5,24 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
+import java.util.UUID;
+
 @Slf4j
-@Component
 @RequiredArgsConstructor
 public class Utils {
 
-    private final ObjectMapper objectMapper;
+    private static ObjectMapper objectMapper;
 
-    public String toJson(Object obj) {
+    public static String toJson(Object obj) {
         try {
             return objectMapper.writeValueAsString(obj);
         } catch (Exception e) {
             log.error("JSON 변환 오류: {}", e.getMessage());
             return null;
         }
+    }
+
+    public static String getUserUUID() {
+         return "USER" + UUID.randomUUID().toString().replace("-", "").toUpperCase();
     }
 }

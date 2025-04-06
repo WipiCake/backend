@@ -80,7 +80,7 @@ public class SecurityConfig {
                 .requestMatchers("/user/signup/**").permitAll()
                 .requestMatchers("/admin/**").hasRole("ADMIN")
                 .requestMatchers("/user/**").hasRole("USER")
-                .requestMatchers("/reissue").permitAll()
+                .requestMatchers("access/reissue").permitAll()
                 .requestMatchers(
                         "/swagger-ui.html",
                         "/swagger-ui/**",
