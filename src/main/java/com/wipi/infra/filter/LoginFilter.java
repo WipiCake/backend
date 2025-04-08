@@ -1,7 +1,7 @@
 package com.wipi.infra.filter;
 
 import com.wipi.domain.jwt.JwtService;
-import com.wipi.inferfaces.dto.ResIssueJwtAuthDto;
+import com.wipi.inferfaces.dto.ResIssueJwtDto;
 import com.wipi.infra.jwt.JwtProperties;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -39,7 +39,7 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
 
     @Override
     protected void successfulAuthentication(HttpServletRequest request, HttpServletResponse response, FilterChain chain, Authentication authResult) throws IOException, ServletException {
-        ResIssueJwtAuthDto resDto =jwtService.issueJwtAuth(authResult);
+        ResIssueJwtDto resDto =jwtService.issueJwtAuth(authResult);
 
         response.setHeader(jwtProperties.getAccessHeaderName(),resDto.getAccessToken());
         response.addCookie(resDto.getCookie());

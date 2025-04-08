@@ -1,23 +1,17 @@
 package com.wipi.domain.jwt;
 
-import com.wipi.inferfaces.dto.ResIssueJwtAuthDto;
-import com.wipi.inferfaces.dto.ResReIssueJwtAuthDto;
+import com.wipi.inferfaces.dto.ResIssueJwtDto;
 import com.wipi.infra.jwt.JwtUtil;
-import jakarta.persistence.Id;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.redis.core.index.Indexed;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Service;
 import java.time.LocalDateTime;
-import java.util.Collection;
-import java.util.Iterator;
 import java.util.UUID;
 
 
@@ -33,6 +27,7 @@ public class JwtService {
     public String ValidAccess(HttpServletRequest request) {
         String accessToken = request.getHeader("Authorization");
 
+        log.info("accessToken: {}", accessToken);
         if (accessToken == null || !accessToken.startsWith("Bearer ")) {
             log.warn("accessToken header is missing or malformed");
             return null;
@@ -58,7 +53,7 @@ public class JwtService {
 
         return accessToken;
     }
-    public ResIssueJwtAuthDto issueJwtAuth(Authentication authResult) {
+    public ResIssueJwtDto issueJwtAuth(Authentication authResult) {
         String username = authResult.getName();
         String role = authResult.getAuthorities().iterator().next().getAuthority();
         String access = jwtUtil.createAccessToken(username, role);
@@ -77,7 +72,7 @@ public class JwtService {
 
         Cookie cookie = jwtUtil.createRefreshCookie(refresh);
 
-        return new ResIssueJwtAuthDto(
+        return new ResIssueJwtDto(
                 jwtAuthRedis.getAccessToken(),
                 jwtAuthRedis.getRefreshToken(),
                 cookie

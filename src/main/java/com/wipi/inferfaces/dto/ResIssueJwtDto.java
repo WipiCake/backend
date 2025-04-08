@@ -10,7 +10,7 @@ import lombok.Setter;
 @NoArgsConstructor
 @Getter
 @Setter
-public class ResIssueJwtAuthDto {
+public class ResIssueJwtDto {
     private String accessToken;
     private String refreshToken;
     private Cookie cookie;

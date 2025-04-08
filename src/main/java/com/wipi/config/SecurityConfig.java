@@ -50,13 +50,13 @@ public class SecurityConfig {
                         ).permitAll()
                         .anyRequest().authenticated()
                 )
-                .logout(logout -> logout.logoutSuccessUrl("/logout"))
-                .oauth2Login(oauth -> oauth
+                .logout(logout -> logout.logoutSuccessUrl("/logout"));
+/*                .oauth2Login(oauth -> oauth
                         .loginPage("/oauth/login") //
                         .defaultSuccessUrl("/oauth-login")
                         .failureUrl("/login?error")
                         .permitAll()
-                );
+                );*/
 
         addCustomFilters(http);
 
@@ -78,7 +78,7 @@ public class SecurityConfig {
     }
 
     @Bean
-    public BCryptPasswordEncoder passwordEncoder() {
+    public BCryptPasswordEncoder bCryptPasswordEncoder() {
         return new BCryptPasswordEncoder();
     }
 

@@ -2,6 +2,8 @@ package com.wipi.infra.jwt;
 
 import com.wipi.domain.jwt.JwtAuthRedis;
 import com.wipi.domain.jwt.JwtRepository;
+import com.wipi.support.util.Utils;
+import jdk.jshell.execution.Util;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Repository;
@@ -38,15 +40,8 @@ public class JwtRepositoryImpl implements JwtRepository {
     public JwtAuthRedis saveJwtAuth(JwtAuthRedis jwtAuthRedis) {
         JwtAuthRedis saved = jwtRedisCachingRepository.save(jwtAuthRedis);
 
-        log.info("Saved JWT entity with UUID key: {}", saved.getId());
+        log.info("Saved JWT entity with UUID key: {}", Utils.toJson(saved));
         return saved;
     }
 
-    @Override
-    public JwtAuthRedis updateJwtAuthByRefreshToken(JwtAuthRedis updatedInfo) {
-        JwtAuthRedis savedAuth = jwtRedisCachingRepository.save(updatedInfo);
-
-        log.info("Updated JWT entity (accessToken): {}", savedAuth.getAccessToken());
-        return savedAuth;
-    }
 }

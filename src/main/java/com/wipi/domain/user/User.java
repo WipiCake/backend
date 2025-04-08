@@ -19,7 +19,7 @@ public class User extends BaseTimeEntity {
     @Column(name = "user_identity_id")
     private Long userIdentityId;
 
-    @Column(name = "email", length = 49, unique = true, nullable = false)
+    @Column(name = "email", length = 99, unique = true, nullable = false)
     private String email;
 
     @Column(name = "password", length = 99, nullable = false)
@@ -28,10 +28,10 @@ public class User extends BaseTimeEntity {
     @Column(name = "role", length = 20, nullable = false)
     private String role;
 
-    @Column(name = "nick_name", length = 49)
+    @Column(name = "nick_name", length = 99)
     private String nickName;
 
-    @Column(name = "phone_number", length = 49)
+    @Column(name = "phone_number", length = 99)
     private String phoneNumber;
 
     @Column(name = "gender", length = 49)
