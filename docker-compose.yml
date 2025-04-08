@@ -7,13 +7,11 @@ services:
     command: ["redis-server", "--save", "", "--appendonly", "no"]
     ports:
       - "6379:6379"
+    volumes:
+      - type: tmpfs
+        target: /data
     networks:
       - spring-network
-    healthcheck:
-      test: ["CMD", "redis-cli", "ping"]
-      interval: 5s
-      timeout: 3s
-      retries: 5
 
 
   # rabbitmq:
