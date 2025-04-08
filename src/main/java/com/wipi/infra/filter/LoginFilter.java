@@ -28,8 +28,6 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
         setFilterProcessesUrl("/login");
     }
 
-
-
     @Override
     public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response) throws AuthenticationException {
         UsernamePasswordAuthenticationToken authRequest = new UsernamePasswordAuthenticationToken(
