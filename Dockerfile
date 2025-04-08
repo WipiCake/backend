@@ -12,4 +12,4 @@ COPY . .
 
 RUN ./gradlew build -x test
 
-ENTRYPOINT ["java", "-jar", "build/libs/backend-0.0.1-SNAPSHOT.jar"]
+ENTRYPOINT ["java", "-jar", "build/libs/wipi-0.0.1-SNAPSHOT.jar"]

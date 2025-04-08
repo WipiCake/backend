@@ -65,17 +65,19 @@ public class JwtService {
         String refresh = jwtUtil.createRefreshToken(username, role);
 
         JwtAuthRedis findJwtAuth = jwtRepository.findJwtAuthRedisByEmail(username).orElse(null);
-        JwtAuthRedis savedJwt = new JwtAuthRedis();
 
-        if(findJwtAuth == null) {
-            savedJwt.setId("JWT:" + UUID.randomUUID());
-            savedJwt.setCreateAt(LocalDateTime.now());
-        }else{
+        JwtAuthRedis savedJwt = new JwtAuthRedis();
             savedJwt.setAccessToken(access);
             savedJwt.setRefreshToken(refresh);
             savedJwt.setEmail(username);
             savedJwt.setAccessExpiration(jwtUtil.getExpirationFromToken(access));
             savedJwt.setRefreshExpiration(jwtUtil.getExpirationFromToken(refresh));
+
+        if(findJwtAuth == null) {
+            savedJwt.setId("JWT:" + UUID.randomUUID());
+            savedJwt.setCreateAt(LocalDateTime.now());
+        }else{
+            savedJwt.setId(findJwtAuth.getId());
             savedJwt.setUpdateAt(LocalDateTime.now());
         }
 
