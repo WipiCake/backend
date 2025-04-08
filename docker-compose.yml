@@ -40,7 +40,7 @@ services:
         condition: service_healthy
       redis:
         condition: service_healthy
-    command: ["--spring.profiles.active=consumer"]
+    #command: ["--spring.profiles.active=consumer"]
     # environment:
     #   SPRING_PROFILES_ACTIVE: consumer
 

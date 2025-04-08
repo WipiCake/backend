@@ -5,7 +5,7 @@ import com.wipi.app.AdminFrontService;
 import com.wipi.inferfaces.dto.ResGetJwtInfoAll;
 import com.wipi.inferfaces.rest.RestResponse;
 import com.wipi.inferfaces.rest.RestResponseEntity;
-import com.wipi.support.swagger.RestGetJwtInfoAllWrapper;
+import com.wipi.support.swagger.wrapper.RestGetJwtInfoAllWrapper;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
