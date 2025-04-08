@@ -65,6 +65,7 @@ public class JwtService {
         String refresh = jwtUtil.createRefreshToken(username, role);
 
         JwtAuthRedis findJwtAuth = jwtRepository.findJwtAuthRedisByEmail(username).orElse(null);
+        log.info("findJwtAuth: {}", Utils.toJson(findJwtAuth));
 
         JwtAuthRedis savedJwt = new JwtAuthRedis();
             savedJwt.setAccessToken(access);
@@ -78,8 +79,12 @@ public class JwtService {
             savedJwt.setCreateAt(LocalDateTime.now());
         }else{
             savedJwt.setId(findJwtAuth.getId());
+            savedJwt.setCreateAt(findJwtAuth.getCreateAt());
             savedJwt.setUpdateAt(LocalDateTime.now());
         }
+
+        log.info("prevSave Jwt in redis: {}", savedJwt);
+
 
         JwtAuthRedis jwtAuth = jwtRepository.saveOrUpdateJwtAuth(savedJwt);
         Cookie cookie = jwtUtil.createRefreshCookie(refresh);

@@ -5,7 +5,7 @@ import com.wipi.inferfaces.dto.ResUserSignupDto;
 import com.wipi.inferfaces.param.UserSignupParam;
 import com.wipi.inferfaces.rest.RestResponse;
 import com.wipi.inferfaces.rest.RestResponseEntity;
-import com.wipi.support.swagger.RestUserSignupWrapper;
+import com.wipi.support.swagger.wrapper.RestUserSignupWrapper;
 import com.wipi.support.util.Utils;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
