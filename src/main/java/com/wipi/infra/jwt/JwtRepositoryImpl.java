@@ -19,6 +19,11 @@ public class JwtRepositoryImpl implements JwtRepository {
     private final JwtRedisCachingRepository jwtRedisCachingRepository;
 
     @Override
+    public Optional<JwtAuthRedis> findJwtAuthRedisByEmail(String email) {
+        return jwtRedisCachingRepository.findJwtAuthRedisByEmail(email);
+    }
+
+    @Override
     public Optional<JwtAuthRedis> findJwtAuthRedisByAccessToken(String accessToken) {
         return jwtRedisCachingRepository.findJwtAuthRedisByAccessToken(accessToken);
     }
@@ -30,14 +35,11 @@ public class JwtRepositoryImpl implements JwtRepository {
 
     @Override
     public void removeAccessToken(String accessToken) {
-        jwtRedisCachingRepository.findJwtAuthRedisByAccessToken(accessToken).ifPresent(entity -> {
-            jwtRedisCachingRepository.deleteById(entity.getId());
-            log.info("Removed Redis entry by accessToken (id={}): {}", entity.getId(), accessToken);
-        });
+        jwtRedisCachingRepository.removeJwtAuthRedisByAccessToken(accessToken);
     }
 
     @Override
-    public JwtAuthRedis saveJwtAuth(JwtAuthRedis jwtAuthRedis) {
+    public JwtAuthRedis saveOrUpdateJwtAuth(JwtAuthRedis jwtAuthRedis) {
         JwtAuthRedis saved = jwtRedisCachingRepository.save(jwtAuthRedis);
 
         log.info("Saved JWT entity with UUID key: {}", Utils.toJson(saved));
@@ -49,5 +51,10 @@ public class JwtRepositoryImpl implements JwtRepository {
         Iterable<JwtAuthRedis> iterable = jwtRedisCachingRepository.findAll();
         return StreamSupport.stream(iterable.spliterator(), false)
                 .collect(Collectors.toList());
+    }
+
+    @Override
+    public void removeJwtAuthRedisById(String id) {
+        jwtRedisCachingRepository.removeJwtAuthRedisById(id);
     }
 }

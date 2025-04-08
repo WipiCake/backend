@@ -27,6 +27,7 @@ public class JwtAuthRedis implements Serializable {
     @Indexed
     private String refreshToken;
 
+    @Indexed
     private String email;
     private LocalDateTime refreshExpiration;
     private LocalDateTime accessExpiration;

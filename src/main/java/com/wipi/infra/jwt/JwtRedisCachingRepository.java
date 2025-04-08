@@ -7,4 +7,7 @@ import java.util.Optional;
 public interface JwtRedisCachingRepository extends CrudRepository<JwtAuthRedis, String> {
     Optional<JwtAuthRedis> findJwtAuthRedisByAccessToken(String accessToken);
     Optional<JwtAuthRedis> findJwtAuthRedisByRefreshToken(String refreshToken);
+    Optional<JwtAuthRedis> findJwtAuthRedisByEmail(String email);
+    void removeJwtAuthRedisById(String id);
+    void removeJwtAuthRedisByAccessToken(String accessToken);
 }

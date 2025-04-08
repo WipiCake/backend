@@ -8,7 +8,9 @@ public interface JwtRepository {
     Optional<JwtAuthRedis> findJwtAuthRedisByAccessToken(String accessToken);
     Optional<JwtAuthRedis> findJwtAuthRedisByRefreshToken(String refreshToken);
     void removeAccessToken(String accessToken);
-    JwtAuthRedis saveJwtAuth(JwtAuthRedis jwtAuthRedis);
+    JwtAuthRedis saveOrUpdateJwtAuth(JwtAuthRedis jwtAuthRedis);
     List<JwtAuthRedis> findAllJwtAuthRedis();
+    Optional<JwtAuthRedis> findJwtAuthRedisByEmail(String email);
+    void removeJwtAuthRedisById(String id);
 
 }
