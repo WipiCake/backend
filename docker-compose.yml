@@ -4,15 +4,17 @@ services:
   redis:
     image: redis
     container_name: redis-1
-    networks:
-      - spring-network
+    command: ["redis-server", "--save", "", "--appendonly", "no"]
     ports:
       - "6379:6379"
+    networks:
+      - spring-network
     healthcheck:
       test: ["CMD", "redis-cli", "ping"]
       interval: 5s
       timeout: 3s
       retries: 5
+
 
   # rabbitmq:
   #   image: rabbitmq:3-management

@@ -11,5 +11,6 @@ public interface JwtRepository {
     JwtAuthRedis saveOrUpdateJwtAuth(JwtAuthRedis jwtAuthRedis);
     List<JwtAuthRedis> findAllJwtAuthRedis();
     Optional<JwtAuthRedis> findJwtAuthRedisByEmail(String email);
+    void removeJwtAuthRedisById(String id);
 
 }

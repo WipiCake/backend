@@ -11,6 +11,10 @@ import org.springframework.stereotype.Component;
 @Component
 public class Utils {
 
+    public static String loginUrl = "/login";
+    public static String logoutUrl = "/logout";
+    public static final String EXPIRED_JWT_CLEANUP_CRON	 = "0 0 */4 * * ?";
+
     private final ObjectMapper injectedMapper;
     private static ObjectMapper objectMapper;
 
@@ -19,8 +23,7 @@ public class Utils {
         objectMapper = this.injectedMapper;
     }
 
-    public static String loginUrl = "/login";
-    public static String logoutUrl = "/logout";
+
 
     public static String toJson(Object obj) {
         try {

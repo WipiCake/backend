@@ -35,10 +35,7 @@ public class JwtRepositoryImpl implements JwtRepository {
 
     @Override
     public void removeAccessToken(String accessToken) {
-        jwtRedisCachingRepository.findJwtAuthRedisByAccessToken(accessToken).ifPresent(entity -> {
-            jwtRedisCachingRepository.deleteById(entity.getId());
-            log.info("Removed Redis entry by accessToken (id={}): {}", entity.getId(), accessToken);
-        });
+        jwtRedisCachingRepository.removeJwtAuthRedisByAccessToken(accessToken);
     }
 
     @Override
@@ -54,5 +51,10 @@ public class JwtRepositoryImpl implements JwtRepository {
         Iterable<JwtAuthRedis> iterable = jwtRedisCachingRepository.findAll();
         return StreamSupport.stream(iterable.spliterator(), false)
                 .collect(Collectors.toList());
+    }
+
+    @Override
+    public void removeJwtAuthRedisById(String id) {
+        jwtRedisCachingRepository.removeJwtAuthRedisById(id);
     }
 }
