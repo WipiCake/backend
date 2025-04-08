@@ -2,6 +2,7 @@ package com.wipi.domain.jwt;
 
 import com.wipi.inferfaces.dto.ResIssueJwtDto;
 import com.wipi.infra.jwt.JwtUtil;
+import com.wipi.support.util.Utils;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
@@ -12,8 +13,8 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Service;
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.UUID;
-
 
 @Service
 @RequiredArgsConstructor
@@ -24,18 +25,21 @@ public class JwtService {
     private final JwtRepository jwtRepository;
     private final UserDetailsService userDetailsService;
 
+    public List<JwtAuthRedis> getJwtInfoAll(){
+        return jwtRepository.findAllJwtAuthRedis();
+    }
+
     public String ValidAccess(HttpServletRequest request) {
         String accessToken = request.getHeader("Authorization");
 
-        log.info("accessToken: {}", accessToken);
         if (accessToken == null || !accessToken.startsWith("Bearer ")) {
             log.warn("accessToken header is missing or malformed");
             return null;
         }
+        accessToken = accessToken.replaceFirst("^Bearer\\s+", "").trim();
+        log.info("accessToken: {}", accessToken);
 
-        accessToken = accessToken.substring(7);
-
-        JwtAuthRedis jwtAuth = jwtRepository.findByAccessToken(accessToken).orElse(null);
+        JwtAuthRedis jwtAuth = jwtRepository.findJwtAuthRedisByAccessToken(accessToken).orElse(null);
         if (jwtAuth == null) {
             log.warn("accessToken not found in Redis");
             return null;
@@ -59,27 +63,28 @@ public class JwtService {
         String access = jwtUtil.createAccessToken(username, role);
         String refresh = jwtUtil.createRefreshToken(username, role);
 
-        JwtAuthRedis jwtAuthRedis = jwtRepository.saveJwtAuth(new JwtAuthRedis(
-                UUID.randomUUID().toString(),
-                access,
-                username,
-                refresh,
-                jwtUtil.getExpirationFromToken(access),
-                jwtUtil.getExpirationFromToken(refresh),
-                LocalDateTime.now(),
-                null
-        ));
+        JwtAuthRedis savedJwt = new JwtAuthRedis();
+            savedJwt.setId("JWT:" + UUID.randomUUID());
+            savedJwt.setAccessToken(access);
+            savedJwt.setRefreshToken(refresh);
+            savedJwt.setEmail(username);
+            savedJwt.setAccessExpiration(jwtUtil.getExpirationFromToken(access));
+            savedJwt.setRefreshExpiration(jwtUtil.getExpirationFromToken(refresh));
+            savedJwt.setCreateAt(LocalDateTime.now());
+            savedJwt.setUpdateAt(null);
+
+        JwtAuthRedis jwtAuth = jwtRepository.saveJwtAuth(savedJwt);
 
         Cookie cookie = jwtUtil.createRefreshCookie(refresh);
+        log.info("save jwtAuth issue : {}", Utils.toJson(jwtAuth));
 
         return new ResIssueJwtDto(
-                jwtAuthRedis.getAccessToken(),
-                jwtAuthRedis.getRefreshToken(),
+                jwtAuth.getAccessToken(),
+                jwtAuth.getRefreshToken(),
                 cookie
         );
 
     }
-
 
     public String reissueAccessByRefresh(HttpServletRequest request) {
         String refreshToken = null;
@@ -92,13 +97,14 @@ public class JwtService {
                 }
             }
         }
+        log.info("refrsh Token : {}", refreshToken);
 
         if (refreshToken == null) {
             log.warn("refresh token not found in header");
             return null;
         }
 
-        JwtAuthRedis jwtAuth = jwtRepository.findByRefreshToken(refreshToken).orElse(null);
+        JwtAuthRedis jwtAuth = jwtRepository.findJwtAuthRedisByRefreshToken(refreshToken).orElse(null);
 
         if (jwtAuth == null) {
             log.warn("refresh token not found in redis");
@@ -110,7 +116,7 @@ public class JwtService {
             return null;
         }
 
-        if(LocalDateTime.now().isBefore(jwtAuth.getRefreshExpiration())){
+        if(jwtAuth.getRefreshExpiration().isBefore(LocalDateTime.now())) {
             log.warn("refresh expired");
             return null;
         }
@@ -123,6 +129,7 @@ public class JwtService {
         jwtAuth.setAccessToken(reissueAccessToken);
         jwtAuth.setUpdateAt(LocalDateTime.now());
         jwtRepository.saveJwtAuth(jwtAuth);
+        log.info("accessUpdate : {}", reissueAccessToken);
 
         return reissueAccessToken;
     }
