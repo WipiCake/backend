@@ -11,7 +11,7 @@ import org.springframework.data.redis.serializer.StringRedisSerializer;
 @Configuration
 public class RedisConfig {
     @Bean
-    public RedisTemplate<String, JwtAuthRedis> redisTemplate(RedisConnectionFactory connectionFactory) {
+    public RedisTemplate<String, JwtAuthRedis> jwtRedisTemplate(RedisConnectionFactory connectionFactory) {
         RedisTemplate<String, JwtAuthRedis> template = new RedisTemplate<>();
         template.setConnectionFactory(connectionFactory);
         template.setKeySerializer(new StringRedisSerializer());

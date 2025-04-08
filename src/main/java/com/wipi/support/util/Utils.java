@@ -19,6 +19,9 @@ public class Utils {
         objectMapper = this.injectedMapper;
     }
 
+    public static String loginUrl = "/login";
+    public static String logoutUrl = "/logout";
+
     public static String toJson(Object obj) {
         try {
             return objectMapper.writeValueAsString(obj);

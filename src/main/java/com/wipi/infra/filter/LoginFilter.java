@@ -3,11 +3,13 @@ package com.wipi.infra.filter;
 import com.wipi.domain.jwt.JwtService;
 import com.wipi.inferfaces.dto.ResIssueJwtDto;
 import com.wipi.infra.jwt.JwtProperties;
+import com.wipi.support.util.Utils;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -18,6 +20,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 
 @RequiredArgsConstructor
+@Slf4j
 public class LoginFilter extends UsernamePasswordAuthenticationFilter {
 
     private final AuthenticationManager authenticationManager;
@@ -25,7 +28,7 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
     private final JwtProperties jwtProperties;
 
     {
-        setFilterProcessesUrl("/login");
+        setFilterProcessesUrl(Utils.loginUrl);
     }
 
     @Override
@@ -41,6 +44,7 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
     protected void successfulAuthentication(HttpServletRequest request, HttpServletResponse response, FilterChain chain, Authentication authResult) throws IOException, ServletException {
         ResIssueJwtDto resDto =jwtService.issueJwtAuth(authResult);
 
+        log.info("login success : {}", Utils.toJson(resDto));
         response.setHeader(jwtProperties.getAccessHeaderName(),resDto.getAccessToken());
         response.addCookie(resDto.getCookie());
         response.setStatus(HttpStatus.OK.value());

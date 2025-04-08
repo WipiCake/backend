@@ -12,17 +12,5 @@ public class RestResponseEntity {
         return ResponseEntity.status(HttpStatus.CREATED).body(new RestResponse<>(HttpStatus.CREATED, message, data));
     }
 
-    public static <T> ResponseEntity<RestResponse<T>> badRequest(String message, T data) {
-        return ResponseEntity.badRequest().body(new RestResponse<>(HttpStatus.BAD_REQUEST, message, data));
-    }
-
-    public static <T> ResponseEntity<RestResponse<T>> error(HttpStatus status, String message, T data) {
-        return ResponseEntity.status(status).body(new RestResponse<>(status, message, data));
-    }
-
-    public static <T> ResponseEntity<RestResponse<T>> of(HttpStatus status, String message, T data) {
-        return ResponseEntity.status(status).body(new RestResponse<>(status, message, data));
-    }
-
 
 }

@@ -23,28 +23,16 @@ public class JwtAuthRedis implements Serializable {
 
     @Indexed
     private String accessToken;
-    private String email;
+
+    @Indexed
     private String refreshToken;
+
+    private String email;
     private LocalDateTime refreshExpiration;
     private LocalDateTime accessExpiration;
     private LocalDateTime createAt;
     private LocalDateTime updateAt;
 
-    public JwtAuthRedis(String email, String refreshToken, LocalDateTime refreshExpiration, String accessToken, LocalDateTime accessExpiration, LocalDateTime createdAt, LocalDateTime updateAt) {
-        this.email = email;
-        this.refreshToken = refreshToken;
-        this.refreshExpiration = refreshExpiration;
-        this.accessToken = accessToken;
-        this.accessExpiration = accessExpiration;
-        this.createAt = createdAt;
-        this.updateAt = updateAt;
-    }
-
-    public JwtAuthRedis(String email, String refreshToken, LocalDateTime refreshExpiration, String accessToken, LocalDateTime accessExpiration) {
-        this.email = email;
-        this.refreshToken = refreshToken;
-        this.refreshExpiration = refreshExpiration;
-        this.accessToken = accessToken;
-        this.accessExpiration = accessExpiration;
-    }
 }
+
+
