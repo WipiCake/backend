@@ -1,4 +1,4 @@
-package com.wipi.domain.jwt;
+package com.wipi.infra.jwt;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.wipi.domain.common.BaseTimeEntity;
@@ -16,18 +16,19 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @Table(name = "t_jwt")
 public class JwtAuth extends BaseTimeEntity {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
 
+    @Id
     @Column(length = 255)
-    private String email;
+    private String id;
 
     @Column(length = 255)
     private String accessToken;
 
     @Column(length = 255)
     private String refreshToken;
+
+    @Column(length = 255)
+    private String email;
 
     @Column(length = 255)
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
@@ -37,11 +38,5 @@ public class JwtAuth extends BaseTimeEntity {
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime accessExpiration;
 
-    public JwtAuth(String email, String refreshToken, LocalDateTime refreshExpiration, String accessToken, LocalDateTime accessExpiration) {
-        this.email = email;
-        this.refreshToken = refreshToken;
-        this.refreshExpiration = refreshExpiration;
-        this.accessToken = accessToken;
-        this.accessExpiration = accessExpiration;
-    }
+
 }

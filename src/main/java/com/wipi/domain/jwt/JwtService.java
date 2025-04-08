@@ -7,6 +7,7 @@ import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -63,19 +64,24 @@ public class JwtService {
         String access = jwtUtil.createAccessToken(username, role);
         String refresh = jwtUtil.createRefreshToken(username, role);
 
+        JwtAuthRedis findJwtAuth = jwtRepository.findJwtAuthRedisByEmail(username).orElse(null);
         JwtAuthRedis savedJwt = new JwtAuthRedis();
+
+        if(findJwtAuth == null) {
             savedJwt.setId("JWT:" + UUID.randomUUID());
+            savedJwt.setCreateAt(LocalDateTime.now());
+        }else{
             savedJwt.setAccessToken(access);
             savedJwt.setRefreshToken(refresh);
             savedJwt.setEmail(username);
             savedJwt.setAccessExpiration(jwtUtil.getExpirationFromToken(access));
             savedJwt.setRefreshExpiration(jwtUtil.getExpirationFromToken(refresh));
-            savedJwt.setCreateAt(LocalDateTime.now());
-            savedJwt.setUpdateAt(null);
+            savedJwt.setUpdateAt(LocalDateTime.now());
+        }
 
-        JwtAuthRedis jwtAuth = jwtRepository.saveJwtAuth(savedJwt);
-
+        JwtAuthRedis jwtAuth = jwtRepository.saveOrUpdateJwtAuth(savedJwt);
         Cookie cookie = jwtUtil.createRefreshCookie(refresh);
+
         log.info("save jwtAuth issue : {}", Utils.toJson(jwtAuth));
 
         return new ResIssueJwtDto(
@@ -83,7 +89,6 @@ public class JwtService {
                 jwtAuth.getRefreshToken(),
                 cookie
         );
-
     }
 
     public String reissueAccessByRefresh(HttpServletRequest request) {
@@ -128,7 +133,7 @@ public class JwtService {
 
         jwtAuth.setAccessToken(reissueAccessToken);
         jwtAuth.setUpdateAt(LocalDateTime.now());
-        jwtRepository.saveJwtAuth(jwtAuth);
+        jwtRepository.saveOrUpdateJwtAuth(jwtAuth);
         log.info("accessUpdate : {}", reissueAccessToken);
 
         return reissueAccessToken;

@@ -19,6 +19,11 @@ public class JwtRepositoryImpl implements JwtRepository {
     private final JwtRedisCachingRepository jwtRedisCachingRepository;
 
     @Override
+    public Optional<JwtAuthRedis> findJwtAuthRedisByEmail(String email) {
+        return jwtRedisCachingRepository.findJwtAuthRedisByEmail(email);
+    }
+
+    @Override
     public Optional<JwtAuthRedis> findJwtAuthRedisByAccessToken(String accessToken) {
         return jwtRedisCachingRepository.findJwtAuthRedisByAccessToken(accessToken);
     }
@@ -37,7 +42,7 @@ public class JwtRepositoryImpl implements JwtRepository {
     }
 
     @Override
-    public JwtAuthRedis saveJwtAuth(JwtAuthRedis jwtAuthRedis) {
+    public JwtAuthRedis saveOrUpdateJwtAuth(JwtAuthRedis jwtAuthRedis) {
         JwtAuthRedis saved = jwtRedisCachingRepository.save(jwtAuthRedis);
 
         log.info("Saved JWT entity with UUID key: {}", Utils.toJson(saved));
