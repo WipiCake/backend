@@ -1,25 +1,20 @@
 package com.wipi.config;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.wipi.filter.SecurityJwtFilter;
-import com.wipi.filter.SecurityLoginFilter;
-import com.wipi.filter.SecurityLogoutFilter;
-import com.wipi.service.front.JwtFrontService;
-import com.wipi.util.FilterUtil;
-import com.wipi.util.JwtUtil;
-import lombok.AllArgsConstructor;
+import com.wipi.domain.jwt.JwtService;
+import com.wipi.infra.filter.JwtFilter;
+import com.wipi.infra.filter.LoginFilter;
+import com.wipi.infra.jwt.JwtProperties;
+import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-import org.springframework.security.web.authentication.logout.LogoutFilter;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
@@ -27,85 +22,79 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import java.util.List;
 
 @Configuration
-@EnableWebSecurity
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class SecurityConfig {
 
     private final AuthenticationConfiguration authenticationConfiguration;
-    private final JwtUtil jwtUtil;
-    private final FilterUtil filterUtil;
-    private final JwtFrontService jwtFrontService;
-    private final ObjectMapper objectMapper;
+    private final JwtService jwtService;
+    private final JwtProperties jwtProperties;
 
     @Bean
-    public AuthenticationManager authenticationManager(AuthenticationConfiguration configuration) throws Exception {
-        return configuration.getAuthenticationManager();
+    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+        http
+                .cors(cors -> cors.configurationSource(corsConfigurationSource()))
+                .csrf(AbstractHttpConfigurer::disable)
+                .formLogin(AbstractHttpConfigurer::disable)
+                .httpBasic(AbstractHttpConfigurer::disable)
+                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+                .authorizeHttpRequests(auth -> auth
+                        .requestMatchers("/login", "/reissue", "/user/signup/**", "/user/bank/**").permitAll()
+                        .requestMatchers("/admin/**").hasRole("ADMIN")
+                        .requestMatchers("/user/**").hasRole("USER")
+                        .requestMatchers(
+                                "/swagger-ui.html",
+                                "/swagger-ui/**",
+                                "/v3/api-docs/**",
+                                "/swagger-resources/**",
+                                "/webjars/**"
+                        ).permitAll()
+                        .anyRequest().authenticated()
+                )
+                .logout(logout -> logout.logoutSuccessUrl("/logout"))
+                .oauth2Login(oauth -> oauth
+                        .loginPage("/oauth/login") //
+                        .defaultSuccessUrl("/oauth-login")
+                        .failureUrl("/login?error")
+                        .permitAll()
+                );
+
+        addCustomFilters(http);
+
+        return http.build();
+    }
+
+    private void addCustomFilters(HttpSecurity http) throws Exception {
+        http.addFilterBefore(new JwtFilter(jwtService), LoginFilter.class);
+        http.addFilterAt(new LoginFilter(
+                authenticationManager(authenticationConfiguration),jwtService,jwtProperties),
+                UsernamePasswordAuthenticationFilter.class
+        );
+        // http.addFilterBefore(new AuthLogoutFilter(jwtService), LogoutFilter.class);
     }
 
     @Bean
-    public BCryptPasswordEncoder bCryptPasswordEncoder(){
+    public AuthenticationManager authenticationManager(AuthenticationConfiguration config) throws Exception {
+        return config.getAuthenticationManager();
+    }
+
+    @Bean
+    public BCryptPasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
 
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
-        CorsConfiguration configuration = new CorsConfiguration();
-        configuration.setAllowedOrigins(List.of("http://localhost:3000","https://localhost:8080"));
-                configuration.setAllowedMethods(List.of("GET","POST","PUT","DELETE","OPTIONS"));
-                        configuration.setAllowedHeaders(List.of("Authorization", "Content-Type"));
-                                configuration.setAllowCredentials(true);
+        CorsConfiguration config = new CorsConfiguration();
+        config.setAllowedOrigins(List.of(
+                "http://localhost:3000",
+                "https://localhost:8080")
+        );
+        config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
+        config.setAllowedHeaders(List.of("Authorization", "Content-Type"));
+        config.setAllowCredentials(true);
 
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-        source.registerCorsConfiguration("/**", configuration);
+        source.registerCorsConfiguration("/**", config);
         return source;
     }
-
-
-    @Bean
-    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception{
-        http.cors(cors -> cors.configurationSource(corsConfigurationSource()));
-        http.csrf(AbstractHttpConfigurer::disable);
-        http.formLogin(AbstractHttpConfigurer::disable);
-        http.httpBasic(AbstractHttpConfigurer::disable);
-
-        http
-                .oauth2Login((auth) -> auth.loginPage("/oauth-login/login")
-                        .defaultSuccessUrl("/oauth-login")
-                        .failureUrl("/oauth-login/login")
-                        .permitAll());
-
-
-        http.authorizeHttpRequests(auth -> auth
-                .requestMatchers("/user/bank/**").permitAll()
-                .requestMatchers("/user/signup/**").permitAll()
-                .requestMatchers("/admin/**").hasRole("ADMIN")
-                .requestMatchers("/user/**").hasRole("USER")
-                .requestMatchers("access/reissue").permitAll()
-                .requestMatchers(
-                        "/swagger-ui.html",
-                        "/swagger-ui/**",
-                        "/v3/api-docs/**",
-                        "/v3/api-docs",
-                        "/swagger-resources/**",
-                        "/webjars/**"
-                ).permitAll()
-                .anyRequest().authenticated() );
-
-        http.logout((logout) -> logout
-                .logoutSuccessUrl("/logout")
-        );
-        http.addFilterBefore(new SecurityJwtFilter(jwtUtil,filterUtil,jwtFrontService), SecurityLoginFilter.class);
-
-        http.addFilterAt(new SecurityLoginFilter(
-                authenticationManager(authenticationConfiguration), jwtFrontService,filterUtil),
-                UsernamePasswordAuthenticationFilter.class);
-
-        http.addFilterBefore(new SecurityLogoutFilter(jwtUtil,jwtFrontService,filterUtil), LogoutFilter.class);
-
-        http.sessionManagement((session) -> session
-                .sessionCreationPolicy(SessionCreationPolicy.STATELESS));
-
-        return http.build();
-    }
-
 }
