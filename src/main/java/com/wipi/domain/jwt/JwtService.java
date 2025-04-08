@@ -121,6 +121,7 @@ public class JwtService {
         );
 
         jwtAuth.setAccessToken(reissueAccessToken);
+        jwtAuth.setUpdateAt(LocalDateTime.now());
         jwtRepository.saveJwtAuth(jwtAuth);
 
         return reissueAccessToken;
