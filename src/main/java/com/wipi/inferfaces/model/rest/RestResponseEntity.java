@@ -8,6 +8,10 @@ public class RestResponseEntity {
         return ResponseEntity.ok(new RestResponse<>(HttpStatus.OK, message, data));
     }
 
+    public static ResponseEntity<RestResponse<Void>> ok(String message) {
+        return ResponseEntity.ok(new RestResponse<>(HttpStatus.OK, message, null));
+    }
+
     public static <T> ResponseEntity<RestResponse<T>> created(String message, T data) {
         return ResponseEntity.status(HttpStatus.CREATED).body(new RestResponse<>(HttpStatus.CREATED, message, data));
     }
