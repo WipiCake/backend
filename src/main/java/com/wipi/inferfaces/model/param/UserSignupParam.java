@@ -1,4 +1,4 @@
-package com.wipi.inferfaces.param;
+package com.wipi.inferfaces.model.param;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.Email;

@@ -1,6 +1,7 @@
 package com.wipi.infra.jwt;
 
 
+import com.wipi.support.properties.JwtProperties;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import jakarta.annotation.PostConstruct;

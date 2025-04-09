@@ -1,20 +1,23 @@
-package com.wipi.domain.jwt;
+package com.wipi.domain.email;
 
-import jakarta.persistence.Id;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.springframework.data.redis.core.RedisHash;
+import jakarta.persistence.Id;
 import org.springframework.data.redis.core.index.Indexed;
 import java.io.Serial;
 import java.io.Serializable;
 import java.time.LocalDateTime;
-import java.util.UUID;
 
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-@RedisHash(value = "JwtAuth")
-public class JwtAuthRedis implements Serializable {
+@RedisHash(value = "EmailVerification")
+public class EmailVerification implements Serializable {
+
     @Serial
     private static final long serialVersionUID = 1L;
 
@@ -22,18 +25,10 @@ public class JwtAuthRedis implements Serializable {
     private String id;
 
     @Indexed
-    private String accessToken;
-
-    @Indexed
-    private String refreshToken;
-
-    @Indexed
     private String email;
-    private LocalDateTime refreshExpiration;
-    private LocalDateTime accessExpiration;
+    private String verificationCode;
+    private String purpose;
+    private LocalDateTime expirationTime;
+    private String verified;
     private LocalDateTime createAt;
-    private LocalDateTime updateAt;
-
 }
-
-

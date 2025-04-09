@@ -1,7 +1,7 @@
 package com.wipi.support.swagger.wrapper;
 
-import com.wipi.inferfaces.dto.ResUserSignupDto;
-import com.wipi.inferfaces.rest.RestResponse;
+import com.wipi.inferfaces.model.dto.res.ResUserSignupDto;
+import com.wipi.inferfaces.model.rest.RestResponse;
 import io.swagger.v3.oas.annotations.media.Schema;
 
 @Schema(description = "회원가입 응답 예시")

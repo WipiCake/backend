@@ -1,4 +1,4 @@
-package com.wipi.inferfaces.rest;
+package com.wipi.inferfaces.model.rest;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -11,6 +11,11 @@ public class RestResponse<T> {
     private int status;
     private String message;
     private T data;
+
+    public RestResponse(int status, String message) {
+        this.status = status;
+        this.message = message;
+    }
 
     public RestResponse(int status, String message, T data) {
         this.status = status;

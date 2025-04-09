@@ -1,4 +1,4 @@
-package com.wipi.inferfaces.rest;
+package com.wipi.inferfaces.model.rest;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

@@ -1,4 +1,4 @@
-package com.wipi.inferfaces.dto;
+package com.wipi.inferfaces.model.dto.res;
 
 import jakarta.servlet.http.Cookie;
 import lombok.AllArgsConstructor;
@@ -10,7 +10,7 @@ import lombok.Setter;
 @NoArgsConstructor
 @Getter
 @Setter
-public class ResReissueJwtDto {
+public class ResIssueJwtDto {
     private String accessToken;
     private String refreshToken;
     private Cookie cookie;

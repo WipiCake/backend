@@ -1,7 +1,7 @@
 package com.wipi.domain.user;
 
-import com.wipi.inferfaces.param.UserSignupParam;
-import com.wipi.infra.user.UserRoleProperties;
+import com.wipi.inferfaces.model.param.UserSignupParam;
+import com.wipi.support.properties.UserRoleProperties;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;

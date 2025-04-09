@@ -1,4 +1,4 @@
-package com.wipi.inferfaces.dto;
+package com.wipi.inferfaces.model.dto.res;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;

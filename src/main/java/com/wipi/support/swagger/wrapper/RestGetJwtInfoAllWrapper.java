@@ -1,7 +1,7 @@
 package com.wipi.support.swagger.wrapper;
 
-import com.wipi.inferfaces.dto.ResGetJwtInfoAll;
-import com.wipi.inferfaces.rest.RestResponse;
+import com.wipi.inferfaces.model.dto.res.ResGetJwtInfoAll;
+import com.wipi.inferfaces.model.rest.RestResponse;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Getter;
 

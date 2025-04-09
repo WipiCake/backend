@@ -1,13 +1,12 @@
 package com.wipi.domain.jwt;
 
-import com.wipi.inferfaces.dto.ResIssueJwtDto;
+import com.wipi.inferfaces.model.dto.res.ResIssueJwtDto;
 import com.wipi.infra.jwt.JwtUtil;
 import com.wipi.support.util.Utils;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;

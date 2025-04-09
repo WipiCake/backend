@@ -1,4 +1,4 @@
-package com.wipi.inferfaces.rest;
+package com.wipi.inferfaces.model.rest;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
