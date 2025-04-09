@@ -13,10 +13,18 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @Tag(description = "로그인 API", name = "로그인 API")
 public class LoginAPI {
+
     @Operation(
             summary = "로그인",
-            description = "form-data: \n username:admin12@naver.com\n password:12345678"
-                    + "성공 시, 응답 헤더에 access: accessToken 및 Cookie가 저장됩니다.\n\n"
+            description = """
+        `form-data` 방식으로 로그인 요청을 보냅니다.  
+        - `username`: admin12@naver.com  
+        - `password`: 12345678  
+
+        로그인에 성공하면 다음과 같은 토큰이 발급됩니다:  
+        - 응답 헤더 `access`에 **Access Token** 포함  
+        - `Refresh Token`은 **Cookie에 저장**되며, 응답 헤더 `refresh`에도 함께 발급됩니다.
+        """
     )
     @ApiResponses(value = {
             @ApiResponse(
@@ -25,17 +33,20 @@ public class LoginAPI {
                     headers = {
                             @Header(
                                     name = "access",
-                                    description = "access 토큰이 header access에발급",
+                                    description = "Access Token이 담긴 헤더",
                                     schema = @Schema(type = "string", example = "eyJhbGciOiJIUzI1NiIsInR...")
                             ),
                             @Header(
                                     name = "refresh",
-                                    description = "refresh쿠키가 등록되고, refresh header에 발급 ",
+                                    description = "Refresh Token이 쿠키에 저장되며, 동시에 헤더에도 포함됩니다.",
                                     schema = @Schema(type = "string", example = "eyJhbGciOiJIUzI1NiIsInR...")
                             )
                     }
             ),
-            @ApiResponse(responseCode = "401", description = "로그인 실패 - 아이디 또는 비밀번호 오류")
+            @ApiResponse(
+                    responseCode = "401",
+                    description = "로그인 실패 - 아이디 또는 비밀번호가 일치하지 않음"
+            )
     })
     @PostMapping("auth/login")
     public void login(@RequestBody LoginRequest request) {

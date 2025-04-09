@@ -23,7 +23,7 @@ public class JwtFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         String uri = request.getRequestURI();
 
-        if (uri.equals(Utils.loginUrl)) {
+        if (uri.equals(Utils.LOGIN_URL)) {
             filterChain.doFilter(request, response);
             return;
         }

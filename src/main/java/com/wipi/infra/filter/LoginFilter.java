@@ -1,8 +1,8 @@
 package com.wipi.infra.filter;
 
 import com.wipi.domain.jwt.JwtService;
-import com.wipi.inferfaces.dto.ResIssueJwtDto;
-import com.wipi.infra.jwt.JwtProperties;
+import com.wipi.inferfaces.model.dto.res.ResIssueJwtDto;
+import com.wipi.support.properties.JwtProperties;
 import com.wipi.support.util.Utils;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -28,7 +28,7 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
     private final JwtProperties jwtProperties;
 
     {
-        setFilterProcessesUrl(Utils.loginUrl);
+        setFilterProcessesUrl(Utils.LOGIN_URL);
     }
 
     @Override

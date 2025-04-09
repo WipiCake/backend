@@ -14,19 +14,19 @@ services:
       - spring-network
 
 
-  # rabbitmq:
-  #   image: rabbitmq:3-management
-  #   container_name: rabbitmq-1
-  #   networks:
-  #     - spring-network
-  #   ports:
-  #     - "5672:5672"
-  #     - "15672:15672"
-  #   healthcheck:
-  #     test: ["CMD", "rabbitmqctl", "status"]
-  #     interval: 10s
-  #     timeout: 5s
-  #     retries: 5
+  rabbitmq:
+    image: rabbitmq:3-management
+    container_name: rabbitmq-1
+    networks:
+      - spring-network
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    healthcheck:
+      test: ["CMD", "rabbitmqctl", "status"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
 
   spring-app:
     image: my-spring-app
@@ -40,9 +40,9 @@ services:
       #   condition: service_healthy
       redis:
         condition: service_healthy
-    #command: ["--spring.profiles.active=consumer"]
-    # environment:
-    #   SPRING_PROFILES_ACTIVE: consumer
+    command: ["--spring.profiles.active=consumer"]
+    environment:
+      SPRING_PROFILES_ACTIVE: consumer
 
 networks:
   spring-network:

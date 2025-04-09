@@ -1,4 +1,4 @@
-package com.wipi.infra.jwt;
+package com.wipi.support.properties;
 
 import lombok.Getter;
 import lombok.Setter;

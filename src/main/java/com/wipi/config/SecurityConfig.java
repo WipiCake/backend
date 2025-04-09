@@ -3,7 +3,7 @@ package com.wipi.config;
 import com.wipi.domain.jwt.JwtService;
 import com.wipi.infra.filter.JwtFilter;
 import com.wipi.infra.filter.LoginFilter;
-import com.wipi.infra.jwt.JwtProperties;
+import com.wipi.support.properties.JwtProperties;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

@@ -1,10 +1,10 @@
-package com.wipi.inferfaces.controller;
+package com.wipi.inferfaces.api.controller;
 
 
 import com.wipi.app.AdminFrontService;
-import com.wipi.inferfaces.dto.ResGetJwtInfoAll;
-import com.wipi.inferfaces.rest.RestResponse;
-import com.wipi.inferfaces.rest.RestResponseEntity;
+import com.wipi.inferfaces.model.dto.res.ResGetJwtInfoAll;
+import com.wipi.inferfaces.model.rest.RestResponse;
+import com.wipi.inferfaces.model.rest.RestResponseEntity;
 import com.wipi.support.swagger.wrapper.RestGetJwtInfoAllWrapper;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;

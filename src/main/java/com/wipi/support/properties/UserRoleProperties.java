@@ -1,4 +1,4 @@
-package com.wipi.infra.user;
+package com.wipi.support.properties;
 
 import lombok.Getter;
 import lombok.Setter;

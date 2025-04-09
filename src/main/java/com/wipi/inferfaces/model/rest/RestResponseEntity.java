@@ -1,4 +1,4 @@
-package com.wipi.inferfaces.rest;
+package com.wipi.inferfaces.model.rest;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -6,6 +6,10 @@ import org.springframework.http.ResponseEntity;
 public class RestResponseEntity {
     public static <T> ResponseEntity<RestResponse<T>> ok(String message, T data) {
         return ResponseEntity.ok(new RestResponse<>(HttpStatus.OK, message, data));
+    }
+
+    public static ResponseEntity<RestResponse<Void>> ok(String message) {
+        return ResponseEntity.ok(new RestResponse<>(HttpStatus.OK, message, null));
     }
 
     public static <T> ResponseEntity<RestResponse<T>> created(String message, T data) {

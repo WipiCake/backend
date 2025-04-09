@@ -1,10 +1,10 @@
-package com.wipi.inferfaces.controller;
+package com.wipi.inferfaces.api.controller;
 
 import com.wipi.app.UserFrontService;
-import com.wipi.inferfaces.dto.ResUserSignupDto;
-import com.wipi.inferfaces.param.UserSignupParam;
-import com.wipi.inferfaces.rest.RestResponse;
-import com.wipi.inferfaces.rest.RestResponseEntity;
+import com.wipi.inferfaces.model.dto.res.ResUserSignupDto;
+import com.wipi.inferfaces.model.param.UserSignupParam;
+import com.wipi.inferfaces.model.rest.RestResponse;
+import com.wipi.inferfaces.model.rest.RestResponseEntity;
 import com.wipi.support.swagger.wrapper.RestUserSignupWrapper;
 import com.wipi.support.util.Utils;
 import io.swagger.v3.oas.annotations.Operation;
