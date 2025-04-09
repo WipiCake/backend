@@ -1,5 +1,6 @@
 package com.wipi.app;
 
+import com.wipi.domain.user.UserService;
 import com.wipi.inferfaces.model.dto.req.ReqSaveEmailVerificationDto;
 import com.wipi.inferfaces.model.dto.req.ReqSendEmailDto;
 import com.wipi.inferfaces.model.param.ProcessEmailVerification;
@@ -16,6 +17,7 @@ import org.springframework.stereotype.Service;
 public class EmailFrontService {
 
     private final RabbitTemplate rabbitTemplate;
+    private final UserService userService;
 
     // TODO 이메일 인증코드 발급 프로세스
     public void processEmailVerification(ProcessEmailVerification param) {
@@ -53,15 +55,17 @@ public class EmailFrontService {
         final String id = Utils.generate32CharCode();
         final String tempPassword = MailUtils.generateTempPassword();
 
-        ReqSaveEmailVerificationDto dto = new ReqSaveEmailVerificationDto();
-            dto.setToEmail(param.getToEmail());
-            dto.setPurpose(param.getPurpose());
-            dto.setExpirationTime(expirationTime);
-            dto.setVerified(verified);
-            dto.setId(id);
-            dto.setCode(tempPassword);
+        userService.updatePasswordByEmail(param.getToEmail(), tempPassword);
 
-        rabbitTemplate.convertAndSend(RabbitmqConstants.EXCHANGE_MAIL,RabbitmqConstants.ROUTING_MAIL_SEND, param);
+        ReqSaveEmailVerificationDto reqSaveDto = new ReqSaveEmailVerificationDto();
+            reqSaveDto.setToEmail(param.getToEmail());
+            reqSaveDto.setPurpose(param.getPurpose());
+            reqSaveDto.setExpirationTime(expirationTime);
+            reqSaveDto.setVerified(verified);
+            reqSaveDto.setId(id);
+            reqSaveDto.setCode(tempPassword);
+
+        rabbitTemplate.convertAndSend(RabbitmqConstants.EXCHANGE_MAIL,RabbitmqConstants.ROUTING_MAIL_SAVE ,reqSaveDto);
 
         // TODO 이메일 전송
         ReqSendEmailDto reqSendDto = new ReqSendEmailDto();
@@ -72,6 +76,7 @@ public class EmailFrontService {
 
         rabbitTemplate.convertAndSend(RabbitmqConstants.EXCHANGE_MAIL,RabbitmqConstants.ROUTING_MAIL_SEND, reqSendDto);
     }
+
 
 
 }

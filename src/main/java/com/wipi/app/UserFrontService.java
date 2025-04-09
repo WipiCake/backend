@@ -14,7 +14,7 @@ public class UserFrontService {
     private final UserService userService;
 
     public ResUserSignupDto userSignup(UserSignupParam param) {
-        userService.validateDuplicateEmail(param);
+        userService.validateDuplicateEmail(param.getEmail());
         User user = userService.saveUser(param);
 
         return new ResUserSignupDto(user.getUserIdentityId(), user.getEmail());

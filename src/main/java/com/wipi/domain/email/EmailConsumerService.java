@@ -24,7 +24,8 @@ public class EmailConsumerService {
 
     @RabbitListener(queues = RabbitmqConstants.QUEUE_MAIL_SAVE, concurrency = "1")
     public void saveEmailVerification(ReqSaveEmailVerificationDto DTO){
-        EmailVerification emailVerification = new EmailVerification();
+        try {
+            EmailVerification emailVerification = new EmailVerification();
             emailVerification.setId(DTO.getId());
             emailVerification.setEmail(DTO.getToEmail());
             emailVerification.setVerificationCode(DTO.getCode());
@@ -33,7 +34,11 @@ public class EmailConsumerService {
             emailVerification.setCreateAt(LocalDateTime.now());
             emailVerification.setExpirationTime(LocalDateTime.now().plusMinutes(DTO.getExpirationTime()));
 
-        emailRepository.save(emailVerification);
+            emailRepository.save(emailVerification);
+        }catch (Exception e){
+            log.error("Error Save Mail : {}",e.getMessage());
+        }
+
     }
 
     @RabbitListener(queues = RabbitmqConstants.QUEUE_MAIL_SEND, concurrency = "1")
@@ -48,7 +53,7 @@ public class EmailConsumerService {
             log.info("Email sent to : {}\n, code : {}",DTO.getToEmail(),DTO.getCode());
 
         }catch (Exception e) {
-            log.error("ERROR : {}",e.getMessage());
+            log.error("ERROR Send Mail : {}",e.getMessage());
         }
     }
 

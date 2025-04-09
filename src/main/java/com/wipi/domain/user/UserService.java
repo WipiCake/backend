@@ -21,8 +21,8 @@ public class UserService {
         );
     }
 
-    public void validateDuplicateEmail(UserSignupParam param) {
-        if (userRepository.existsByEmail(param.getEmail())) {
+    public void validateDuplicateEmail(String email) {
+        if (userRepository.existsByEmail(email)) {
             throw new RuntimeException("이미 존재하는 이메일입니다.");
         }
     }
@@ -44,6 +44,12 @@ public class UserService {
             user.setDetailAddress(param.getDetailAddress());
 
         return userRepository.save(user);
+    }
+
+    public User updatePasswordByEmail(String email, String password) {
+        User findUser = userRepository.findByEmail(email).orElseThrow(() -> new RuntimeException("해당 이메일이 존재하지 않습니다."));
+        findUser.setPassword(passwordEncoder.encode(password));
+        return userRepository.save(findUser);
     }
 
 
