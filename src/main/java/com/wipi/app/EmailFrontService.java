@@ -5,6 +5,7 @@ import com.wipi.inferfaces.model.dto.req.ReqSaveEmailVerificationDto;
 import com.wipi.inferfaces.model.dto.req.ReqSendEmailDto;
 import com.wipi.inferfaces.model.param.ProcessEmailVerification;
 import com.wipi.inferfaces.model.param.processIssueTempPassword;
+import com.wipi.infra.email.EmailRedisRepository;
 import com.wipi.support.constants.RabbitmqConstants;
 import com.wipi.support.util.MailUtils;
 import com.wipi.support.util.Utils;
@@ -18,6 +19,7 @@ public class EmailFrontService {
 
     private final RabbitTemplate rabbitTemplate;
     private final UserService userService;
+    private final EmailRedisRepository emailRedisRepository;
 
     // TODO 이메일 인증코드 발급 프로세스
     public void processEmailVerification(ProcessEmailVerification param) {
@@ -76,6 +78,38 @@ public class EmailFrontService {
 
         rabbitTemplate.convertAndSend(RabbitmqConstants.EXCHANGE_MAIL,RabbitmqConstants.ROUTING_MAIL_SEND, reqSendDto);
     }
+
+    // TODO 이메일 인증코드 재전송
+    public void reissueVerificationCode(processIssueTempPassword param) {
+        final int expirationTime = 10;
+        final String verified = "false";
+        final String id = Utils.generate32CharCode();
+        final String tempPassword = MailUtils.generateTempPassword();
+
+
+
+
+        ReqSaveEmailVerificationDto reqSaveDto = new ReqSaveEmailVerificationDto();
+        reqSaveDto.setToEmail(param.getToEmail());
+        reqSaveDto.setPurpose(param.getPurpose());
+        reqSaveDto.setExpirationTime(expirationTime);
+        reqSaveDto.setVerified(verified);
+        reqSaveDto.setId(id);
+        reqSaveDto.setCode(tempPassword);
+
+        rabbitTemplate.convertAndSend(RabbitmqConstants.EXCHANGE_MAIL,RabbitmqConstants.ROUTING_MAIL_SAVE ,reqSaveDto);
+
+        // TODO 이메일 전송
+        ReqSendEmailDto reqSendDto = new ReqSendEmailDto();
+        reqSendDto.setToEmail(param.getToEmail());
+        reqSendDto.setCode(tempPassword);
+        reqSendDto.setSubject(MailUtils.getSubjectForFindPassword());
+        reqSendDto.setBody(MailUtils.getBodyForFindPassword(tempPassword));
+
+        rabbitTemplate.convertAndSend(RabbitmqConstants.EXCHANGE_MAIL,RabbitmqConstants.ROUTING_MAIL_SEND, reqSendDto);
+    }
+
+
 
 
 

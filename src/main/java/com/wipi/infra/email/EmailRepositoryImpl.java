@@ -15,4 +15,14 @@ public class EmailRepositoryImpl implements EmailRepository {
     public EmailVerification save(EmailVerification emailVerification) {
         return emailRedisRepository.save(emailVerification);
     }
+
+    @Override
+    public EmailVerification findByEmail(String email) {
+        return emailRedisRepository.findByEmail(email);
+    }
+
+    @Override
+    public void deleteByEmail(String email) {
+        emailRedisRepository.deleteByEmail(email);
+    }
 }
