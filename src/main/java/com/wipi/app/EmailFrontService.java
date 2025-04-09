@@ -62,6 +62,15 @@ public class EmailFrontService {
             dto.setCode(tempPassword);
 
         rabbitTemplate.convertAndSend(RabbitmqConstants.EXCHANGE_MAIL,RabbitmqConstants.ROUTING_MAIL_SEND, param);
+
+        // TODO 이메일 전송
+        ReqSendEmailDto reqSendDto = new ReqSendEmailDto();
+        reqSendDto.setToEmail(param.getToEmail());
+        reqSendDto.setCode(tempPassword);
+        reqSendDto.setSubject(MailUtils.getSubjectForFindPassword());
+        reqSendDto.setBody(MailUtils.getBodyForFindPassword(tempPassword));
+
+        rabbitTemplate.convertAndSend(RabbitmqConstants.EXCHANGE_MAIL,RabbitmqConstants.ROUTING_MAIL_SEND, reqSendDto);
     }
 
 
