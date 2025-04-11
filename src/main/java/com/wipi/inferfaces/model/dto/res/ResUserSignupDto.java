@@ -7,9 +7,12 @@ import lombok.Getter;
 @Getter
 @AllArgsConstructor
 public class ResUserSignupDto {
-    @Schema(description = "유저 식별 ID", example = "1")
-    private Long userIdentityId;
+    @Schema(description = "유저 아이디", example = "admin12")
+    private String userId;
 
     @Schema(description = "이메일", example = "wipi@naver.com")
     private String email;
+
+    @Schema(description = "권한", example = "ROLE_USER")
+    private String role;
 }

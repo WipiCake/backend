@@ -27,11 +27,18 @@ public class UserService {
         }
     }
 
+    public void validateDuplicateUserId(String userId) {
+        if (userRepository.existByUserId(userId)) {
+            throw new RuntimeException("이미 존재하는 아이디입니다.");
+        }
+    }
+
     public User saveUser(UserSignupParam param) {
         final String userRole = userRoleProperties.getUser();
         final String encodedPassword = passwordEncoder.encode(param.getPassword());
 
         User user = new User();
+            user.setUserId(param.getUserId());
             user.setEmail(param.getEmail());
             user.setPassword(encodedPassword);
             user.setRole(userRole);

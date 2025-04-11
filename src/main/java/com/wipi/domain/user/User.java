@@ -15,9 +15,8 @@ import lombok.Setter;
 @Table(name = "wipi_user")
 public class User extends BaseTimeEntity {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "user_identity_id")
-    private Long userIdentityId;
+    @Column(name = "user_id")
+    private String userId;
 
     @Column(name = "email", length = 99, unique = true, nullable = false)
     private String email;
@@ -28,10 +27,10 @@ public class User extends BaseTimeEntity {
     @Column(name = "role", length = 20, nullable = false)
     private String role;
 
-    @Column(name = "nick_name", length = 99)
+    @Column(name = "nick_name", length = 99, nullable = false)
     private String nickName;
 
-    @Column(name = "phone_number", length = 99)
+    @Column(name = "phone_number", length = 99, nullable = false)
     private String phoneNumber;
 
     @Column(name = "gender", length = 49)
@@ -62,8 +61,8 @@ public class User extends BaseTimeEntity {
         this.detailAddress = detailAddress;
     }
 
-    public User(Long userIdentityId, String role) {
-        this.userIdentityId = userIdentityId;
+    public User(String userId, String role) {
+        this.userId = userId;
         this.role = role;
     }
 }
