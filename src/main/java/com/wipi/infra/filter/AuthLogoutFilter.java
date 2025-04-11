@@ -26,7 +26,7 @@ public class AuthLogoutFilter extends GenericFilterBean {
     }
 
     private void doFilter(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws IOException, ServletException {
-        if(!request.getRequestURI().equals("/logout") || !"POST".equals(request.getMethod()){
+        if (!request.getRequestURI().equals("/logout") || !"POST".equals(request.getMethod()) ) {
             filterChain.doFilter(request, response);
             return;
         }
