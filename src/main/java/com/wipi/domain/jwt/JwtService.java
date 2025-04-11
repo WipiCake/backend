@@ -145,9 +145,32 @@ public class JwtService {
         return reissueAccessToken;
     }
 
+    public Cookie logoutAndCreateExpiredCookie(HttpServletRequest request){
+        // todo RefreshToken 삭제
+        Cookie[] cookies = request.getCookies();
+        if (cookies != null) {
+            for (Cookie cookie : cookies) {
+                if ("refresh".equals(cookie.getName())) {
+                    jwtRepository.removeJwtAuthRedisByRefreshToken(cookie.getValue());
+                    break;
+                }
+            }
+        }
+
+        // todo AccessToken 삭제
+        String accessToken = request.getHeader("Authorization");
+        if (accessToken != null && accessToken.startsWith("Bearer ")) {
+            jwtRepository.removeJwtAuthRedisByAccessToken(accessToken);
+        }
+
+        return jwtUtil.createLogoutCookie();
+    }
+
     public Authentication getAuthentication(String validAccessToken) {
         String username = jwtUtil.getUsername(validAccessToken);
         UserDetails userDetails = userDetailsService.loadUserByUsername(username);
         return new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
     }
+
+
 }

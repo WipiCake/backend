@@ -10,4 +10,5 @@ public interface JwtRedisCachingRepository extends CrudRepository<JwtAuthRedis, 
     Optional<JwtAuthRedis> findJwtAuthRedisByEmail(String email);
     void removeJwtAuthRedisById(String id);
     void removeJwtAuthRedisByAccessToken(String accessToken);
+    void removeJwtAuthRedisByRefreshToken(String refreshToken);
 }

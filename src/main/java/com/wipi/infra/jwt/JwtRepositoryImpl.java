@@ -34,11 +34,6 @@ public class JwtRepositoryImpl implements JwtRepository {
     }
 
     @Override
-    public void removeAccessToken(String accessToken) {
-        jwtRedisCachingRepository.removeJwtAuthRedisByAccessToken(accessToken);
-    }
-
-    @Override
     public JwtAuthRedis saveOrUpdateJwtAuth(JwtAuthRedis jwtAuthRedis) {
         JwtAuthRedis saved = jwtRedisCachingRepository.save(jwtAuthRedis);
 
@@ -56,5 +51,15 @@ public class JwtRepositoryImpl implements JwtRepository {
     @Override
     public void removeJwtAuthRedisById(String id) {
         jwtRedisCachingRepository.removeJwtAuthRedisById(id);
+    }
+
+    @Override
+    public void removeJwtAuthRedisByRefreshToken(String refreshToken) {
+        jwtRedisCachingRepository.removeJwtAuthRedisByRefreshToken(refreshToken);
+    }
+
+    @Override
+    public void removeJwtAuthRedisByAccessToken(String accessToken) {
+        jwtRedisCachingRepository.removeJwtAuthRedisByAccessToken(accessToken);
     }
 }
