@@ -1,7 +1,11 @@
 package com.wipi.domain.email;
 
+import java.util.Optional;
+
 public interface EmailRepository {
     EmailVerification save(EmailVerification emailVerification);
-    EmailVerification findByEmail(String email);
+    Optional<EmailVerification> findByEmail(String email);
     void deleteByEmail(String email);
+    Optional<EmailVerification> findByEmailAndVerificationCode(String email, String verificationCode);
+
 }

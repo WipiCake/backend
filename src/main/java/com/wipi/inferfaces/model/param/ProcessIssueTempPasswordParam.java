@@ -1,4 +1,4 @@
-package com.wipi.inferfaces.model.dto.req;
+package com.wipi.inferfaces.model.param;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -6,11 +6,11 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @AllArgsConstructor
-@NoArgsConstructor
 @Getter
+@NoArgsConstructor
 @Setter
-public class ReqSaveEmailVerificationDto {
+public class ProcessIssueTempPasswordParam {
     private String toEmail;
     private String purpose;
-    private String verificationCode;
+
 }

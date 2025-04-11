@@ -5,6 +5,8 @@ import com.wipi.domain.email.EmailVerification;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
+import java.util.Optional;
+
 @Repository
 @RequiredArgsConstructor
 public class EmailRepositoryImpl implements EmailRepository {
@@ -17,7 +19,7 @@ public class EmailRepositoryImpl implements EmailRepository {
     }
 
     @Override
-    public EmailVerification findByEmail(String email) {
+    public Optional<EmailVerification> findByEmail(String email) {
         return emailRedisRepository.findByEmail(email);
     }
 
@@ -25,4 +27,10 @@ public class EmailRepositoryImpl implements EmailRepository {
     public void deleteByEmail(String email) {
         emailRedisRepository.deleteByEmail(email);
     }
+
+    @Override
+    public Optional<EmailVerification> findByEmailAndVerificationCode(String email, String verificationCode) {
+        return emailRedisRepository.findByEmailAndVerificationCode(email, verificationCode);
+    }
+
 }

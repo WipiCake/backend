@@ -9,8 +9,9 @@ import lombok.Setter;
 @NoArgsConstructor
 @Getter
 @Setter
-public class ReqSaveEmailVerificationDto {
+public class ReissueEmailVerificationCodeParam {
+
     private String toEmail;
     private String purpose;
-    private String verificationCode;
+
 }

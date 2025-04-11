@@ -31,20 +31,12 @@ public class RabbitmqConfig {
         return new Queue(RabbitmqConstants.QUEUE_MAIL_SEND, true);
     }
 
-    @Bean
-    public Queue queueMailSave() {
-        return new Queue(RabbitmqConstants.QUEUE_MAIL_SAVE, true);
-    }
 
     @Bean
     public Binding BindingMailSend(Queue queueMailSend, DirectExchange mailExchange) {
         return BindingBuilder.bind(queueMailSend).to(mailExchange).with(RabbitmqConstants.ROUTING_MAIL_SEND);
     }
 
-    @Bean
-    public Binding BindingMailSave(Queue queueMailSave, DirectExchange mailExchange) {
-        return BindingBuilder.bind(queueMailSave).to(mailExchange).with(RabbitmqConstants.ROUTING_MAIL_SAVE);
-    }
 
     @Bean
     public ConnectionFactory connectionFactory() {

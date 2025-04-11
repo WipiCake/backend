@@ -29,6 +29,5 @@ public class EmailVerification implements Serializable {
     private String verificationCode;
     private String purpose;
     private LocalDateTime expirationTime;
-    private String verified;
     private LocalDateTime createAt;
 }

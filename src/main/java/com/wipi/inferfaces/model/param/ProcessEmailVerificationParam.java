@@ -9,7 +9,7 @@ import lombok.Setter;
 @Getter
 @NoArgsConstructor
 @Setter
-public class ProcessEmailVerification {
+public class ProcessEmailVerificationParam {
     private String toEmail;
     private String purpose;
 }
