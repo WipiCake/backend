@@ -12,6 +12,7 @@ import com.wipi.inferfaces.model.param.ProcessIssueTempPasswordParam;
 import com.wipi.inferfaces.model.param.VerifyEmailVerificationCodeParam;
 import com.wipi.support.constants.RabbitmqConstants;
 import com.wipi.support.util.MailUtils;
+import com.wipi.support.util.Utils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.stereotype.Service;
@@ -28,7 +29,7 @@ public class EmailFrontService {
     public void processEmailVerification(ProcessEmailVerificationParam param) {
         final String reqEmail = param.getToEmail();
         final String reqPurpose = param.getPurpose();
-        final String reqVerificationCode = MailUtils.generateCode();
+        final String reqVerificationCode = Utils.generateCode6();
         final String reqSubject = MailUtils.getSubjectForVerificationEmail();
         final String reqBody = MailUtils.getBodyForVerificationEmail(reqVerificationCode);
 
@@ -52,7 +53,7 @@ public class EmailFrontService {
     //임시 비밀번호 발급 프로세스
     public void processIssueTempPassword(ProcessIssueTempPasswordParam param) {
         final String reqEmail = param.getToEmail();
-        final String tempPassword = MailUtils.generateTempPassword();
+        final String tempPassword = Utils.generateTempPassword8();
         final String reqSubject = MailUtils.getSubjectForFindPassword();
         final String reqBody = MailUtils.getBodyForFindPassword(tempPassword);
 
@@ -90,7 +91,7 @@ public class EmailFrontService {
         // todo 발급시간 2분 지났는지 검증
         emailService.canReissueVerificationCode(reqToEmail);
 
-        final String reqVerificationCode = MailUtils.generateCode();
+        final String reqVerificationCode = Utils.generateCode6();
         final String reqPurpose = param.getPurpose();
         final String reqSubject = MailUtils.getSubjectForVerificationEmail();
         final String reqBody = MailUtils.getBodyForVerificationEmail(reqVerificationCode);

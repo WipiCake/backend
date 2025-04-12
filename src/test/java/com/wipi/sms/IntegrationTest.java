@@ -1,6 +1,6 @@
 package com.wipi.sms;
 
-import com.wipi.domain.sms.SmsCoolConsumerService;
+import com.wipi.infra.sms.SmsCoolConsumerService;
 import com.wipi.support.util.MailUtils;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

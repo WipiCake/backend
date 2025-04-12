@@ -4,24 +4,7 @@ import java.util.Random;
 
 public class MailUtils {
 
-    private static final Random random = new Random();
     public static final String setFrom = "wipi_cake";
-
-    // todo 인증번호 발급
-    public static String generateCode() {
-        int code = random.nextInt(1_000_000);
-        return String.format("%06d", code);
-    }
-
-    // todo 임시비밀번호 발급
-    public static String generateTempPassword() {
-        StringBuilder sb = new StringBuilder();
-        for (int i = 0; i < 8; i++) {
-            int digit = random.nextInt(10); // 0~9
-            sb.append(digit);
-        }
-        return sb.toString();
-    }
 
     // todo 본문,제목
     public static String getSubjectForVerificationEmail() {

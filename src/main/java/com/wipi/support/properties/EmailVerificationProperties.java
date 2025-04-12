@@ -10,7 +10,6 @@ import org.springframework.stereotype.Component;
 @Component
 @ConfigurationProperties(prefix = "spring.mail")
 public class EmailVerificationProperties {
-
     private String host;
     private Integer port;
     private String fromEmail;

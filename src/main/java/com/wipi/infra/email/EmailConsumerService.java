@@ -1,4 +1,4 @@
-package com.wipi.domain.email;
+package com.wipi.infra.email;
 
 import com.wipi.inferfaces.model.dto.req.ReqSendEmailDto;
 import com.wipi.support.constants.RabbitmqConstants;

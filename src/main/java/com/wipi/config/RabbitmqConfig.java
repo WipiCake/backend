@@ -21,8 +21,9 @@ public class RabbitmqConfig {
 
     private final RabbitmqProperties rabbitMqProperties;
 
+    // === EMAIL 설정 ===
     @Bean
-    public DirectExchange mailExchange() {
+    public DirectExchange exchangeMail() {
         return new DirectExchange(RabbitmqConstants.EXCHANGE_MAIL);
     }
 
@@ -31,13 +32,32 @@ public class RabbitmqConfig {
         return new Queue(RabbitmqConstants.QUEUE_MAIL_SEND, true);
     }
 
-
     @Bean
-    public Binding BindingMailSend(Queue queueMailSend, DirectExchange mailExchange) {
-        return BindingBuilder.bind(queueMailSend).to(mailExchange).with(RabbitmqConstants.ROUTING_MAIL_SEND);
+    public Binding bindingMailSend(Queue queueMailSend, DirectExchange exchangeMail) {
+        return BindingBuilder.bind(queueMailSend)
+                .to(exchangeMail)
+                .with(RabbitmqConstants.ROUTING_MAIL_SEND);
     }
 
+    // === SMS 설정 ===
+    @Bean
+    public DirectExchange exchangeSmsCool() {
+        return new DirectExchange(RabbitmqConstants.EXCHANGE_SMS_COOL);
+    }
 
+    @Bean
+    public Queue queueSmsCool() {
+        return new Queue(RabbitmqConstants.QUEUE_SMS_COOL, true);
+    }
+
+    @Bean
+    public Binding bindingSmsCool(Queue queueSmsCool, DirectExchange exchangeSmsCool) {
+        return BindingBuilder.bind(queueSmsCool)
+                .to(exchangeSmsCool)
+                .with(RabbitmqConstants.ROUTING_SMS_SEND);
+    }
+
+    // === 공통 RabbitMQ 설정 ===
     @Bean
     public ConnectionFactory connectionFactory() {
         CachingConnectionFactory connectionFactory = new CachingConnectionFactory();
@@ -45,7 +65,6 @@ public class RabbitmqConfig {
         connectionFactory.setPort(rabbitMqProperties.getPort());
         connectionFactory.setUsername(rabbitMqProperties.getUsername());
         connectionFactory.setPassword(rabbitMqProperties.getPassword());
-        // optional: TLS, virtual host 등 추가 가능
         return connectionFactory;
     }
 
@@ -55,7 +74,8 @@ public class RabbitmqConfig {
     }
 
     @Bean
-    public RabbitTemplate rabbitTemplate(ConnectionFactory connectionFactory,MessageConverter messageConverter) {
+    public RabbitTemplate rabbitTemplate(ConnectionFactory connectionFactory,
+                                         MessageConverter messageConverter) {
         RabbitTemplate rabbitTemplate = new RabbitTemplate(connectionFactory);
         rabbitTemplate.setMessageConverter(messageConverter);
         return rabbitTemplate;

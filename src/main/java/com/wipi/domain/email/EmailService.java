@@ -2,15 +2,10 @@ package com.wipi.domain.email;
 
 import com.wipi.inferfaces.model.dto.req.ReqSaveEmailVerificationDto;
 import com.wipi.inferfaces.model.dto.req.ReqVerifyEmailVerificationCode;
-import com.wipi.inferfaces.model.dto.req.SaveEmailVerificationDto;
-import com.wipi.support.constants.RabbitmqConstants;
-import com.wipi.support.util.MailUtils;
 import com.wipi.support.util.Utils;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.stereotype.Service;
-
 import java.time.LocalDateTime;
 
 @Service
