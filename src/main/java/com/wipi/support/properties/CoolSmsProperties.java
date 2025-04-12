@@ -8,11 +8,8 @@ import org.springframework.stereotype.Component;
 @Getter
 @Setter
 @Component
-@ConfigurationProperties(prefix = "spring.mail")
-public class EmailVerificationProperties {
-
-    private String host;
-    private Integer port;
-    private String fromEmail;
-    private String password;
+@ConfigurationProperties(prefix = "sms.cool")
+public class CoolSmsProperties {
+    private String apiKey;
+    private String secret;
 }
