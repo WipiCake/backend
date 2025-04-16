@@ -4,15 +4,15 @@ services:
   redis:
     image: redis
     container_name: redis-1
-    command: ["redis-server", "--save", "", "--appendonly", "no"]
-    ports:
-      - "6379:6379"
-    volumes:
-      - type: tmpfs
-        target: /data
     networks:
       - spring-network
-
+    ports:
+      - "6379:6379"
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 3s
+      retries: 5
 
   rabbitmq:
     image: rabbitmq:3-management
@@ -36,13 +36,13 @@ services:
     ports:
       - "8080:8080"
     depends_on:
-      # rabbitmq:
-      #   condition: service_healthy
+      rabbitmq:
+        condition: service_healthy
       redis:
         condition: service_healthy
     command: ["--spring.profiles.active=consumer"]
-    environment:
-      SPRING_PROFILES_ACTIVE: consumer
+    # environment:
+    #   SPRING_PROFILES_ACTIVE: consumer
 
 networks:
   spring-network:

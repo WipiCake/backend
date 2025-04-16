@@ -37,6 +37,8 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
                 obtainUsername(request), obtainPassword(request),null
         );
 
+        log.info("Attempting to authenticate: {},{}", obtainUsername(request), obtainPassword(request));
+
         return authenticationManager.authenticate(authRequest);
     }
 

@@ -48,7 +48,7 @@ public class LoginAPI {
                     description = "로그인 실패 - 아이디 또는 비밀번호가 일치하지 않음"
             )
     })
-    @PostMapping("auth/login")
+    @PostMapping("/login")
     public void login(@RequestBody LoginRequest request) {
         // 실제 동작은 Spring Security Filter (ex: UsernamePasswordAuthenticationFilter)에서 처리됨
         throw new UnsupportedOperationException("이 API는 문서 전용이며 실제 동작하지 않습니다.");

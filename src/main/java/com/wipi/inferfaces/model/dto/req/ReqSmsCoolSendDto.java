@@ -6,7 +6,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 
 @RequiredArgsConstructor
-@NoArgsConstructor
 @Getter
 @Setter
 public class ReqSmsCoolSendDto {

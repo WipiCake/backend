@@ -1,14 +1,12 @@
 package com.wipi.support.properties;
 
-import lombok.Getter;
-import lombok.Setter;
+import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.stereotype.Component;
 
-@Getter
-@Setter
+@Data
 @Component
-@ConfigurationProperties(prefix = "rabbitmq")
+@ConfigurationProperties(prefix = "spring.main.rabbitmq")
 public class RabbitmqProperties {
 
     private String host;

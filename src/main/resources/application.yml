@@ -1,1 +1,128 @@
-- Protected
+server:
+  port: 8080
+  servlet:
+    context-path: /
+    encoding:
+      force-response: true
+
+spring:
+  application:
+    name: pro
+  datasource:
+    url: jdbc:mysql://my8003.gabiadb.com:3306/jmdb?useUnicode=true&characterEncoding=utf-8&characterSetResults=utf-8&serverTimezone=Asia/Seoul
+    username: jmhost
+    password: jaemin202020
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    hikari:
+      connection-test-query: 'select 1'
+      connection-timeout: 10000
+      maximum-pool-size: 5
+      pool-name: jm-admin-pool
+
+  jackson:
+    time-zone: Asia/Seoul
+
+  mail:
+    host: smtp.naver.com
+    port: 587
+    username: eheh8734@naver.com
+    password: Sh102884!!
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+
+  rabbitmq:
+    host: rabbitmq-1
+    port: 5672
+    username: guest
+    password: guest
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+    properties:
+      hibernate:
+        order_inserts: true
+        order_updates: true
+        show_sql: true
+        id:
+          new_generator_mappings: false
+
+  web:
+    resources:
+      add-mappings: false
+
+
+  data:
+    redis:
+      host: redis-1
+      #host: localhost
+      port: 6379
+      timeout: 0
+  cache:
+    type: redis
+    redis:
+      use-key-prefix: true
+      cache-null-values: true
+
+  #Registration
+  security:
+    oauth2:
+      client:
+        registration:
+          google:
+            client-id: 770070001883-jbm4ef62ak9u1cie1kv50u8vrdvfkihq.apps.googleusercontent.com
+            client-secret: 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
+            scope: profile, email
+
+
+
+          kakao:
+            client-id: e9892d48b7716e43ee76f989213ba23d
+            client-secret: aLBfNVKiXWDLb0Bqrumqfm70eaKwmVgr
+            redirect-uri: http://localhost:8000/api/v1/oauth2/kakao
+            authorization-grant-type: authorization_code
+            client-authentication-method: POST
+            client-name: Kakao
+            scope:
+              - profile_nickname
+              - profile_image
+        provider:
+          kakao:
+            authorization-uri: https://kauth.kakao.com/oauth/authorize
+            token-uri: https://kauth.kakao.com/oauth/token
+            user-info-uri: https://kapi.kakao.com/v2/user/me
+            user-name-attribute: id
+
+
+springdoc:
+  api-docs:
+    enabled: true
+  swagger-ui:
+    enabled: true
+
+logging:
+  level:
+    org.springdoc: DEBUG
+    org.springframework.web: DEBUG
+
+jwt:
+  secret: vmfhaltmskdlstkfkdgodyroqkfwkdbalroqkfwkdbalaaaaaaaaaaaaaaaabbbbb
+  access-expiration-minutes: 10
+  refresh-expiration-days: 1
+  refresh-cookie-name: refresh
+  access-header-name: access
+
+role:
+  user: ROLE_USER
+  admin: ROLE_ADMIN
+  any: ROLE_ANY
+
+sms:
+  cool:
+    api-key: NCSCPHLPUZAIKJML
+    secret: WFLXSU5YXY4KOFKZAOTCH0EDAWJBYGDW
