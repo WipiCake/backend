@@ -16,7 +16,7 @@ public class CoolSmsConfig {
     @Bean
     public DefaultMessageService defaultMessageService() {
         return NurigoApp.INSTANCE.initialize(
-                coolSmsProperties.getApiKey(),
+                coolSmsProperties.getKey(),
                 coolSmsProperties.getSecret(),
                 "https://api.coolsms.co.kr"
         );
