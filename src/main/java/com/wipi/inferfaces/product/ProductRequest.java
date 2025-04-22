@@ -2,7 +2,6 @@ package com.wipi.inferfaces.product;
 
 import com.wipi.domain.product.IsThumbnail;
 import com.wipi.domain.product.ProductCommand;
-import com.wipi.domain.product.ProductSellingStatus;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -11,8 +10,8 @@ import jakarta.validation.constraints.Size;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+
 import java.util.List;
-import java.util.stream.Collectors;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class ProductRequest {
@@ -33,6 +32,7 @@ public class ProductRequest {
         @NotBlank(message = "상품 유형은 필수입니다.")
         private String type;
 
+        @Getter
         @NotBlank(message = "판매 상태는 필수입니다.")
         private String sellStatus;
 
@@ -40,34 +40,16 @@ public class ProductRequest {
         @Size(min = 1, message = "최소 1개의 이미지를 등록해야 합니다.")
         private List<@Valid RegisterImage> imageList;
 
-        public ProductCommand.Register toCommand() {
-            return ProductCommand.Register.of(
-                    name,
-                    price,
-                    description,
-                    type,
-                    ProductSellingStatus.valueOf(sellStatus.toUpperCase()),
-                    imageList.stream()
-                            .map(RegisterImage::toCommand)
-                            .collect(Collectors.toList())
-            );
-        }
     }
 
     @Getter
     @NoArgsConstructor
     public static class RegisterImage {
 
-        @NotBlank(message = "이미지 이름은 필수입니다.")
-        private String imageName;
-
-        @NotBlank(message = "이미지 경로는 필수입니다.")
-        private String imagePath;
-
         @NotBlank(message = "썸네일 여부는 필수입니다.")
         private String isThumbnail;
 
-        public ProductCommand.RegisterImage toCommand() {
+        public ProductCommand.RegisterImage toCommand(String imageName, String imagePath) {
             return ProductCommand.RegisterImage.of(
                     imageName,
                     imagePath,
@@ -75,6 +57,4 @@ public class ProductRequest {
             );
         }
     }
-
-
 }

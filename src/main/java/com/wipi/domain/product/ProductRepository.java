@@ -3,6 +3,6 @@ package com.wipi.domain.product;
 import java.util.List;
 
 public interface ProductRepository {
-    List<Product> getProductAll();
+    List<Product> findAll();
     Product save(Product product);
 }

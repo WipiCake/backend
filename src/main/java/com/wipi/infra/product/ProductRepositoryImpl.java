@@ -13,7 +13,7 @@ public class ProductRepositoryImpl implements ProductRepository {
     private final ProductJpaRepository productJpaRepository;
 
     @Override
-    public List<Product> getProductAll() {
+    public List<Product> findAll() {
         return productJpaRepository.findAll();
     }
 
