@@ -9,7 +9,7 @@ import org.springframework.stereotype.Component;
 @Getter
 @Setter
 @Component
-@ConfigurationProperties(prefix = "cool-sms.api")
+@ConfigurationProperties(prefix = "sms.cool")
 public class CoolSmsProperties {
     private String key;
     private String secret;

@@ -6,7 +6,7 @@ import org.springframework.stereotype.Component;
 
 @Data
 @Component
-@ConfigurationProperties(prefix = "spring.main.rabbitmq")
+@ConfigurationProperties(prefix = "spring.rabbitmq")
 public class RabbitmqProperties {
 
     private String host;

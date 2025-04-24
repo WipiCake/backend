@@ -6,7 +6,6 @@ import org.springframework.stereotype.Repository;
 
 import java.util.Optional;
 
-@Repository
 public interface EmailRedisRepository extends CrudRepository<EmailVerification, String> {
 
     Optional<EmailVerification> findByEmail(String email);

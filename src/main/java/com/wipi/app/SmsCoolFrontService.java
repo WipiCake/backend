@@ -18,7 +18,7 @@ public class SmsCoolFrontService {
 
     public void sendSmsCoolProcess(ProcessSendSmsCoolParam param) {
         final String reqToPhoneNumber = param.getToPhoneNumber();
-        final String reqVerificationCode = Utils.generate32CharCode();
+        final String reqVerificationCode = Utils.generateCode6();
 
         // todo SMS 인증정보 저장
         smsCoolService.saveSmsVerification(reqToPhoneNumber,reqVerificationCode);
