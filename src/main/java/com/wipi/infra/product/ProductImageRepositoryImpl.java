@@ -15,16 +15,6 @@ public class ProductImageRepositoryImpl implements ProductImageRepository {
     private final ProductImageJpaRepository productImageJpaRepository;
 
     @Override
-    public Optional<ProductImage> findByProductIdAndIsThumbnail(Long productId, IsThumbnail isThumbnail) {
-        return Optional.empty();
-    }
-
-    @Override
-    public void saveAll(List<ProductImage> productImage) {
-        productImageJpaRepository.saveAll(productImage);
-    }
-
-    @Override
     public ProductImage save(ProductImage productImage) {
         return productImageJpaRepository.save(productImage);
     }
@@ -32,5 +22,10 @@ public class ProductImageRepositoryImpl implements ProductImageRepository {
     @Override
     public List<ProductImage> findAll() {
         return productImageJpaRepository.findAll();
+    }
+
+    @Override
+    public List<ProductImage> findByProductId(Long productId) {
+        return productImageJpaRepository.findByProductId(productId);
     }
 }

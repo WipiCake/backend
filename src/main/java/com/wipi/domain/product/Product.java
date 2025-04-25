@@ -27,7 +27,7 @@ public class Product extends BaseTimeEntity {
     private String type;
 
     @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
+    @Column(nullable = false, name = "sell_status")
     private ProductSellingStatus sellStatus;
 
     private Product(String name, long price, String description, String type, ProductSellingStatus sellStatus) {

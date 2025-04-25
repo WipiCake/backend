@@ -2,6 +2,7 @@ package com.wipi.infra.product;
 
 import com.wipi.domain.product.Product;
 import com.wipi.domain.product.ProductRepository;
+import com.wipi.domain.product.ProductSellingStatus;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 import java.util.List;
@@ -26,5 +27,10 @@ public class ProductRepositoryImpl implements ProductRepository {
     @Override
     public Optional<Product> findByProductId(Long productId) {
         return productJpaRepository.findByProductId(productId);
+    }
+
+    @Override
+    public List<Product> findAllBySellStatus(ProductSellingStatus sellStatus) {
+        return productJpaRepository.findAllBySellStatus(sellStatus);
     }
 }

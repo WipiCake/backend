@@ -67,7 +67,8 @@ public class ProductCommand {
         public static RegisterDetailImages of(List<MultipartFile> detailImages, IsThumbnail isThumbnail, Long productId) {
             return new RegisterDetailImages(productId,detailImages, isThumbnail);
         }
-
-
     }
+
+
+
 }
