@@ -1,4 +1,4 @@
-package com.wipi.inferfaces.api.controller;
+package com.wipi.inferfaces.api.controller.email;
 
 import com.wipi.app.EmailFrontService;
 import com.wipi.inferfaces.model.dto.req.ReissueEmailVerificationCodeParam;

@@ -1,4 +1,4 @@
-package com.wipi.inferfaces.api.controller;
+package com.wipi.inferfaces.api.controller.admin;
 
 
 import com.wipi.app.AdminFrontService;

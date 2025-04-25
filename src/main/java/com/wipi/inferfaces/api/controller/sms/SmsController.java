@@ -1,4 +1,4 @@
-package com.wipi.inferfaces.api.controller;
+package com.wipi.inferfaces.api.controller.sms;
 
 import com.wipi.app.SmsCoolFrontService;
 import com.wipi.inferfaces.model.dto.req.VerifySmsCoolVerificationCodeParam;

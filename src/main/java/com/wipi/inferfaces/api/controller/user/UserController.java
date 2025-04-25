@@ -1,4 +1,4 @@
-package com.wipi.inferfaces.api.controller;
+package com.wipi.inferfaces.api.controller.user;
 
 import com.wipi.app.UserFrontService;
 import com.wipi.inferfaces.model.dto.res.ResUserSignupDto;
