@@ -24,7 +24,7 @@ public class ProductService {
     private final String basePath = "/product";
 
     @Transactional
-    public void register(ProductCommand.Register command){
+    public Long register(ProductCommand.Register command){
         Product product = productRepository.save(Product.create(
                 command.getName(),
                 command.getPrice(),
@@ -37,6 +37,7 @@ public class ProductService {
                 product.getProductId(),
                 command.getQuantity())
         );
+        return product.getProductId();
     }
 
     @Transactional
@@ -96,6 +97,8 @@ public class ProductService {
             String savedFullPath = uploadDir + File.separator + savedFileName;
 
             File dest = new File(savedFullPath);
+
+
             dest.getParentFile().mkdirs();
             file.transferTo(dest);
             String webPath = imagesPathProperties.getSrc().replace("/**", "") + basePath + "/" + savedFileName;
@@ -105,7 +108,7 @@ public class ProductService {
                     "savedFileName", savedFileName,
                     "webPath", webPath
             );
-        } catch (IOException e) {
+        } catch (Exception e) {
             throw new RuntimeException("썸네일 이미지 저장 중 오류가 발생했습니다.", e);
         }
     }

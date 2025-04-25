@@ -25,10 +25,6 @@ public class ProductImageRepositoryImpl implements ProductImageRepository {
     }
 
     @Override
-    public Optional<ProductImage> findByProductIdAndIsThumbnail(Long productId, IsThumbnail isThumbnail) {
-        return Optional.empty();
-    }
-    @Override
     public ProductImage save(ProductImage productImage) {
         return productImageJpaRepository.save(productImage);
     }

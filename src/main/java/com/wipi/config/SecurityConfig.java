@@ -49,7 +49,8 @@ public class SecurityConfig {
                         ).permitAll()
                         .requestMatchers(
                                 "/email/**",
-                                "/sms/**"
+                                "/sms/**",
+                                "/product/**"
                         ).permitAll()
                         .anyRequest().authenticated()
                 )
