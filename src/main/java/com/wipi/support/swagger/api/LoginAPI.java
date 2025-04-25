@@ -22,8 +22,8 @@ public class LoginAPI {
         - `password`: 12345678  
 
         로그인에 성공하면 다음과 같은 토큰이 발급됩니다:  
-        - 응답 헤더 `access`에 **Access Token** 포함  
-        - `Refresh Token`은 **Cookie에 저장**되며, 응답 헤더 `refresh`에도 함께 발급됩니다.
+        - 응답 헤더 `access-token`에 **access-token** 포함  
+        - `Refresh Token`은 **Cookie에 저장**됩니다.
         """
     )
     @ApiResponses(value = {

@@ -6,4 +6,6 @@ import java.util.Optional;
 public interface ProductImageRepository {
     void saveAll(List<ProductImage> productImage);
     Optional<ProductImage> findByProductIdAndIsThumbnail(Long productId, IsThumbnail isThumbnail);
+    ProductImage save (ProductImage productImage);
+    List<ProductImage> findAll();
 }

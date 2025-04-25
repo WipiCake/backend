@@ -9,9 +9,9 @@ import org.springframework.stereotype.Component;
 @Getter
 @Setter
 @Component
-@ConfigurationProperties(prefix = "sms.cool")
-public class CoolSmsProperties {
-    private String key;
-    private String secret;
-    private String number;
+@ConfigurationProperties(prefix = "images.base")
+public class ImagesPathProperties {
+
+    private String path;
+    private String src;
 }

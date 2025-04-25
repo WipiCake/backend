@@ -3,6 +3,7 @@ package com.wipi.domain.email;
 import com.wipi.inferfaces.model.dto.req.ReqSaveEmailVerificationDto;
 import com.wipi.inferfaces.model.dto.req.ReqVerifyEmailVerificationCode;
 import com.wipi.support.util.Utils;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -15,7 +16,7 @@ public class EmailService {
 
     private final EmailRepository emailRepository;
 
-
+    @Transactional
     public EmailVerification verifyEmailVerificationCode(ReqVerifyEmailVerificationCode DTO) {
         EmailVerification resEmailVerification = emailRepository.findByEmailAndVerificationCode(
                 DTO.getEmail(), DTO.getVerificationCode()).orElseThrow(() -> new RuntimeException("이메일 인증에 실패하였습니다."));
@@ -27,6 +28,7 @@ public class EmailService {
         return resEmailVerification;
     }
 
+    @Transactional
     public EmailVerification saveEmailVerification(ReqSaveEmailVerificationDto DTO) {
         final String reqToEmail = DTO.getToEmail();
         final String reqPurpose = DTO.getPurpose();
@@ -50,6 +52,7 @@ public class EmailService {
         emailRepository.deleteByEmail(email);
     }
 
+    @Transactional
     public void canReissueVerificationCode(String toEmail) {
         EmailVerification resEmailVerification = emailRepository.findByEmail(toEmail).orElseThrow(
                 () -> new RuntimeException(toEmail + ": 해당 이메일이 존재하지 않습니다.")
