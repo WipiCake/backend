@@ -1,5 +1,6 @@
 package com.wipi.domain.product;
 
+import com.wipi.infra.comm.CommFileService;
 import com.wipi.support.properties.ImagesPathProperties;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -21,6 +22,7 @@ public class ProductService {
     private final StockRepository stockRepository;
     private final ProductImageRepository productImageRepository;
     private final ImagesPathProperties imagesPathProperties;
+    private final CommFileService commFileService;
     private final String basePath = "/product";
 
     @Transactional
@@ -43,7 +45,7 @@ public class ProductService {
     @Transactional
     public void registerThumbnailImage(ProductCommand.RegisterThumbnailImage command){
         validProductId(command.getProductId());
-        Map<String,String> savedImage = saveImagesForPath(command.getThumbnailImage());
+        Map<String,String> savedImage = commFileService.saveImagesForPath(command.getThumbnailImage(), basePath);
 
         productImageRepository.save(ProductImage.of(
                 command.getProductId(),
@@ -66,7 +68,7 @@ public class ProductService {
         List<Map<String,String>> savedImages = new ArrayList<>();
 
         for(MultipartFile file : files){
-            savedImages.add(saveImagesForPath(file));
+            savedImages.add(commFileService.saveImagesForPath(file, basePath));
         }
 
         for(Map<String,String> savedImage : savedImages){
@@ -80,37 +82,11 @@ public class ProductService {
         }
     }
 
+
     private void validProductId(Long productId){
         productRepository.findByProductId(productId).orElseThrow(
                 () -> new RuntimeException("존재하지 않는 상품입니다 : " + productId)
         );
-    }
-
-
-    // 단일 상품 이미지 저장
-    private Map<String, String> saveImagesForPath(MultipartFile file) {
-        try {
-            String uploadDir = imagesPathProperties.getPath().replace("file:", "") + basePath;
-            String uuid = UUID.randomUUID().toString();
-            String originalFileName = file.getOriginalFilename();
-            String savedFileName = uuid + "_" + originalFileName;
-            String savedFullPath = uploadDir + File.separator + savedFileName;
-
-            File dest = new File(savedFullPath);
-
-
-            dest.getParentFile().mkdirs();
-            file.transferTo(dest);
-            String webPath = imagesPathProperties.getSrc().replace("/**", "") + basePath + "/" + savedFileName;
-
-            return Map.of(
-                    "originalFileName", originalFileName,
-                    "savedFileName", savedFileName,
-                    "webPath", webPath
-            );
-        } catch (Exception e) {
-            throw new RuntimeException("썸네일 이미지 저장 중 오류가 발생했습니다.", e);
-        }
     }
 
 

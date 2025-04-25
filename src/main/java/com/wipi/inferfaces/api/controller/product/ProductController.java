@@ -21,10 +21,15 @@ public class ProductController {
 
     @PostMapping(value = "/register", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ApiResponse<Void> register(
-            @RequestPart("product") ProductRequest.Register request,
+            @ModelAttribute ProductRequest.Register request,
             @RequestPart("thumbNailImage") MultipartFile thumbnail,
             @RequestPart("detailImages") List<MultipartFile> detailImages)
     {
+
+        log.info("상품명: {}", request.getName());
+        log.info("가격: {}", request.getPrice());
+        log.info("설명: {}", request.getDescription());
+
         request.setThumbNailImage(thumbnail);
         request.setDetailImages(detailImages);
         productFacadeService.registerProduct(request.toCriteria());

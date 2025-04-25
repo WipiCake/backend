@@ -14,6 +14,7 @@ import java.util.List;
 public class ProductRequest {
 
     @Getter
+    @Setter
     @NoArgsConstructor
     public static class Register {
         private String name;
@@ -22,11 +23,7 @@ public class ProductRequest {
         private String type;
         private ProductSellingStatus sellStatus;
         private long quantity;
-
-        @Setter
         private MultipartFile thumbNailImage;
-
-        @Setter
         private List<MultipartFile> detailImages;
 
         private Register(String name, long price, String description, String type, ProductSellingStatus sellStatus, long quantity) {
