@@ -2,10 +2,8 @@ package com.wipi.infra.comm;
 
 import com.wipi.support.properties.ImagesPathProperties;
 import lombok.RequiredArgsConstructor;
-import org.springframework.core.io.UrlResource;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
-
 import java.io.File;
 import java.util.Map;
 import java.util.UUID;
@@ -16,18 +14,19 @@ public class CommFileService {
 
     private final ImagesPathProperties imagesPathProperties;
 
-    public UrlResource loadImage(String fileName, String basePath) {
+    public String loadImage(String savedFileName, String basePath) {
         try {
             String uploadDir = imagesPathProperties.getPath().replace("file:", "") + basePath;
-            File file = new File(uploadDir, fileName);
+            File file = new File(uploadDir, savedFileName);
 
             if (!file.exists()) {
-                throw new RuntimeException("이미지를 찾을 수 없습니다: " + fileName);
+                throw new RuntimeException("이미지를 찾을 수 없습니다: " + savedFileName);
             }
 
-            return new UrlResource(file.toURI());
+            String urlPath = basePath + "/" + savedFileName;
+            return urlPath.replace("\\", "/");
         } catch (Exception e) {
-            throw new RuntimeException("이미지 로드 중 오류 발생: " + fileName, e);
+            throw new RuntimeException("이미지 로드 중 오류 발생: " + savedFileName, e);
         }
     }
 
