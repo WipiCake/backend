@@ -1,4 +1,4 @@
-package com.wipi.infra.filter;
+package com.wipi.filter.auth;
 
 import com.wipi.domain.jwt.JwtService;
 import com.wipi.inferfaces.model.dto.res.ResIssueJwtDto;

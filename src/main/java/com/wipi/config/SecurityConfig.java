@@ -1,8 +1,8 @@
 package com.wipi.config;
 
 import com.wipi.domain.jwt.JwtService;
-import com.wipi.infra.filter.JwtFilter;
-import com.wipi.infra.filter.LoginFilter;
+import com.wipi.filter.auth.JwtFilter;
+import com.wipi.filter.auth.LoginFilter;
 import com.wipi.support.properties.JwtProperties;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
@@ -92,10 +92,11 @@ public class SecurityConfig {
         config.setAllowedOrigins(List.of(
                 "http://localhost:3000",
                 "http://localhost:8080",
-                "http://localhost:5173"
+                "http://localhost:5173",
+                "http://localhost:3000/api/v1"
         ));
         config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
-        config.setAllowedHeaders(List.of("Authorization", "Content-Type"));
+        config.setAllowedHeaders(List.of("Authorization", "Content-Type","access","refresh","Set-Cookie"));
         config.setAllowCredentials(true);
 
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();

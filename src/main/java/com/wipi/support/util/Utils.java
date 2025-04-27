@@ -6,12 +6,14 @@ import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Component;
 
 import java.util.Random;
 import java.util.UUID;
 
 @Slf4j
 @RequiredArgsConstructor
+@Component
 public class Utils {
 
     private final ObjectMapper injectedMapper;

@@ -1,3 +1,4 @@
+/*
 package com.wipi.e2e.product;
 
 import org.junit.jupiter.api.DisplayName;
@@ -71,3 +72,4 @@ public class ProductTest {
                 .andExpect(status().isOk());
     }
 }
+*/

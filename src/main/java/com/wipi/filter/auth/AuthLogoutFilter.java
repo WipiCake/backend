@@ -1,4 +1,4 @@
-package com.wipi.infra.filter;
+package com.wipi.filter.auth;
 
 import com.wipi.domain.jwt.JwtService;
 import jakarta.servlet.FilterChain;
@@ -37,4 +37,7 @@ public class AuthLogoutFilter extends GenericFilterBean {
         response.addCookie(cookie);
         response.setStatus(HttpServletResponse.SC_OK);
     }
+
+
+
 }
