@@ -1,9 +1,7 @@
 package com.wipi.inferfaces.api.controller.email;
 
-import com.wipi.app.EmailFrontService;
-import com.wipi.inferfaces.model.dto.req.ReissueEmailVerificationCodeParam;
+import com.wipi.app.mail.EmailFrontService;
 import com.wipi.inferfaces.model.param.ProcessEmailVerificationParam;
-import com.wipi.inferfaces.model.param.ProcessIssueTempPasswordParam;
 import com.wipi.inferfaces.model.param.VerifyEmailVerificationCodeParam;
 import com.wipi.inferfaces.model.rest.RestMessage;
 import com.wipi.inferfaces.model.rest.RestResponse;
@@ -43,7 +41,7 @@ public class EmailController {
         return ResponseEntity.ok(new RestMessage("이메일 인증코드가 발급되었습니다."));
     }
 
-    @PostMapping("/code/reissue")
+/*    @PostMapping("/code/reissue")
     @Operation(
             summary = "이메일 인증코드 재발급",
             description = "이전에 발급된 인증코드를 제거하고 새로 발급합니다. 2분 제한 적용됨."
@@ -56,9 +54,9 @@ public class EmailController {
     public ResponseEntity<RestMessage> reissueEmailVerificationCode(@RequestBody ReissueEmailVerificationCodeParam param) {
         emailFrontService.resReissueEmailVerificationCode(param);
         return ResponseEntity.ok(new RestMessage("이메일 인증코드가 재발급되었습니다."));
-    }
+    }*/
 
-    @PostMapping("/temp-password/issue")
+/*    @PostMapping("/temp-password/issue")
     @Operation(
             summary = "임시 비밀번호 발급",
             description = "해당 이메일로 임시 비밀번호를 전송합니다."
@@ -71,7 +69,7 @@ public class EmailController {
     public ResponseEntity<RestResponse<Void>> issueTempPassword(@RequestBody ProcessIssueTempPasswordParam param) {
         emailFrontService.processIssueTempPassword(param);
         return RestResponseEntity.ok("임시 비밀번호가 이메일로 전송되었습니다.");
-    }
+    }*/
 
     @PostMapping("/code/verify")
     @Operation(

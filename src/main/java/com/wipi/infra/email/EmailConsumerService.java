@@ -3,6 +3,7 @@ package com.wipi.infra.email;
 import com.wipi.inferfaces.model.dto.req.ReqSendEmailDto;
 import com.wipi.support.constants.RabbitmqConstants;
 import com.wipi.support.util.MailUtils;
+import com.wipi.support.util.Utils;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
@@ -28,7 +29,7 @@ public class EmailConsumerService {
             message.setText(DTO.getBody());
             message.setFrom(MailUtils.setFrom);
             mailSender.send(message);
-            log.info("Email sent to : {}\n, code : {}",DTO.getToEmail(),DTO.getCode());
+            log.info("Email sent to : {}",Utils.toJson(DTO));
 
         }catch (Exception e) {
             log.error("ERROR Send Mail : {}",e.getMessage());

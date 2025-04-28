@@ -21,7 +21,9 @@ public class EmailService {
         EmailVerification resEmailVerification = emailRepository.findByEmailAndVerificationCode(
                 DTO.getEmail(), DTO.getVerificationCode()).orElseThrow(() -> new RuntimeException("이메일 인증에 실패하였습니다."));
 
-        if(LocalDateTime.now().isBefore(resEmailVerification.getExpirationTime())){
+
+        log.info("verifyEmailVerificationCode : {}",Utils.toJson(resEmailVerification));
+        if (LocalDateTime.now().isAfter(resEmailVerification.getExpirationTime())) {
             throw new RuntimeException("인증 코드가 만료되었습니다.");
         }
 
@@ -45,6 +47,7 @@ public class EmailService {
             emailVerification.setCreateAt(reqNow);
             emailVerification.setExpirationTime(reqExpiration);
 
+        log.info("Save email verification : {}", Utils.toJson(emailVerification));
         return emailRepository.save(emailVerification);
     }
 
@@ -54,16 +57,25 @@ public class EmailService {
 
     @Transactional
     public void canReissueVerificationCode(String toEmail) {
-        EmailVerification resEmailVerification = emailRepository.findByEmail(toEmail).orElseThrow(
-                () -> new RuntimeException(toEmail + ": 해당 이메일이 존재하지 않습니다.")
-        );
+        EmailVerification resEmailVerification = emailRepository.findByEmail(toEmail)
+                .orElse(null);
 
-        final LocalDateTime createdAt = resEmailVerification.getCreateAt(); // 여기 수정
+        log.info("resEmailVerification : {}", Utils.toJson(resEmailVerification));
 
-        if (createdAt.plusMinutes(2).isAfter(LocalDateTime.now())) {
-            throw new RuntimeException("2분 이내에는 재발급이 불가능합니다.");
+        if (resEmailVerification != null) {
+            final LocalDateTime createdAt = resEmailVerification.getCreateAt();
+
+            if (createdAt.plusMinutes(2).isAfter(LocalDateTime.now())) {
+                log.info("2분 이내에는 재발급이 불가능합니다.");
+                throw new RuntimeException("2분 이내에는 재발급이 불가능합니다.");
+            }
+
+            emailRepository.deleteAllByEmail(toEmail);
+            log.info("Email 정상적으로 삭제 : {}",Utils.toJson(emailRepository.findByEmail(toEmail)
+                    .orElse(null)));
         }
     }
+
 
 
 }

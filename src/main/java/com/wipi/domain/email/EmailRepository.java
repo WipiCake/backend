@@ -7,5 +7,6 @@ public interface EmailRepository {
     Optional<EmailVerification> findByEmail(String email);
     void deleteByEmail(String email);
     Optional<EmailVerification> findByEmailAndVerificationCode(String email, String verificationCode);
+    void deleteAllByEmail(String email);
 
 }

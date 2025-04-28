@@ -1,7 +1,6 @@
-package com.wipi.app;
+package com.wipi.app.mail;
 
 import com.wipi.domain.email.EmailService;
-import com.wipi.domain.email.EmailVerification;
 import com.wipi.domain.user.UserService;
 import com.wipi.inferfaces.model.dto.req.ReissueEmailVerificationCodeParam;
 import com.wipi.inferfaces.model.dto.req.ReqSaveEmailVerificationDto;
@@ -13,12 +12,15 @@ import com.wipi.inferfaces.model.param.VerifyEmailVerificationCodeParam;
 import com.wipi.support.constants.RabbitmqConstants;
 import com.wipi.support.util.MailUtils;
 import com.wipi.support.util.Utils;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class EmailFrontService {
 
     private final RabbitTemplate rabbitTemplate;
@@ -26,8 +28,11 @@ public class EmailFrontService {
     private final EmailService emailService;
 
     //이메일 인증코드 발급 프로세스
+    @Transactional
     public void processEmailVerification(ProcessEmailVerificationParam param) {
         final String reqEmail = param.getToEmail();
+        emailService.canReissueVerificationCode(reqEmail);
+
         final String reqPurpose = param.getPurpose();
         final String reqVerificationCode = Utils.generateCode6();
         final String reqSubject = MailUtils.getSubjectForVerificationEmail();
@@ -75,13 +80,13 @@ public class EmailFrontService {
 
     //이메일 인증코드 검증 프로세스
     public void verifyEmailVerificationCode(VerifyEmailVerificationCodeParam param){
+        log.info("verifyEmailVerification : {}",Utils.toJson(param));
+
         // todo 이메일 인증코드 검증
         emailService.verifyEmailVerificationCode(new ReqVerifyEmailVerificationCode(
                 param.getFromEmail(), param.getVerificationCode())
         );
 
-        // todo 검증완료시 인증코드 삭제
-        emailService.deleteEmailVerificationByEmail(param.getFromEmail());
     }
 
     //이메일 재발급 프로세스
