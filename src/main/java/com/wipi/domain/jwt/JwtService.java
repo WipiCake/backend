@@ -2,6 +2,7 @@ package com.wipi.domain.jwt;
 
 import com.wipi.inferfaces.model.dto.res.ResIssueJwtDto;
 import com.wipi.infra.jwt.JwtUtil;
+import com.wipi.support.properties.JwtProperties;
 import com.wipi.support.util.Utils;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
@@ -24,6 +25,7 @@ public class JwtService {
     private final JwtUtil jwtUtil;
     private final JwtRepository jwtRepository;
     private final UserDetailsService userDetailsService;
+    private final JwtProperties jwtProperties;
 
     public List<JwtAuthRedis> getJwtInfoAll(){
         return jwtRepository.findAllJwtAuthRedis();
@@ -102,7 +104,7 @@ public class JwtService {
 
         if (request.getCookies() != null) {
             for (Cookie cookie : request.getCookies()) {
-                if (cookie.getName().equals("refresh")) {
+                if (cookie.getName().equals(jwtProperties.getRefreshCookieName())) {
                     refreshToken = cookie.getValue();
                     break;
                 }

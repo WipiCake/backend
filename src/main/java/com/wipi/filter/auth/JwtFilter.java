@@ -34,7 +34,7 @@ public class JwtFilter extends OncePerRequestFilter {
             validAccessToken = jwtService.reissueAccessByRefresh(request);
 
             if(validAccessToken == null) {
-                filterChain.doFilter(request, response);
+                response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
                 return;
             }
         }
