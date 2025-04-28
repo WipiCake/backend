@@ -1,4 +1,4 @@
-package com.wipi.app;
+package com.wipi.app.user;
 
 import com.wipi.domain.user.User;
 import com.wipi.domain.user.UserService;

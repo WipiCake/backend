@@ -6,4 +6,6 @@ public interface SmsCoolRepository {
     void save(SmsCool smsCool);
     Optional<SmsCool> findByPhoneNumberAndVerificationCode(String phoneNumber, String verificationCode);
     void deleteByPhoneNumber(String phoneNumber);
+    void deleteAllByPhoneNumber(String phoneNumber);
+    Optional<SmsCool> findByPhoneNumber(String phoneNumber);
 }

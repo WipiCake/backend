@@ -4,7 +4,7 @@ import java.util.Random;
 
 public class MailUtils {
 
-    public static final String setFrom = "wipi_cake";
+    public static final String setFrom = "eheh8734@naver.com";
 
     // todo 본문,제목
     public static String getSubjectForVerificationEmail() {

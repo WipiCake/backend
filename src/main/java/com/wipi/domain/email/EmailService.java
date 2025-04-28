@@ -27,6 +27,8 @@ public class EmailService {
             throw new RuntimeException("인증 코드가 만료되었습니다.");
         }
 
+        emailRepository.deleteAllByEmail(DTO.getEmail());
+
         return resEmailVerification;
     }
 

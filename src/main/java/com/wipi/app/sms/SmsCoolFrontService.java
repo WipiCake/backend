@@ -1,4 +1,4 @@
-package com.wipi.app;
+package com.wipi.app.sms;
 
 import com.wipi.domain.sms.SmsCoolService;
 import com.wipi.inferfaces.model.dto.req.ReqSmsCoolSendDto;
@@ -19,6 +19,8 @@ public class SmsCoolFrontService {
     public void sendSmsCoolProcess(ProcessSendSmsCoolParam param) {
         final String reqToPhoneNumber = param.getToPhoneNumber();
         final String reqVerificationCode = Utils.generateCode6();
+
+        smsCoolService.canReissueSmsCool(reqToPhoneNumber);
 
         // todo SMS 인증정보 저장
         smsCoolService.saveSmsVerification(reqToPhoneNumber,reqVerificationCode);

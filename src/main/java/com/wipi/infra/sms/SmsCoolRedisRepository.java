@@ -7,7 +7,9 @@ import org.springframework.stereotype.Component;
 import java.util.List;
 import java.util.Optional;
 
-public interface SmsCoolRedisRepository extends CrudRepository<SmsCool, Long> {
+public interface SmsCoolRedisRepository extends CrudRepository<SmsCool, String> {
     void deleteByPhoneNumber(String phoneNumber);
     Optional<SmsCool> findByPhoneNumberAndVerificationCode(String phoneNumber, String verificationCode);
+
+    Optional<SmsCool> findByPhoneNumber(String phoneNumber);
 }

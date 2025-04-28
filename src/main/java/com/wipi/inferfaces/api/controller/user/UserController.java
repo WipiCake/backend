@@ -1,6 +1,6 @@
 package com.wipi.inferfaces.api.controller.user;
 
-import com.wipi.app.UserFrontService;
+import com.wipi.app.user.UserFrontService;
 import com.wipi.inferfaces.model.dto.res.ResUserSignupDto;
 import com.wipi.inferfaces.model.param.UserSignupParam;
 import com.wipi.inferfaces.model.rest.RestResponse;

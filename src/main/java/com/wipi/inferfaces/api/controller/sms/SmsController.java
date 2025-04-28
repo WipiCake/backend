@@ -1,6 +1,6 @@
 package com.wipi.inferfaces.api.controller.sms;
 
-import com.wipi.app.SmsCoolFrontService;
+import com.wipi.app.sms.SmsCoolFrontService;
 import com.wipi.inferfaces.model.dto.req.VerifySmsCoolVerificationCodeParam;
 import com.wipi.inferfaces.model.param.ProcessSendSmsCoolParam;
 import com.wipi.inferfaces.model.rest.RestMessage;
