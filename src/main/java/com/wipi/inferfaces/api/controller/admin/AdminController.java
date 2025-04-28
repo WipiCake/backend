@@ -1,7 +1,7 @@
 package com.wipi.inferfaces.api.controller.admin;
 
 
-import com.wipi.app.AdminFrontService;
+import com.wipi.app.admin.AdminFrontService;
 import com.wipi.inferfaces.model.dto.res.ResGetJwtInfoAll;
 import com.wipi.inferfaces.model.rest.RestResponse;
 import com.wipi.inferfaces.model.rest.RestResponseEntity;

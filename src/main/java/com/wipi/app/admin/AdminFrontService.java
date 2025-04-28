@@ -1,4 +1,4 @@
-package com.wipi.app;
+package com.wipi.app.admin;
 
 import com.wipi.domain.jwt.JwtAuthRedis;
 import com.wipi.domain.jwt.JwtService;
