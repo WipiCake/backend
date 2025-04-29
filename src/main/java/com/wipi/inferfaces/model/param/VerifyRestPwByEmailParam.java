@@ -9,8 +9,9 @@ import lombok.Setter;
 @NoArgsConstructor
 @Getter
 @Setter
-public class VerifyEmailVerificationCodeParam {
+public class VerifyRestPwByEmailParam {
     private String fromEmail;
     private String verificationCode;
+    private String purpose;
 }
 

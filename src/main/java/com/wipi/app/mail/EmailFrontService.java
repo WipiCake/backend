@@ -1,22 +1,27 @@
 package com.wipi.app.mail;
 
 import com.wipi.domain.email.EmailService;
+import com.wipi.domain.jwt.JwtService;
+import com.wipi.domain.user.User;
 import com.wipi.domain.user.UserService;
-import com.wipi.inferfaces.model.dto.req.ReissueEmailVerificationCodeParam;
+import com.wipi.inferfaces.model.dto.res.ResIssueJwtDto;
+import com.wipi.inferfaces.model.param.VerifyFindIdByEmailParam;
 import com.wipi.inferfaces.model.dto.req.ReqSaveEmailVerificationDto;
 import com.wipi.inferfaces.model.dto.req.ReqSendEmailDto;
 import com.wipi.inferfaces.model.dto.req.ReqVerifyEmailVerificationCode;
 import com.wipi.inferfaces.model.param.ProcessEmailVerificationParam;
-import com.wipi.inferfaces.model.param.ProcessIssueTempPasswordParam;
-import com.wipi.inferfaces.model.param.VerifyEmailVerificationCodeParam;
+import com.wipi.inferfaces.model.param.VerifyRestPwByEmailParam;
 import com.wipi.support.constants.RabbitmqConstants;
 import com.wipi.support.util.MailUtils;
 import com.wipi.support.util.Utils;
+import com.wipi.support.util.ValidUtils;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -26,26 +31,26 @@ public class EmailFrontService {
     private final RabbitTemplate rabbitTemplate;
     private final UserService userService;
     private final EmailService emailService;
+    private final JwtService jwtService;
 
     //이메일 인증코드 발급 프로세스
     @Transactional
     public void processEmailVerification(ProcessEmailVerificationParam param) {
+        ValidUtils.validVerifyPurpose(param.getPurpose(), List.of("FIND-PW", "FIND-ID", "AUTH", "TEST"));
+
         final String reqEmail = param.getToEmail();
         emailService.canReissueVerificationCode(reqEmail);
 
-        final String reqPurpose = param.getPurpose();
         final String reqVerificationCode = Utils.generateCode6();
         final String reqSubject = MailUtils.getSubjectForVerificationEmail();
         final String reqBody = MailUtils.getBodyForVerificationEmail(reqVerificationCode);
 
-        // TODO 이메일 REDIS 저장
         ReqSaveEmailVerificationDto reqSaveDto= new ReqSaveEmailVerificationDto(
-                reqEmail,reqPurpose,reqVerificationCode
+                reqEmail,param.getPurpose(),reqVerificationCode
         );
 
         emailService.saveEmailVerification(reqSaveDto);
 
-        // TODO 이메일 전송 rabbitmq 비동기
         ReqSendEmailDto reqSendDto = new ReqSendEmailDto();
             reqSendDto.setToEmail(reqEmail);
             reqSendDto.setCode(reqVerificationCode);
@@ -55,68 +60,29 @@ public class EmailFrontService {
         rabbitTemplate.convertAndSend(RabbitmqConstants.EXCHANGE_MAIL,RabbitmqConstants.ROUTING_MAIL_SEND, reqSendDto);
     }
 
-    //임시 비밀번호 발급 프로세스
-    public void processIssueTempPassword(ProcessIssueTempPasswordParam param) {
-        final String reqEmail = param.getToEmail();
-        final String tempPassword = Utils.generateTempPassword8();
-        final String reqSubject = MailUtils.getSubjectForFindPassword();
-        final String reqBody = MailUtils.getBodyForFindPassword(tempPassword);
 
-        // todo 유저 검증
-        userService.findByEmail(reqEmail);
+    //이메일 인증코드 검증, 아이디 찾기
+    public String verifyFindId(VerifyFindIdByEmailParam param){
+       ValidUtils.validVerifyPurpose(param.getPurpose(), List.of("FIND-ID","TEST"));
 
-        // todo 비밀번호 업데이트
-        userService.updatePasswordByEmail(reqEmail, tempPassword);
+       emailService.verifyEmailVerificationCode(new ReqVerifyEmailVerificationCode(
+                param.getFromEmail(), param.getVerificationCode()
+        ));
 
-        // todo 이메일 전송
-        ReqSendEmailDto reqSendDto = new ReqSendEmailDto();
-            reqSendDto.setToEmail(reqEmail);
-            reqSendDto.setCode(tempPassword);
-            reqSendDto.setSubject(reqSubject);
-            reqSendDto.setBody(reqBody);
-
-        rabbitTemplate.convertAndSend(RabbitmqConstants.EXCHANGE_MAIL,RabbitmqConstants.ROUTING_MAIL_SEND, reqSendDto);
+        return userService.findByEmail(param.getFromEmail()).getUserId();
     }
 
-    //이메일 인증코드 검증 프로세스
-    public void verifyEmailVerificationCode(VerifyEmailVerificationCodeParam param){
-        log.info("verifyEmailVerification : {}",Utils.toJson(param));
+    //이메일 인증코드 검증, 비밀번호 찾기
+    public void verifyResetPw(VerifyRestPwByEmailParam param){
+        ValidUtils.validVerifyPurpose(param.getPurpose(), List.of("FIND-PW","TEST"));
 
-        // todo 이메일 인증코드 검증
         emailService.verifyEmailVerificationCode(new ReqVerifyEmailVerificationCode(
                 param.getFromEmail(), param.getVerificationCode())
         );
+        User user = userService.findByEmail(param.getFromEmail());
 
-    }
-
-    //이메일 재발급 프로세스
-    public void resReissueEmailVerificationCode(ReissueEmailVerificationCodeParam param){
-        final String reqToEmail = param.getToEmail();
-
-        // todo 발급시간 2분 지났는지 검증
-        emailService.canReissueVerificationCode(reqToEmail);
-
-        final String reqVerificationCode = Utils.generateCode6();
-        final String reqPurpose = param.getPurpose();
-        final String reqSubject = MailUtils.getSubjectForVerificationEmail();
-        final String reqBody = MailUtils.getBodyForVerificationEmail(reqVerificationCode);
-
-        // todo 해당 이메일에 해당하는 인증코드 삭제 -> 해당 이메일 없어도 문제없음
-        emailService.deleteEmailVerificationByEmail(reqToEmail);
-
-        // todo redis 인증코드 저장
-        emailService.saveEmailVerification(new ReqSaveEmailVerificationDto(
-           reqToEmail,reqPurpose,reqVerificationCode
-        ));
-
-        // TODO 이메일 전송 rabbitmq 비동기
-        ReqSendEmailDto reqSendDto = new ReqSendEmailDto();
-            reqSendDto.setToEmail(reqToEmail);
-            reqSendDto.setCode(reqVerificationCode);
-            reqSendDto.setSubject(reqSubject);
-            reqSendDto.setBody(reqBody);
-
-        rabbitTemplate.convertAndSend(RabbitmqConstants.EXCHANGE_MAIL,RabbitmqConstants.ROUTING_MAIL_SEND, reqSendDto);
+        ResIssueJwtDto resIssueJwtDto = jwtService.issueJwtAuth(user.getUserId(),user.getRole());
+        log.info("resIssueJwtDto:{}", resIssueJwtDto);
     }
 
 

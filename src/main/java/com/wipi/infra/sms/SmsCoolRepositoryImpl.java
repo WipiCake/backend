@@ -42,6 +42,8 @@ public class SmsCoolRepositoryImpl implements SmsCoolRepository {
     public Optional<SmsCool> findByPhoneNumber(String phoneNumber) {
         return smsCoolRedisRepository.findByPhoneNumber(phoneNumber);
     }
+
+
 }
 
 

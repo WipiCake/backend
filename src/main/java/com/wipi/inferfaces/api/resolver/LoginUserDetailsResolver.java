@@ -1,5 +1,6 @@
 package com.wipi.inferfaces.api.resolver;
 
+import com.wipi.domain.user.CustomUserDetails;
 import lombok.RequiredArgsConstructor;
 import org.springframework.core.MethodParameter;
 import org.springframework.security.core.Authentication;
@@ -24,9 +25,17 @@ public class LoginUserDetailsResolver implements HandlerMethodArgumentResolver {
     public Object resolveArgument(MethodParameter parameter, ModelAndViewContainer mavContainer, NativeWebRequest webRequest, WebDataBinderFactory binderFactory) throws Exception {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
-        if(authentication == null || !authentication.isAuthenticated()){
+        if (authentication == null || !authentication.isAuthenticated()) {
             return null;
         }
-        return authentication.getDetails();
+
+        Object principal = authentication.getPrincipal();
+
+        if (principal instanceof CustomUserDetails) {
+            return principal;
+        }
+
+        return null;
     }
+
 }

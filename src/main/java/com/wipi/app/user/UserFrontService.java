@@ -27,4 +27,5 @@ public class UserFrontService {
         return new ResUserSignupDto(user.getUserId(), user.getEmail(), user.getRole());
     }
 
+
 }

@@ -99,6 +99,40 @@ public class JwtService {
         );
     }
 
+    public ResIssueJwtDto issueJwtAuth(String userId, String role) {
+
+        String access = jwtUtil.createAccessToken(userId, role);
+        String refresh = jwtUtil.createRefreshToken(userId, role);
+
+        JwtAuthRedis findJwtAuth = jwtRepository.findJwtAuthRedisByEmail(userId).orElse(null);
+
+        JwtAuthRedis savedJwt = new JwtAuthRedis();
+        savedJwt.setAccessToken(access);
+        savedJwt.setRefreshToken(refresh);
+        savedJwt.setEmail(userId);
+        savedJwt.setAccessExpiration(jwtUtil.getExpirationFromToken(access));
+        savedJwt.setRefreshExpiration(jwtUtil.getExpirationFromToken(refresh));
+
+        if(findJwtAuth == null) {
+            savedJwt.setId("JWT:" + UUID.randomUUID());
+            savedJwt.setCreateAt(LocalDateTime.now());
+        }else{
+            savedJwt.setId(findJwtAuth.getId());
+            savedJwt.setCreateAt(findJwtAuth.getCreateAt());
+            savedJwt.setUpdateAt(LocalDateTime.now());
+        }
+
+        JwtAuthRedis jwtAuth = jwtRepository.saveOrUpdateJwtAuth(savedJwt);
+        Cookie cookie = jwtUtil.createRefreshCookie(refresh);
+
+
+        return new ResIssueJwtDto(
+                jwtAuth.getAccessToken(),
+                jwtAuth.getRefreshToken(),
+                cookie
+        );
+    }
+
     public String reissueAccessByRefresh(HttpServletRequest request) {
         String refreshToken = null;
 

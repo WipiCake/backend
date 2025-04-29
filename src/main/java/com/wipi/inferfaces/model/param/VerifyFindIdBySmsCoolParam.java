@@ -6,16 +6,18 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
 @Setter
-public class ProcessSendSmsCoolParam {
+public class VerifyFindIdBySmsCoolParam {
+    @NotBlank
+    private String phoneNumber;
 
     @NotBlank
-    private String toPhoneNumber;
+    private String verificationCode;
 
     @NotBlank
     private String purpose;
-
 }

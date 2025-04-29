@@ -10,12 +10,14 @@ import lombok.Setter;
 @NoArgsConstructor
 @Getter
 @Setter
-public class ProcessSendSmsCoolParam {
+public class VerifyFindIdByEmailParam {
 
     @NotBlank
-    private String toPhoneNumber;
+    private String fromEmail;
+
+    @NotBlank
+    private String verificationCode;
 
     @NotBlank
     private String purpose;
-
 }

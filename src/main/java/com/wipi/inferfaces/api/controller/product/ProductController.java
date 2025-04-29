@@ -2,7 +2,7 @@ package com.wipi.inferfaces.api.controller.product;
 
 import com.wipi.app.product.ProductFacadeService;
 import com.wipi.domain.product.ProductService;
-import com.wipi.inferfaces.model.ApiResponse;
+import com.wipi.inferfaces.model.APIResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.MediaType;
@@ -20,7 +20,7 @@ public class ProductController {
     private final ProductService productService;
 
     @PostMapping(value = "/register", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public ApiResponse<Void> register(
+    public APIResponse<Void> register(
             @ModelAttribute ProductRequest.Register request,
             @RequestPart("thumbNailImage") MultipartFile thumbnail,
             @RequestPart("detailImages") List<MultipartFile> detailImages)
@@ -28,17 +28,17 @@ public class ProductController {
         request.setThumbNailImage(thumbnail);
         request.setDetailImages(detailImages);
         productFacadeService.registerProduct(request.toCriteria());
-        return ApiResponse.success();
+        return APIResponse.success();
     }
 
     @GetMapping("/getSelling")
-    public ApiResponse<List<ProductResponse.GetSelling>> getSelling() {
+    public APIResponse<List<ProductResponse.GetSelling>> getSelling() {
         List<ProductResponse.GetSelling> list = productService.getAllSellingList()
                 .stream()
                 .map(ProductResponse.GetSelling::fromGetSellingInfo)
                 .toList();
 
-        return ApiResponse.success(list);
+        return APIResponse.success(list);
     }
 
 }

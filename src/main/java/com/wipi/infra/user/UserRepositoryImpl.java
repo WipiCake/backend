@@ -36,4 +36,9 @@ public class UserRepositoryImpl implements UserRepository {
     public Optional<User> findByUserId(String userId) {
         return userJpaRepository.findByUserId(userId);
     }
+
+    @Override
+    public Optional<User> findByPhoneNumber(String phoneNumber) {
+        return userJpaRepository.findByPhoneNumber(phoneNumber);
+    }
 }

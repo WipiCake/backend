@@ -15,6 +15,8 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.core.userdetails.User;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -44,7 +46,8 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
 
     @Override
     protected void successfulAuthentication(HttpServletRequest request, HttpServletResponse response, FilterChain chain, Authentication authResult) throws IOException, ServletException {
-        ResIssueJwtDto resDto =jwtService.issueJwtAuth(authResult);
+        UserDetails user = (UserDetails) authResult.getPrincipal();
+        ResIssueJwtDto resDto =jwtService.issueJwtAuth(user.getUsername(),user.getAuthorities().iterator().next().getAuthority());
 
         log.info("login success : {}", Utils.toJson(resDto));
         response.setHeader(jwtProperties.getAccessHeaderName(),"Bearer " + resDto.getAccessToken());

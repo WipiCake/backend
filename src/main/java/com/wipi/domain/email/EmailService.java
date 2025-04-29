@@ -53,10 +53,6 @@ public class EmailService {
         return emailRepository.save(emailVerification);
     }
 
-    public void deleteEmailVerificationByEmail(String email) {
-        emailRepository.deleteByEmail(email);
-    }
-
     @Transactional
     public void canReissueVerificationCode(String toEmail) {
         EmailVerification resEmailVerification = emailRepository.findByEmail(toEmail)

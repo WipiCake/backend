@@ -8,4 +8,5 @@ public interface UserRepository {
     User save(User user);
     Boolean existByUserId(String userId);
     Optional<User> findByUserId(String userId);
+    Optional<User> findByPhoneNumber(String phoneNumber);
 }
