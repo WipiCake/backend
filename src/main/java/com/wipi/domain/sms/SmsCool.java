@@ -28,6 +28,10 @@ public class SmsCool implements Serializable {
 
     @Indexed
     private String verificationCode;
+
+    @Indexed
+    private String purpose;
+
     private LocalDateTime expirationTime;
     private LocalDateTime createAt;
 

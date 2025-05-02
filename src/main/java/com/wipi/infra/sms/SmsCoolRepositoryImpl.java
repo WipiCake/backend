@@ -5,6 +5,8 @@ import com.wipi.domain.sms.SmsCool;
 import com.wipi.domain.sms.SmsCoolRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
+
+import java.util.List;
 import java.util.Optional;
 import java.util.stream.StreamSupport;
 
@@ -39,11 +41,9 @@ public class SmsCoolRepositoryImpl implements SmsCoolRepository {
     }
 
     @Override
-    public Optional<SmsCool> findByPhoneNumber(String phoneNumber) {
-        return smsCoolRedisRepository.findByPhoneNumber(phoneNumber);
+    public Optional<List<SmsCool>> findByPhoneNumberAndPurpose(String phoneNumber, String purpose) {
+        return smsCoolRedisRepository.findByPhoneNumberAndPurpose(phoneNumber,purpose);
     }
-
-
 }
 
 

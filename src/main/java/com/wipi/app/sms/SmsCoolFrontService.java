@@ -32,12 +32,13 @@ public class SmsCoolFrontService {
         ValidUtils.validVerifyPurpose(param.getPurpose(), List.of("FIND-PW", "FIND-ID", "AUTH", "TEST"));
 
         final String reqToPhoneNumber = param.getToPhoneNumber();
+        final String reqPurpose = param.getPurpose();
         final String reqVerificationCode = Utils.generateCode6();
 
-        smsCoolService.canReissueSmsCool(reqToPhoneNumber);
+        smsCoolService.canReissueSmsCool(reqToPhoneNumber, reqPurpose);
 
         // todo SMS 인증정보 저장
-        smsCoolService.saveSmsVerification(reqToPhoneNumber,reqVerificationCode);
+        smsCoolService.saveSmsVerification(reqToPhoneNumber,reqVerificationCode,reqPurpose);
         ReqSmsCoolSendDto reqSmsCoolSendDto = new ReqSmsCoolSendDto();
             reqSmsCoolSendDto.setToPhoneNumber(reqToPhoneNumber);
             reqSmsCoolSendDto.setVerificationCode(reqVerificationCode);
@@ -69,7 +70,7 @@ public class SmsCoolFrontService {
 
         User user = userService.findUserByPhoneNumber(param.getPhoneNumber());
         ResIssueJwtDto resIssueJwtDto = jwtService.issueJwtAuth(user.getUserId(),user.getRole());
-        log.info("resIssueJwtDto:{}", resIssueJwtDto);
+        log.info("resIssueJwtDto:{}", Utils.toJson(resIssueJwtDto));
     }
 
 

@@ -12,4 +12,6 @@ public interface SmsCoolRedisRepository extends CrudRepository<SmsCool, String> 
     Optional<SmsCool> findByPhoneNumberAndVerificationCode(String phoneNumber, String verificationCode);
 
     Optional<SmsCool> findByPhoneNumber(String phoneNumber);
+
+    Optional<List<SmsCool>> findByPhoneNumberAndPurpose(String phoneNumber, String purpose);
 }

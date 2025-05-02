@@ -7,6 +7,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import java.time.LocalDateTime;
+import java.util.Comparator;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -17,7 +19,7 @@ public class SmsCoolService {
     private final SmsCoolRepository smsCoolRepository;
 
     @Transactional
-    public void saveSmsVerification(String reqToNumber, String reqVerificationCode) {
+    public void saveSmsVerification(String reqToNumber, String reqVerificationCode, String reqPurpose) {
         final String reqId = Utils.generate32CharCode();
         final LocalDateTime reqNow = LocalDateTime.now();
         final LocalDateTime reqExpiration = reqNow.plusMinutes(SmsUtils.expirationMinute);
@@ -28,6 +30,7 @@ public class SmsCoolService {
             smsCool.setVerificationCode(reqVerificationCode);
             smsCool.setCreateAt(reqNow);
             smsCool.setExpirationTime(reqExpiration);
+            smsCool.setPurpose(reqPurpose);
 
         smsCoolRepository.save(smsCool);
     }
@@ -48,14 +51,19 @@ public class SmsCoolService {
 
 
     @Transactional
-    public void canReissueSmsCool(String reqPhoneNumber) {
-        SmsCool resSmsCool = smsCoolRepository.findByPhoneNumber(reqPhoneNumber)
-                .orElse(null);
+    public void canReissueSmsCool(String reqPhoneNumber, String reqPurpose) {
+        Optional<List<SmsCool>> optionalSmsList = smsCoolRepository.findByPhoneNumberAndPurpose(reqPhoneNumber, reqPurpose);
 
-        if (resSmsCool != null) {
-            log.info("찾은 SmsCool 데이터: {}", Utils.toJson(resSmsCool));
+        if (optionalSmsList.isPresent()) {
+            List<SmsCool> resSmsCoolList = optionalSmsList.get();
 
-            if (resSmsCool.getCreateAt().plusMinutes(2).isAfter(LocalDateTime.now())) {
+            log.info("찾은 SmsCool 데이터: {}", Utils.toJson(resSmsCoolList));
+
+            SmsCool latest = resSmsCoolList.stream()
+                    .max(Comparator.comparing(SmsCool::getCreateAt))
+                    .orElse(null);
+
+            if (latest != null && latest.getCreateAt().plusMinutes(2).isAfter(LocalDateTime.now())) {
                 log.warn("2분 이내 재발급 요청 탐지 - phoneNumber: {}", reqPhoneNumber);
                 throw new RuntimeException("2분 이내에 재발급이 불가능합니다.");
             }
@@ -66,6 +74,7 @@ public class SmsCoolService {
             log.info("발견된 SmsCool 데이터 없음 - phoneNumber: {}", reqPhoneNumber);
         }
     }
+
 
 
 
