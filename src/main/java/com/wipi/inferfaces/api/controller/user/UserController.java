@@ -2,6 +2,7 @@ package com.wipi.inferfaces.api.controller.user;
 
 import com.wipi.app.user.UserFrontService;
 import com.wipi.domain.user.CustomUserDetails;
+import com.wipi.domain.user.User;
 import com.wipi.domain.user.UserService;
 import com.wipi.inferfaces.api.resolver.LoginUsers;
 import com.wipi.inferfaces.model.APIResponse;
@@ -21,6 +22,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
@@ -53,9 +55,11 @@ public class UserController {
     }
 
     @PostMapping(value = "/updatePw")
-    public APIResponse<Void> updatePw(@RequestBody @Valid UserUpdatePwParam param, @LoginUsers CustomUserDetails user) {
+    public APIResponse<Void> updatePw(@org.springframework.web.bind.annotation.RequestBody @Valid UserUpdatePwParam param, @LoginUsers User user) {
         log.info("유저 : {}", Utils.toJson(user));
-        userService.updatePasswordByUserId(param.getPassword(),param.getPassword2(),user.getUser());
+        log.info("파람 : {}", Utils.toJson(param));
+
+        userService.updatePasswordByUserId(param.getPassword(),param.getPassword2(), user);
         return APIResponse.success();
     }
 

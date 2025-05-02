@@ -24,15 +24,12 @@ public class LoginUserDetailsResolver implements HandlerMethodArgumentResolver {
     @Override
     public Object resolveArgument(MethodParameter parameter, ModelAndViewContainer mavContainer, NativeWebRequest webRequest, WebDataBinderFactory binderFactory) throws Exception {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-
         if (authentication == null || !authentication.isAuthenticated()) {
             return null;
         }
 
-        Object principal = authentication.getPrincipal();
-
-        if (principal instanceof CustomUserDetails) {
-            return principal;
+        if (authentication.getPrincipal() instanceof CustomUserDetails) {
+            return ((CustomUserDetails) authentication.getPrincipal()).getUser();
         }
 
         return null;
