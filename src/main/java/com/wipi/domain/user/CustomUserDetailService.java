@@ -18,7 +18,7 @@ public class CustomUserDetailService implements UserDetailsService {
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         log.info("loadUserBy : {}", username);
 
-        User entity = userRepository.findByEmail(username)
+        User entity = userRepository.findByUserId(username)
                 .orElseThrow(() -> {
                     log.warn("해당 계정이 존재하지 않습니다: {}", username);
                     return new UsernameNotFoundException("해당 계정이 존재하지 않습니다.");

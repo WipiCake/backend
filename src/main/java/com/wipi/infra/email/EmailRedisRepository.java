@@ -4,10 +4,12 @@ import com.wipi.domain.email.EmailVerification;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 
-@Repository
+import java.util.Optional;
+
 public interface EmailRedisRepository extends CrudRepository<EmailVerification, String> {
 
-    EmailVerification findByEmail(String email);
+    Optional<EmailVerification> findByEmail(String email);
     void deleteByEmail(String email);
+    Optional<EmailVerification> findByEmailAndVerificationCode(String email, String verificationCode);
 
 }

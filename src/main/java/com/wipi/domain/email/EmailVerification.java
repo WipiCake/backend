@@ -26,9 +26,10 @@ public class EmailVerification implements Serializable {
 
     @Indexed
     private String email;
+
+    @Indexed
     private String verificationCode;
     private String purpose;
     private LocalDateTime expirationTime;
-    private String verified;
     private LocalDateTime createAt;
 }

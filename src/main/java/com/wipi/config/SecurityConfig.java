@@ -1,8 +1,8 @@
 package com.wipi.config;
 
 import com.wipi.domain.jwt.JwtService;
-import com.wipi.infra.filter.JwtFilter;
-import com.wipi.infra.filter.LoginFilter;
+import com.wipi.filter.auth.JwtFilter;
+import com.wipi.filter.auth.LoginFilter;
 import com.wipi.support.properties.JwtProperties;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
@@ -37,15 +37,21 @@ public class SecurityConfig {
                 .httpBasic(AbstractHttpConfigurer::disable)
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/login", "/reissue", "/user/signup/**", "/user/bank/**").permitAll()
+                        .requestMatchers("/login", "/reissue", "/user/signup/**").permitAll()
                         .requestMatchers("/admin/**").hasRole("ADMIN")
                         .requestMatchers("/user/**").hasRole("USER")
+                       // .requestMatchers("/user/updatePw").hasAnyRole("USER","ADMIN")
                         .requestMatchers(
                                 "/swagger-ui.html",
                                 "/swagger-ui/**",
                                 "/v3/api-docs/**",
                                 "/swagger-resources/**",
                                 "/webjars/**"
+                        ).permitAll()
+                        .requestMatchers(
+                                "/email/**",
+                                "/sms/**",
+                                "/product/**"
                         ).permitAll()
                         .anyRequest().authenticated()
                 )
@@ -86,10 +92,12 @@ public class SecurityConfig {
         CorsConfiguration config = new CorsConfiguration();
         config.setAllowedOrigins(List.of(
                 "http://localhost:3000",
-                "https://localhost:8080")
-        );
+                "http://localhost:8080",
+                "http://localhost:5173",
+                "http://localhost:3000/api/v1"
+        ));
         config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
-        config.setAllowedHeaders(List.of("Authorization", "Content-Type"));
+        config.setAllowedHeaders(List.of("Authorization", "Content-Type","access","refresh","Set-Cookie"));
         config.setAllowCredentials(true);
 
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();

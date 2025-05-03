@@ -14,6 +14,12 @@ import lombok.Setter;
 @NoArgsConstructor
 @Setter
 public class UserSignupParam {
+
+    @Schema(example = "admin12", description = "유저 아이디")
+    @NotNull(message = "아이디는 필수 입력 항목입니다.")
+    @Size(min = 4, message = "아이디는 최소 4자리 이상입니다.")
+    private String userId;
+
     @Schema(example = "user@example.com", description = "사용자 이메일")
     @NotNull(message = "이메일은 필수 입력 항목입니다.")
     @Email(message = "이메일 형식이 올바르지 않습니다.")

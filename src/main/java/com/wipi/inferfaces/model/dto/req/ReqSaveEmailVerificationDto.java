@@ -12,8 +12,5 @@ import lombok.Setter;
 public class ReqSaveEmailVerificationDto {
     private String toEmail;
     private String purpose;
-    private int expirationTime;
-    private String verified;
-    private String id;
-    private String code;
+    private String verificationCode;
 }

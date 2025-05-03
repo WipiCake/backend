@@ -1,0 +1,17 @@
+package com.wipi.infra.sms;
+
+import com.wipi.domain.sms.SmsCool;
+import org.springframework.data.repository.CrudRepository;
+import org.springframework.stereotype.Component;
+
+import java.util.List;
+import java.util.Optional;
+
+public interface SmsCoolRedisRepository extends CrudRepository<SmsCool, String> {
+    void deleteByPhoneNumber(String phoneNumber);
+    Optional<SmsCool> findByPhoneNumberAndVerificationCode(String phoneNumber, String verificationCode);
+
+    Optional<SmsCool> findByPhoneNumber(String phoneNumber);
+
+    Optional<List<SmsCool>> findByPhoneNumberAndPurpose(String phoneNumber, String purpose);
+}
