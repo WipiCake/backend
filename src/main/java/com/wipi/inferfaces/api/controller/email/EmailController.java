@@ -5,13 +5,21 @@ import com.wipi.inferfaces.model.APIResponse;
 import com.wipi.inferfaces.model.param.ProcessEmailVerificationParam;
 import com.wipi.inferfaces.model.param.VerifyFindIdByEmailParam;
 import com.wipi.inferfaces.model.param.VerifyRestPwByEmailParam;
+import com.wipi.support.properties.JwtProperties;
+import com.wipi.support.util.Utils;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import java.util.Map;
 
+@Slf4j
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/email")
@@ -19,6 +27,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class EmailController {
 
     private final EmailFrontService emailFrontService;
+    private final JwtProperties jwtProperties;
 
     @PostMapping("/code/issue")
     public APIResponse<String> issueEmailVerificationCode(@RequestBody ProcessEmailVerificationParam param) {
@@ -27,8 +36,12 @@ public class EmailController {
     }
 
     @PostMapping("/verify/reset-pw")
-    public APIResponse<String> verifyEmailVerificationCode(@RequestBody VerifyRestPwByEmailParam param) {
-        emailFrontService.verifyResetPw(param);
+    public APIResponse<String> verifyEmailVerificationCode(@RequestBody VerifyRestPwByEmailParam param, HttpServletResponse response) {
+        Map<String,Object> data =  emailFrontService.verifyResetPw(param);
+        log.info("data : {}", Utils.toJson(data));
+
+        response.setHeader(jwtProperties.getAccessHeaderName(),"Bearer " + data.get("accessToken"));
+        response.addCookie((Cookie) data.get("refreshCookie"));
         return APIResponse.success("인증에 성공하였습니다.");
     }
 

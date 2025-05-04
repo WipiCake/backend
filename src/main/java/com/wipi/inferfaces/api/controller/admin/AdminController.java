@@ -29,15 +29,6 @@ public class AdminController {
     private final AdminFrontService adminFrontService;
 
     @GetMapping("/getJwtInfoAll")
-    @Operation(summary = "Jwt 전체조회", description = "Redeis에 존재하는 Access, Refresh 토큰을 전체 조회한다. ")
-    @ApiResponse(
-            responseCode = "200",
-            description = "성공 시 [status,message,data] 형식으로 반환",
-            content = @Content(
-                    mediaType = "application/json",
-                    schema = @Schema(implementation = RestGetJwtInfoAllWrapper.class)
-            )
-    )
     public ResponseEntity<RestResponse<List<ResGetJwtInfoAll>>> getJwtInfoAll(){
         List<ResGetJwtInfoAll> resDto = adminFrontService.getJwtInfoAll();
 
