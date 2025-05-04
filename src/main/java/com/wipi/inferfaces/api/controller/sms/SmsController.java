@@ -5,26 +5,34 @@ import com.wipi.inferfaces.model.APIResponse;
 import com.wipi.inferfaces.model.param.VerifyFindIdBySmsCoolParam;
 import com.wipi.inferfaces.model.param.VerifyResetPwByCoolSmsParam;
 import com.wipi.inferfaces.model.param.ProcessSendSmsCoolParam;
+import com.wipi.support.properties.JwtProperties;
+import com.wipi.support.util.Utils;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import java.util.Map;
 
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/sms")
 @Tag(name = "SMS", description = "SMS 인증 관련 API")
+@Slf4j
 public class SmsController {
 
     private final SmsCoolFrontService smsCoolFrontService;
+    private final JwtProperties jwtProperties;
 
     @PostMapping("/code/issue")
     public APIResponse<String> issueEmailVerificationCode(@Valid @RequestBody ProcessSendSmsCoolParam param) {
@@ -33,8 +41,12 @@ public class SmsController {
     }
 
     @PostMapping("/verify/reset-pw")
-    public APIResponse<String> verifyRestPw(@Valid@RequestBody VerifyResetPwByCoolSmsParam param) {
-        smsCoolFrontService.verifyResetPw(param);
+    public APIResponse<String> verifyRestPw(@Valid@RequestBody VerifyResetPwByCoolSmsParam param, HttpServletResponse response) {
+        Map<String,Object> data = smsCoolFrontService.verifyResetPw(param);
+        log.info("data : {}", Utils.toJson(data));
+
+        response.setHeader(jwtProperties.getAccessHeaderName(),"Bearer " + data.get("accessToken"));
+        response.addCookie((Cookie) data.get("refreshCookie"));
         return APIResponse.success("인증이 완료되었습니다.");
     }
 
