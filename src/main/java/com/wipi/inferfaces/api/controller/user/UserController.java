@@ -1,7 +1,6 @@
 package com.wipi.inferfaces.api.controller.user;
 
 import com.wipi.app.user.UserFrontService;
-import com.wipi.domain.user.CustomUserDetails;
 import com.wipi.domain.user.User;
 import com.wipi.domain.user.UserService;
 import com.wipi.inferfaces.api.resolver.LoginUsers;
@@ -11,21 +10,13 @@ import com.wipi.inferfaces.model.param.UserSignupParam;
 import com.wipi.inferfaces.model.param.UserUpdatePwParam;
 import com.wipi.inferfaces.model.rest.RestResponse;
 import com.wipi.inferfaces.model.rest.RestResponseEntity;
-import com.wipi.support.swagger.wrapper.RestUserSignupWrapper;
 import com.wipi.support.util.Utils;
-import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.media.Content;
-import io.swagger.v3.oas.annotations.media.Schema;
-import io.swagger.v3.oas.annotations.parameters.RequestBody;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
-
 
 @RestController
 @Slf4j
@@ -38,15 +29,6 @@ public class UserController {
     private final UserService userService;
 
     @PostMapping("/signup")
-    @Operation(summary = "회원가입", description = "사용자 회원가입")
-    @io.swagger.v3.oas.annotations.responses.ApiResponse(
-            responseCode = "200",
-            description = "성공 시 [status,message,data] 형식으로 반환",
-            content = @Content(
-                    mediaType = "application/json",
-                    schema = @Schema(implementation = RestUserSignupWrapper.class)
-            )
-    )
     public ResponseEntity<RestResponse<ResUserSignupDto>> signup(@RequestBody @Valid UserSignupParam param){
         ResUserSignupDto resDto = userFrontService.userSignup(param);
 
@@ -55,7 +37,7 @@ public class UserController {
     }
 
     @PostMapping(value = "/updatePw")
-    public APIResponse<Void> updatePw(@org.springframework.web.bind.annotation.RequestBody @Valid UserUpdatePwParam param, @LoginUsers User user) {
+    public APIResponse<Void> updatePw(@RequestBody @Valid UserUpdatePwParam param, @LoginUsers User user) {
         log.info("유저 : {}", Utils.toJson(user));
         log.info("파람 : {}", Utils.toJson(param));
 

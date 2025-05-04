@@ -1,11 +1,16 @@
 package com.wipi.domain.user;
 
+import com.wipi.domain.email.EmailRepository;
+import com.wipi.domain.email.EmailVerification;
+import com.wipi.domain.jwt.JwtService;
 import com.wipi.inferfaces.model.param.UserSignupParam;
 import com.wipi.support.properties.UserRoleProperties;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+
+import java.time.LocalDateTime;
 
 @Service
 @RequiredArgsConstructor
@@ -14,6 +19,7 @@ public class UserService {
     private final UserRepository userRepository;
     private final BCryptPasswordEncoder passwordEncoder;
     private final UserRoleProperties userRoleProperties;
+    private final EmailRepository emailRepository;
 
     public User findByEmail(String email) {
         return userRepository.findByEmail(email).orElseThrow(
@@ -53,22 +59,26 @@ public class UserService {
         return userRepository.save(user);
     }
 
-    public void updatePasswordByUserId(String password1, String password2, User user) {
-        if (user.getUserId() == null || user.getRole() == null) {
-            throw new RuntimeException("잘못된 접근입니다.");
+    public void updatePasswordByUserId(String newPassword, String confirmPassword, User user) {
+        if (user == null || user.getUserId() == null || user.getRole() == null) {
+            throw new IllegalArgumentException("유효하지 않은 사용자 정보입니다.");
         }
 
-        if(password1 == null || password2 == null) {
-            throw new RuntimeException("비밀번호가 누락되었습니다.");
-        }
-        if(!password1.equals(password2)) {
-            throw new RuntimeException("비밀번호가 일치하지 않습니다.");
+        if (newPassword == null || confirmPassword == null) {
+            throw new IllegalArgumentException("비밀번호를 입력해주세요.");
         }
 
-        User findUser = userRepository.findByUserId(user.getUserId()).orElseThrow(() -> new RuntimeException("해당 이메일이 존재하지 않습니다."));
-        findUser.setPassword(passwordEncoder.encode(password1));
+        if (!newPassword.equals(confirmPassword)) {
+            throw new IllegalArgumentException("입력한 비밀번호가 서로 일치하지 않습니다.");
+        }
+
+        User findUser = userRepository.findByUserId(user.getUserId())
+                .orElseThrow(() -> new RuntimeException("존재하지 않는 사용자입니다: " + user.getUserId()));
+
+        findUser.setPassword(passwordEncoder.encode(newPassword));
         userRepository.save(findUser);
     }
+
 
     public User findUserByPhoneNumber(String phoneNumber) {
         return userRepository.findByPhoneNumber(phoneNumber).orElseThrow(

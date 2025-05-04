@@ -39,7 +39,8 @@ public class EmailFrontService {
         ValidUtils.validVerifyPurpose(param.getPurpose(), List.of("FIND-PW", "FIND-ID", "AUTH", "TEST"));
 
         final String reqEmail = param.getToEmail();
-        emailService.canReissueVerificationCode(reqEmail);
+        final String reqPurpose = param.getPurpose();
+        emailService.canReissueVerificationCode(reqEmail, reqPurpose);
 
         final String reqVerificationCode = Utils.generateCode6();
         final String reqSubject = MailUtils.getSubjectForVerificationEmail();
