@@ -16,8 +16,12 @@ spring:
     hikari:
       connection-test-query: 'select 1'
       connection-timeout: 10000
-      maximum-pool-size: 5
+      maximum-pool-size: 10
       pool-name: jm-admin-pool
+      max-lifetime: 1800000
+      idle-timeout: 600000
+      validation-timeout: 5000
+
 
   jackson:
     time-zone: Asia/Seoul
