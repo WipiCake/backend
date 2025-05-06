@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/test")
 public class TestController {
 
-    @PostMapping("/v2")
+    @PostMapping("/v3")
     public APIResponse<String> test(@Valid @RequestBody ProcessSendSmsCoolParam param) {
         return APIResponse.success();
     }
