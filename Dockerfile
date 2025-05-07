@@ -1,15 +1,19 @@
-FROM eclipse-temurin:21-jdk
+FROM eclipse-temurin:21-jdk AS build
+WORKDIR /workspace
 
-WORKDIR /app
-
-COPY build.gradle ./
-COPY gradle ./gradle
-COPY gradlew ./
-RUN chmod +x gradlew
-RUN ./gradlew dependencies || true
+COPY gradle gradle
+COPY gradlew build.gradle settings.gradle* ./
+RUN chmod +x gradlew && ./gradlew --no-daemon dependencies
 
 COPY . .
+RUN ./gradlew --no-daemon clean bootJar -x test
 
-RUN ./gradlew build -x test
+FROM eclipse-temurin:21-jre
+WORKDIR /app
 
-ENTRYPOINT ["java", "-jar", "build/libs/wipi-0.0.1-SNAPSHOT.jar"]
+# build/libs/*.jar copy -> app.jar
+COPY --from=build /workspace/build/libs/*SNAPSHOT.jar app.jar
+
+ENTRYPOINT ["java","-jar","/app/app.jar"]
+
+
