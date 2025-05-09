@@ -57,6 +57,24 @@ public class RabbitmqConfig {
                 .with(RabbitmqConstants.ROUTING_SMS_SEND);
     }
 
+    // === AccessLog 설정 ===
+    @Bean
+    public DirectExchange exchangeAccessLog() {
+        return new DirectExchange(RabbitmqConstants.EXCHANGE_ACCESS_LOG);
+    }
+
+    @Bean
+    public Queue queueAccessLogSave() {
+        return new Queue(RabbitmqConstants.QUEUE_ACCESS_LOG_SAVE, true);
+    }
+
+    @Bean
+    public Binding bindingAccessLogSave(Queue queueAccessLogSave, DirectExchange exchangeAccessLog) {
+        return BindingBuilder.bind(queueAccessLogSave)
+                .to(exchangeAccessLog)
+                .with(RabbitmqConstants.ROUTING_ACCESS_LOG_SAVE);
+    }
+
     // === 공통 RabbitMQ 설정 ===
     @Bean
     public ConnectionFactory connectionFactory() {

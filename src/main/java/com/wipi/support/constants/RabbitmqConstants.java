@@ -11,7 +11,10 @@ public final class RabbitmqConstants {
     public static final String QUEUE_SMS_COOL = "queue.sms.cool.send";
     public static final String ROUTING_SMS_SEND = "route.sms.cool.send";
 
-
+    //AccessLog
+    public static final String EXCHANGE_ACCESS_LOG = "exchange.access.log";
+    public static final String QUEUE_ACCESS_LOG_SAVE = "queue.access.log.save";
+    public static final String ROUTING_ACCESS_LOG_SAVE = "route.access.log.save";
 
     private RabbitmqConstants() {
     }
