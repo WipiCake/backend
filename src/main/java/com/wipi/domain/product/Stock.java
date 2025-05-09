@@ -20,7 +20,7 @@ public class Stock {
 
     private long quantity;
 
-    public Stock(Long productId, long quantity) {
+    private Stock(Long productId, long quantity) {
         validateQuantity(quantity);
         this.productId = productId;
         this.quantity = quantity;

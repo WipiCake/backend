@@ -5,6 +5,7 @@ import com.wipi.support.util.Utils;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.logging.log4j.util.ProcessIdUtil;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import java.util.ArrayList;
@@ -41,7 +42,7 @@ public class ProductService {
 
     @Transactional
     public void registerThumbnailImage(ProductCommand.RegisterThumbnailImage command){
-        validProductId(command.getProductId());
+        findProduct(command.getProductId());
         Map<String,String> savedImage = commFileService.saveImagesForPath(command.getThumbnailImage(), basePath);
 
         productImageRepository.save(ProductImage.of(
@@ -55,7 +56,7 @@ public class ProductService {
 
     @Transactional
     public void registerDetailImages(ProductCommand.RegisterDetailImages command){
-        validProductId(command.getProductId());
+        findProduct(command.getProductId());
         List<MultipartFile> files = command.getDetailImages();
 
         if(files.size() > 10){
@@ -84,10 +85,9 @@ public class ProductService {
         List<ProductInfo.ListSelling> result = new ArrayList<>();
 
         for (Product product : productList) {
-
-            Stock stock = stockRepository.findByProductId(product.getProductId())
-                    .orElseThrow(() -> new RuntimeException("재고가 존재하지 않습니다: " + product.getProductId()));
-
+            Stock stock = stockRepository.findByProductId(product.getProductId()).orElseThrow(
+                    () -> new RuntimeException("해당 재고가 존재하지 않습니다 : "+ product.getProductId())
+            );
             List<ProductImage> productImageList = productImageRepository.findByProductId(product.getProductId());
 
             String thumbnail = null;
@@ -105,6 +105,7 @@ public class ProductService {
             }
 
             ProductInfo.ListSelling listSelling = ProductInfo.ListSelling.of(
+                    product.getProductId(),
                     product.getName(),
                     product.getPrice(),
                     product.getDescription(),
@@ -122,14 +123,65 @@ public class ProductService {
         return result;
     }
 
+    public ProductInfo.ProductDetail getProductDetail(Long productId){
+        Product product = findSellingProduct(productId);
+        Stock stock = findValidStock(productId);
+        List<ProductImage> images = productImageRepository.findByProductId(productId);
 
+        String thumbnail = null;
+        List<String> detailImages = new ArrayList<>();
 
+        for(ProductImage image : images){
 
-    private void validProductId(Long productId){
-        productRepository.findByProductId(productId).orElseThrow(
-                () -> new RuntimeException("존재하지 않는 상품입니다 : " + productId)
+            String imageResource = commFileService.loadImage(image.getSavedFileName(), basePath);
+
+            if(image.getIsThumbnail().equals(IsThumbnail.TRUE)){
+                thumbnail = imageResource;
+            } else{
+                detailImages.add(imageResource);
+            }
+        }
+
+        return ProductInfo.ProductDetail.of(
+                product.getProductId(),
+                product.getName(),
+                product.getPrice(),
+                product.getDescription(),
+                product.getType(),
+                product.getSellStatus(),
+                stock.getQuantity(),
+                thumbnail,
+                detailImages
         );
+
+
     }
 
+
+    private Stock findValidStock(Long productId){
+        Stock stock =  stockRepository.findByProductId(productId).orElseThrow(
+                () -> new RuntimeException("해당 재고가 존재하지 않습니다 : " + productId)
+        );
+        if(stock.getQuantity() <= 0){
+             throw new RuntimeException("해당 상품의 재고수량이 부족합니다 : " + productId);
+        }
+        return stock;
+    }
+
+    private Product findSellingProduct(Long productId){
+        Product product = productRepository.findByProductId(productId).orElseThrow(
+                () -> new RuntimeException("해당 상품이 존재하지 않습니다 : " + productId)
+        );
+        if(!product.getSellStatus().equals(ProductSellingStatus.SELLING)){
+            throw new RuntimeException("해당 상품은 판매중이지 않습니다 : " + productId);
+        }
+        return product;
+    }
+
+    private Product findProduct(Long productId){
+        return productRepository.findByProductId(productId).orElseThrow(
+                () -> new RuntimeException("해당 상품이 존재하지 않습니다 : " + productId)
+        );
+    }
 
 }
