@@ -1,5 +1,6 @@
 package com.wipi.domain.product;
 
+import com.wipi.domain.pick.Pick;
 import com.wipi.infra.comm.CommFileService;
 import com.wipi.support.util.Utils;
 import jakarta.transaction.Transactional;
@@ -21,7 +22,7 @@ public class ProductService {
     private final StockRepository stockRepository;
     private final ProductImageRepository productImageRepository;
     private final CommFileService commFileService;
-    private final String basePath = "/product";
+    public final static String basePath = "/product";
 
     @Transactional
     public Long register(ProductCommand.Register command){
@@ -155,6 +156,37 @@ public class ProductService {
         );
 
 
+    }
+
+    public List<ProductInfo.GetPickProducts> getPickProducts(List<Long> productIdList){
+
+        List<ProductInfo.GetPickProducts> result = new ArrayList<>();
+
+        for (Long productId : productIdList) {
+            Product product = productRepository.findByProductId(productId)
+                    .orElseThrow(() -> new RuntimeException("해당 상품이 존재하지 않습니다."));
+
+            String thumbnailPath = productImageRepository.findByProductId(productId).stream()
+                    .filter(img -> img.getIsThumbnail().equals(IsThumbnail.TRUE))
+                    .map(ProductImage::getSavedFileName)
+                    .findFirst()
+                    .orElse(null);
+
+            long quantity = stockRepository.findByProductId(productId).orElseThrow(() -> new RuntimeException("해당 재고가 존재하지 않습니다.")).getQuantity();
+
+            result.add(ProductInfo.GetPickProducts.of(
+                    product.getProductId(),
+                    product.getName(),
+                    product.getPrice(),
+                    product.getDescription(),
+                    product.getType(),
+                    product.getSellStatus(),
+                    quantity,
+                    thumbnailPath
+            ));
+        }
+
+        return result;
     }
 
 

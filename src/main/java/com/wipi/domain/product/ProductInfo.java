@@ -3,6 +3,8 @@ package com.wipi.domain.product;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import retrofit2.http.GET;
+
 import java.util.List;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
@@ -67,5 +69,31 @@ public class ProductInfo {
 
     }
 
+    @Getter
+    public static class GetPickProducts {
+        private final Long productId;
+        private final String name;
+        private final long price;
+        private final String description;
+        private final String type;
+        private final ProductSellingStatus sellStatus;
+        private final long quantity;
+        private final String thumbnail;
 
+        private GetPickProducts(Long productId, String name, long price, String description, String type, ProductSellingStatus sellStatus, long quantity, String thumbnail) {
+            this.productId = productId;
+            this.name = name;
+            this.price = price;
+            this.description = description;
+            this.type = type;
+            this.sellStatus = sellStatus;
+            this.quantity = quantity;
+            this.thumbnail = thumbnail;
+        }
+
+        public static GetPickProducts of(Long productId, String name, long price, String description, String type, ProductSellingStatus sellStatus, long quantity, String thumbnail) {
+            return new GetPickProducts(productId, name, price, description, type, sellStatus, quantity, thumbnail);
+        }
+
+    }
 }
