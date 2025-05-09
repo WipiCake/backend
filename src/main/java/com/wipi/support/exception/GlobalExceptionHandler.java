@@ -1,6 +1,6 @@
 package com.wipi.support.exception;
 
-import com.wipi.model.ApiResponse;
+import com.wipi.model.APIResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.support.DefaultMessageSourceResolvable;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -26,7 +26,7 @@ public class GlobalExceptionHandler {
      */
     @ExceptionHandler(BindException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public ApiResponse<Object> bindException(BindException e) {
+    public APIResponse<Object> bindException(BindException e) {
         String message = e.getBindingResult().getAllErrors().getFirst().getDefaultMessage();
         String fullMessages = e.getBindingResult().getAllErrors().stream()
                 .map(DefaultMessageSourceResolvable::getDefaultMessage)
@@ -34,7 +34,7 @@ public class GlobalExceptionHandler {
 
         log.warn("BindException 발생: {}", fullMessages);
 
-        return ApiResponse.fail(
+        return APIResponse.fail(
                 HttpStatus.BAD_REQUEST.value(),
                 message
         );
@@ -45,8 +45,8 @@ public class GlobalExceptionHandler {
      */
     @ExceptionHandler(HttpMessageNotReadableException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public ApiResponse<Object> handleMessageNotReadable(HttpMessageNotReadableException e) {
-        return ApiResponse.fail(
+    public APIResponse<Object> handleMessageNotReadable(HttpMessageNotReadableException e) {
+        return APIResponse.fail(
                 HttpStatus.BAD_REQUEST.value(),
                 "요청 본문을 읽을 수 없습니다: " + e.getMessage()
         );
@@ -57,8 +57,8 @@ public class GlobalExceptionHandler {
      */
     @ExceptionHandler(AuthenticationException.class)
     @ResponseStatus(HttpStatus.UNAUTHORIZED)
-    public ApiResponse<Object> handleAuthenticationException(AuthenticationException e) {
-        return ApiResponse.fail(
+    public APIResponse<Object> handleAuthenticationException(AuthenticationException e) {
+        return APIResponse.fail(
                 HttpStatus.UNAUTHORIZED.value(),
                 "인증에 실패했습니다: " + e.getMessage()
         );
@@ -69,8 +69,8 @@ public class GlobalExceptionHandler {
      */
     @ExceptionHandler(AccessDeniedException.class)
     @ResponseStatus(HttpStatus.FORBIDDEN)
-    public ApiResponse<Object> handleAccessDeniedException(AccessDeniedException e) {
-        return ApiResponse.fail(
+    public APIResponse<Object> handleAccessDeniedException(AccessDeniedException e) {
+        return APIResponse.fail(
                 HttpStatus.FORBIDDEN.value(),
                 "접근이 거부되었습니다."
         );
@@ -81,8 +81,8 @@ public class GlobalExceptionHandler {
      */
     @ExceptionHandler(NoHandlerFoundException.class)
     @ResponseStatus(HttpStatus.NOT_FOUND)
-    public ApiResponse<Object> handleNotFound(NoHandlerFoundException e) {
-        return ApiResponse.fail(
+    public APIResponse<Object> handleNotFound(NoHandlerFoundException e) {
+        return APIResponse.fail(
                 HttpStatus.NOT_FOUND.value(),
                 "요청한 경로를 찾을 수 없습니다."
         );
@@ -93,8 +93,8 @@ public class GlobalExceptionHandler {
      */
     @ExceptionHandler(HttpRequestMethodNotSupportedException.class)
     @ResponseStatus(HttpStatus.METHOD_NOT_ALLOWED)
-    public ApiResponse<Object> handleMethodNotAllowed(HttpRequestMethodNotSupportedException e) {
-        return ApiResponse.fail(
+    public APIResponse<Object> handleMethodNotAllowed(HttpRequestMethodNotSupportedException e) {
+        return APIResponse.fail(
                 HttpStatus.METHOD_NOT_ALLOWED.value(),
                 "지원되지 않는 HTTP 메서드입니다: " + e.getMethod()
         );
@@ -105,8 +105,8 @@ public class GlobalExceptionHandler {
      */
     @ExceptionHandler(DataIntegrityViolationException.class)
     @ResponseStatus(HttpStatus.CONFLICT)
-    public ApiResponse<Object> handleDataIntegrityViolation(DataIntegrityViolationException e) {
-        return ApiResponse.fail(
+    public APIResponse<Object> handleDataIntegrityViolation(DataIntegrityViolationException e) {
+        return APIResponse.fail(
                 HttpStatus.CONFLICT.value(),
                 "데이터 무결성 오류: " + e.getMostSpecificCause().getMessage()
         );
@@ -117,8 +117,8 @@ public class GlobalExceptionHandler {
      */
     @ExceptionHandler(HttpMediaTypeNotSupportedException.class)
     @ResponseStatus(HttpStatus.UNSUPPORTED_MEDIA_TYPE)
-    public ApiResponse<Object> handleUnsupportedMediaType(HttpMediaTypeNotSupportedException e) {
-        return ApiResponse.fail(
+    public APIResponse<Object> handleUnsupportedMediaType(HttpMediaTypeNotSupportedException e) {
+        return APIResponse.fail(
                 HttpStatus.UNSUPPORTED_MEDIA_TYPE.value(),
                 "지원하지 않는 미디어 타입입니다: " + e.getContentType()
         );
@@ -129,8 +129,8 @@ public class GlobalExceptionHandler {
      */
     @ExceptionHandler(TooManyRequestsException.class)
     @ResponseStatus(HttpStatus.TOO_MANY_REQUESTS)
-    public ApiResponse<Object> handleTooManyRequests(TooManyRequestsException e) {
-        return ApiResponse.fail(
+    public APIResponse<Object> handleTooManyRequests(TooManyRequestsException e) {
+        return APIResponse.fail(
                 HttpStatus.TOO_MANY_REQUESTS.value(),
                 e.getMessage()
         );
@@ -141,8 +141,8 @@ public class GlobalExceptionHandler {
      */
     @ExceptionHandler(RuntimeException.class)
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
-    public ApiResponse<Object> handleRuntimeException(RuntimeException e) {
-        return ApiResponse.fail(
+    public APIResponse<Object> handleRuntimeException(RuntimeException e) {
+        return APIResponse.fail(
                 HttpStatus.INTERNAL_SERVER_ERROR.value(),
                 "서버 오류가 발생했습니다: " + e.getMessage()
         );
@@ -153,8 +153,8 @@ public class GlobalExceptionHandler {
      */
     @ExceptionHandler(Exception.class)
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
-    public ApiResponse<Object> handleException(Exception e) {
-        return ApiResponse.fail(
+    public APIResponse<Object> handleException(Exception e) {
+        return APIResponse.fail(
                 HttpStatus.INTERNAL_SERVER_ERROR.value(),
                 "예기치 못한 오류가 발생했습니다."
         );
