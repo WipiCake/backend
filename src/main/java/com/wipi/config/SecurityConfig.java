@@ -1,6 +1,7 @@
 package com.wipi.config;
 
 import com.wipi.domain.jwt.JwtService;
+import com.wipi.filter.auth.AuthLogoutFilter;
 import com.wipi.filter.auth.JwtFilter;
 import com.wipi.filter.auth.LoginFilter;
 import com.wipi.support.properties.JwtProperties;
@@ -15,6 +16,7 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.security.web.authentication.logout.LogoutFilter;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
@@ -74,7 +76,7 @@ public class SecurityConfig {
                 authenticationManager(authenticationConfiguration),jwtService,jwtProperties),
                 UsernamePasswordAuthenticationFilter.class
         );
-        // http.addFilterBefore(new AuthLogoutFilter(jwtService), LogoutFilter.class);
+         http.addFilterBefore(new AuthLogoutFilter(jwtService), LogoutFilter.class);
     }
 
     @Bean
