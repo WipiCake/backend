@@ -2,7 +2,7 @@ package com.wipi.app.admin;
 
 import com.wipi.domain.jwt.JwtAuthRedis;
 import com.wipi.domain.jwt.JwtService;
-import com.wipi.inferfaces.model.dto.res.ResGetJwtInfoAll;
+import com.wipi.model.dto.res.ResGetJwtInfoAll;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import java.util.List;

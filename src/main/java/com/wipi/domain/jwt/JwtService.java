@@ -1,6 +1,6 @@
 package com.wipi.domain.jwt;
 
-import com.wipi.inferfaces.model.dto.res.ResIssueJwtDto;
+import com.wipi.model.dto.res.ResIssueJwtDto;
 import com.wipi.infra.jwt.JwtUtil;
 import com.wipi.support.properties.JwtProperties;
 import com.wipi.support.util.Utils;

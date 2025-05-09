@@ -1,6 +1,6 @@
 package com.wipi.support.swagger.wrapper;
 
-import com.wipi.inferfaces.model.rest.RestResponse;
+import com.wipi.model.rest.RestResponse;
 import io.swagger.v3.oas.annotations.media.Schema;
 
 @Schema(description = "임시 비밀번호 이메일 전송 예시")

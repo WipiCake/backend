@@ -1,7 +1,7 @@
 package com.wipi.filter.auth;
 
 import com.wipi.domain.jwt.JwtService;
-import com.wipi.inferfaces.model.dto.res.ResIssueJwtDto;
+import com.wipi.model.dto.res.ResIssueJwtDto;
 import com.wipi.support.properties.JwtProperties;
 import com.wipi.support.util.Utils;
 import jakarta.servlet.FilterChain;
@@ -15,7 +15,6 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import java.io.IOException;

@@ -1,7 +1,7 @@
 package com.wipi.domain.email;
 
-import com.wipi.inferfaces.model.dto.req.ReqSaveEmailVerificationDto;
-import com.wipi.inferfaces.model.dto.req.ReqVerifyEmailVerificationCode;
+import com.wipi.model.dto.req.ReqSaveEmailVerificationDto;
+import com.wipi.model.dto.req.ReqVerifyEmailVerificationCode;
 import com.wipi.infra.sms.SmsCoolRedisRepository;
 import com.wipi.support.util.Utils;
 import jakarta.transaction.Transactional;

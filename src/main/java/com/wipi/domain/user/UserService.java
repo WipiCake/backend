@@ -1,16 +1,12 @@
 package com.wipi.domain.user;
 
 import com.wipi.domain.email.EmailRepository;
-import com.wipi.domain.email.EmailVerification;
-import com.wipi.domain.jwt.JwtService;
-import com.wipi.inferfaces.model.param.UserSignupParam;
+import com.wipi.model.param.UserSignupParam;
 import com.wipi.support.properties.UserRoleProperties;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
-
-import java.time.LocalDateTime;
 
 @Service
 @RequiredArgsConstructor

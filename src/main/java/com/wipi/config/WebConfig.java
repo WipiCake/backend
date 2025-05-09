@@ -1,6 +1,6 @@
 package com.wipi.config;
 
-import com.wipi.inferfaces.api.resolver.LoginUserDetailsResolver;
+import com.wipi.inferfaces.resolver.LoginUserDetailsResolver;
 import com.wipi.support.properties.ImagesPathProperties;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;

@@ -1,6 +1,6 @@
 package com.wipi.support.swagger.wrapper;
 
-import com.wipi.inferfaces.model.rest.RestResponse;
+import com.wipi.model.rest.RestResponse;
 import io.swagger.v3.oas.annotations.media.Schema;
 
 public class RestProcessEmailVerificationWrapper extends RestResponse<Void> {
