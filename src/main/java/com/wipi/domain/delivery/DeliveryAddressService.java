@@ -17,7 +17,7 @@ public class DeliveryAddressService {
     @Transactional
     public void save(DeliveryAddressCommand.Save command) {
         if (command.getDefaultDelivery().equals(DefaultDelivery.TRUE)) {
-            findIdByDefaultAddress(command.getUserId(), DefaultDelivery.TRUE)
+            findIdByDefaultAddress(command.getUserId())
                     .ifPresent(deliveryAddress -> {
                         deliveryAddress.changeToNonDefault();
                         deliveryAddressRepository.save(deliveryAddress);
@@ -27,8 +27,14 @@ public class DeliveryAddressService {
         deliveryAddressRepository.save(command.toEntity());
     }
 
-    private Optional<DeliveryAddress> findIdByDefaultAddress(String userId, DefaultDelivery defaultDelivery) {
-        return deliveryAddressRepository.findByUserIdAndDefaultDelivery(userId, defaultDelivery);
+    @Transactional
+    public void deleteDeliveryAddress(Long id, String userId){
+        deliveryAddressRepository.deleteByIdAndUserId(id, userId);
+    }
+
+
+    private Optional<DeliveryAddress> findIdByDefaultAddress(String userId) {
+        return deliveryAddressRepository.findByUserIdAndDefaultDelivery(userId, DefaultDelivery.TRUE);
     }
 
 

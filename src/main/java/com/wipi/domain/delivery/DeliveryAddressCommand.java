@@ -17,7 +17,6 @@ public class DeliveryAddressCommand {
         private final String detailAddress;
         private final String phoneNumber;
 
-        @Setter(AccessLevel.PROTECTED)
         private final DefaultDelivery defaultDelivery;
 
         private Save(
@@ -62,5 +61,6 @@ public class DeliveryAddressCommand {
             );
         }
     }
+
 
 }

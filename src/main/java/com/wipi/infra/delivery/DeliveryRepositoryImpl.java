@@ -23,4 +23,9 @@ public class DeliveryRepositoryImpl implements DeliveryAddressRepository {
     public Optional<DeliveryAddress> findByUserIdAndDefaultDelivery(String userId, DefaultDelivery defaultDelivery) {
         return deliveryJpaRepository.findByUserIdAndDefaultDelivery(userId, defaultDelivery);
     }
+
+    @Override
+    public void deleteByIdAndUserId(Long deliveryAddressId, String userId) {
+        deliveryJpaRepository.deleteByDeliveryAddressIdAndUserId(deliveryAddressId,userId);
+    }
 }
