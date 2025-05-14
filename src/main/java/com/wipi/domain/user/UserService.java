@@ -82,6 +82,23 @@ public class UserService {
         );
     }
 
+    public void modifyLogin(UserCommand.ModifyLogin command) {
+        User user = findUser(command.getUserId());
 
+        if (!passwordEncoder.matches(command.getPassword(), user.getPassword())) {
+            throw new RuntimeException("비밀번호가 일치하지 않습니다");
+        }
+    }
+
+    public void modifyPersonal(UserCommand.ModifyPersonal command){
+        User user = findUser(command.getUserId());
+        user.updatePersonal(command);
+        userRepository.save(user);
+    }
+
+    private User findUser(String userId){
+        return userRepository.findByUserId(userId)
+                .orElseThrow(() -> new RuntimeException("유저를 찾을 수 없습니다"));
+    }
 
 }

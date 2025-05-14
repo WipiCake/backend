@@ -65,4 +65,20 @@ public class User extends BaseTimeEntity {
         this.userId = userId;
         this.role = role;
     }
+
+    public void updatePersonal(UserCommand.ModifyPersonal command) {
+        if (!command.getPassword1().equals(command.getPassword2())) {
+            throw new IllegalArgumentException("비밀번호가 일치하지 않습니다.");
+        }
+
+        this.password = command.getPassword1();
+        this.nickName = command.getNickName();
+        this.email = command.getEmail();
+        this.phoneNumber = command.getPhoneNumber();
+        this.gender = command.getGender();
+        this.birthDt = command.getBirthDt();
+        this.zipAddress = command.getZipAddress();
+        this.mainAddress = command.getMainAddress();
+        this.detailAddress = command.getDetailAddress();
+    }
 }
