@@ -47,9 +47,16 @@ public class DeliveryController {
     }
 
     @GetMapping("/getAll")
-    public APIResponse<List<DeliveryAddressInfo.GetAll>> get(@Parameter(hidden = true) @LoginUsers User user) {
+    public APIResponse<List<DeliveryAddressInfo.GetAll>> getAll(@Parameter(hidden = true) @LoginUsers User user) {
         List<DeliveryAddressInfo.GetAll> list = deliveryAddressService.getAll(user.getUserId());
         return APIResponse.success(list);
+    }
+
+    @GetMapping("/getDetail/{id}")
+    public APIResponse<DeliveryAddressInfo.GetDetail> getDetail(@Parameter(hidden = true) @LoginUsers User user,
+                                                                @PathVariable Long id) {
+        DeliveryAddressInfo.GetDetail detail = deliveryAddressService.getDetail(id,user.getUserId());
+        return APIResponse.success(detail);
     }
 
 }

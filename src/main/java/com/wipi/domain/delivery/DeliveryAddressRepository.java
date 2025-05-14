@@ -9,4 +9,5 @@ public interface DeliveryAddressRepository {
     void deleteByIdAndUserId(Long deliveryAddressId, String userId);
     Optional<DeliveryAddress> findByIdAndUserId(Long id, String userId);
     List<DeliveryAddress> findAllByUserId(String userId);
+    Optional<DeliveryAddress> findById(Long id);
 }

@@ -8,6 +8,14 @@ import java.util.List;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class DeliveryAddressInfo {
+    private Long deliveryAddressId;
+    private String userId;
+    private String title;
+    private String zipAddress;
+    private String mainAddress;
+    private String detailAddress;
+    private String phoneNumber;
+    private DefaultDelivery defaultDelivery;
 
     @Getter
     public static class GetAll {
@@ -37,6 +45,34 @@ public class DeliveryAddressInfo {
                         return dto;
                     })
                     .toList();
+        }
+    }
+
+    @Getter
+    public static class GetDetail {
+        private Long deliveryAddressId;
+        private String userId;
+        private String title;
+        private String zipAddress;
+        private String mainAddress;
+        private String detailAddress;
+        private String phoneNumber;
+        private DefaultDelivery defaultDelivery;
+
+        private GetDetail() {
+        }
+
+        public static GetDetail fromEntity(DeliveryAddress entity) {
+            GetDetail dto = new GetDetail();
+            dto.deliveryAddressId = entity.getDeliveryAddressId();
+            dto.userId = entity.getUserId();
+            dto.title = entity.getTitle();
+            dto.zipAddress = entity.getZipAddress();
+            dto.mainAddress = entity.getMainAddress();
+            dto.detailAddress = entity.getDetailAddress();
+            dto.phoneNumber = entity.getPhoneNumber();
+            dto.defaultDelivery = entity.getDefaultDelivery();
+            return dto;
         }
     }
 }

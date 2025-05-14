@@ -39,4 +39,9 @@ public class DeliveryRepositoryImpl implements DeliveryAddressRepository {
     public List<DeliveryAddress> findAllByUserId(String userId) {
         return deliveryJpaRepository.findAllByUserId(userId);
     }
+
+    @Override
+    public Optional<DeliveryAddress> findById(Long id) {
+        return deliveryJpaRepository.findById(id);
+    }
 }

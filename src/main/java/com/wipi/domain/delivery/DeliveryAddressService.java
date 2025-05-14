@@ -20,6 +20,12 @@ public class DeliveryAddressService {
         return DeliveryAddressInfo.GetAll.fromEntity(list);
     }
 
+    public DeliveryAddressInfo.GetDetail getDetail(Long id, String userId) {
+        DeliveryAddress deliveryAddress = deliveryAddressRepository.findByIdAndUserId(id,userId).orElseThrow(()
+                -> new RuntimeException("해당 배송지 정보를 찾을 수 없습니다"));
+
+        return DeliveryAddressInfo.GetDetail.fromEntity(deliveryAddress);
+    }
 
     @Transactional
     public void save(DeliveryAddressCommand.Save command) {
