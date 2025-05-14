@@ -16,7 +16,6 @@ public class DeliveryAddressCommand {
         private final String mainAddress;
         private final String detailAddress;
         private final String phoneNumber;
-
         private final DefaultDelivery defaultDelivery;
 
         private Save(
@@ -59,6 +58,33 @@ public class DeliveryAddressCommand {
                     phoneNumber,
                     defaultDelivery
             );
+        }
+    }
+
+    @Getter
+    public static class Update{
+        private final Long deliveryAddressId;
+        private final String userId;
+        private final String title;
+        private final String zipAddress;
+        private final String mainAddress;
+        private final String detailAddress;
+        private final String phoneNumber;
+        private final DefaultDelivery defaultDelivery;
+
+        private Update(Long deliveryAddressId, String userId, String title, String zipAddress, String mainAddress, String detailAddress, String phoneNumber, DefaultDelivery defaultDelivery) {
+            this.deliveryAddressId = deliveryAddressId;
+            this.userId = userId;
+            this.title = title;
+            this.zipAddress = zipAddress;
+            this.mainAddress = mainAddress;
+            this.detailAddress = detailAddress;
+            this.phoneNumber = phoneNumber;
+            this.defaultDelivery = defaultDelivery;
+        }
+
+        public static Update of(Long deliveryAddressId, String userId, String title, String zipAddress, String mainAddress, String detailAddress, String phoneNumber, DefaultDelivery defaultDelivery) {
+            return new Update(deliveryAddressId, userId, title, zipAddress, mainAddress, detailAddress, phoneNumber, defaultDelivery);
         }
     }
 

@@ -1,5 +1,7 @@
 package com.wipi.inferfaces.controller.delivery;
 
+import com.wipi.domain.delivery.DeliveryAddress;
+import com.wipi.domain.delivery.DeliveryAddressCommand;
 import com.wipi.domain.delivery.DeliveryAddressService;
 import com.wipi.domain.user.User;
 import com.wipi.inferfaces.resolver.LoginUsers;
@@ -31,6 +33,13 @@ public class DeliveryController {
     public APIResponse<Void> delete(@PathVariable Long id,
                                     @Parameter(hidden = true) @LoginUsers User user) {
         deliveryAddressService.deleteDeliveryAddress(id,user.getUserId());
+        return APIResponse.success();
+    }
+
+    @PostMapping("/update")
+    public APIResponse<Void> update(@Valid @RequestBody DeliveryAddressRequest.Update request,
+                                    @Parameter(hidden = true) @LoginUsers User user) {
+        deliveryAddressService.updateDeliveryAddress(request.toCommand(user.getUserId()));
         return APIResponse.success();
     }
 

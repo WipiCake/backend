@@ -58,4 +58,13 @@ public class DeliveryAddress {
     public void changeToNonDefault() {
         this.defaultDelivery = DefaultDelivery.FALSE;
     }
+
+    public void update(DeliveryAddressCommand.Update command) {
+        this.title = command.getTitle();
+        this.zipAddress = command.getZipAddress();
+        this.mainAddress = command.getMainAddress();
+        this.detailAddress = command.getDetailAddress();
+        this.phoneNumber = command.getPhoneNumber();
+        this.defaultDelivery = command.getDefaultDelivery();
+    }
 }

@@ -28,4 +28,9 @@ public class DeliveryRepositoryImpl implements DeliveryAddressRepository {
     public void deleteByIdAndUserId(Long deliveryAddressId, String userId) {
         deliveryJpaRepository.deleteByDeliveryAddressIdAndUserId(deliveryAddressId,userId);
     }
+
+    @Override
+    public Optional<DeliveryAddress> findByIdAndUserId(Long id, String userId) {
+        return deliveryJpaRepository.findByDeliveryAddressIdAndUserId(id,userId);
+    }
 }
