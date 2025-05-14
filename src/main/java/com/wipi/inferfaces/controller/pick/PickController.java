@@ -33,7 +33,7 @@ public class PickController {
     }
 
     @GetMapping("/getPicks")
-    public APIResponse<List<PickResult.GetUserPicks>> getProducts(@Valid @LoginUsers User user) {
+    public APIResponse<List<PickResult.GetUserPicks>> getProducts(@Parameter(hidden = true) @Valid @LoginUsers User user) {
         List<PickResult.GetUserPicks> data = pickFacade.getUserPicks(user.getUserId());
         return APIResponse.success(data);
     }
