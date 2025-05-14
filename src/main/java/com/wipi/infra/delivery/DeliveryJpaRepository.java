@@ -13,5 +13,7 @@ public interface DeliveryJpaRepository extends JpaRepository<DeliveryAddress, Lo
     void deleteByDeliveryAddressIdAndUserId(Long id,String userId);
 
     Optional<DeliveryAddress> findByDeliveryAddressIdAndUserId(Long id, String userId);
+
+    List<DeliveryAddress> findAllByUserId(String userId);
 }
 

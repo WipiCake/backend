@@ -2,6 +2,7 @@ package com.wipi.inferfaces.controller.delivery;
 
 import com.wipi.domain.delivery.DeliveryAddress;
 import com.wipi.domain.delivery.DeliveryAddressCommand;
+import com.wipi.domain.delivery.DeliveryAddressInfo;
 import com.wipi.domain.delivery.DeliveryAddressService;
 import com.wipi.domain.user.User;
 import com.wipi.inferfaces.resolver.LoginUsers;
@@ -12,6 +13,8 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @Slf4j
 @RestController
@@ -41,6 +44,12 @@ public class DeliveryController {
                                     @Parameter(hidden = true) @LoginUsers User user) {
         deliveryAddressService.updateDeliveryAddress(request.toCommand(user.getUserId()));
         return APIResponse.success();
+    }
+
+    @GetMapping("/getAll")
+    public APIResponse<List<DeliveryAddressInfo.GetAll>> get(@Parameter(hidden = true) @LoginUsers User user) {
+        List<DeliveryAddressInfo.GetAll> list = deliveryAddressService.getAll(user.getUserId());
+        return APIResponse.success(list);
     }
 
 }

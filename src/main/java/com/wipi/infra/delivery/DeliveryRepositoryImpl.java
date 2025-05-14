@@ -6,6 +6,7 @@ import com.wipi.domain.delivery.DeliveryAddressRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
 import java.util.Optional;
 
 @Repository
@@ -32,5 +33,10 @@ public class DeliveryRepositoryImpl implements DeliveryAddressRepository {
     @Override
     public Optional<DeliveryAddress> findByIdAndUserId(Long id, String userId) {
         return deliveryJpaRepository.findByDeliveryAddressIdAndUserId(id,userId);
+    }
+
+    @Override
+    public List<DeliveryAddress> findAllByUserId(String userId) {
+        return deliveryJpaRepository.findAllByUserId(userId);
     }
 }

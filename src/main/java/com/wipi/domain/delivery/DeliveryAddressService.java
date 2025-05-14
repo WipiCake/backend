@@ -5,6 +5,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -13,6 +14,12 @@ import java.util.Optional;
 public class DeliveryAddressService {
 
     private final DeliveryAddressRepository deliveryAddressRepository;
+
+    public List<DeliveryAddressInfo.GetAll> getAll(String userId){
+        List<DeliveryAddress> list = deliveryAddressRepository.findAllByUserId(userId);
+        return DeliveryAddressInfo.GetAll.fromEntity(list);
+    }
+
 
     @Transactional
     public void save(DeliveryAddressCommand.Save command) {
