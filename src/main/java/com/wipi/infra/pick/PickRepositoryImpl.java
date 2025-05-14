@@ -28,4 +28,19 @@ public class PickRepositoryImpl implements PickRepository {
     public List<Pick> findAllByUserId(String userId) {
         return pickJpaRepository.findAllByUserId(userId);
     }
+
+    @Override
+    public Pick findByProductId(Long productId) {
+        return pickJpaRepository.findByProductId(productId);
+    }
+
+    @Override
+    public void deleteByProductIdAndUserId(Long productId, String userId) {
+       pickJpaRepository.deleteByProductIdAndUserId(productId, userId);
+    }
+
+    @Override
+    public Optional<Pick> findByProductIdAndUserId(Long productId, String userId) {
+        return pickJpaRepository.findByProductIdAndUserId(productId, userId);
+    }
 }

@@ -1,6 +1,6 @@
 package com.wipi.support.exception;
 
-import com.wipi.model.APIResponse;
+import com.wipi.model.rest.APIResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.support.DefaultMessageSourceResolvable;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -137,13 +137,13 @@ public class GlobalExceptionHandler {
     }
 
     /**
-     * 500 Internal Server Error - 런타임 예외 (명시적 처리되지 않은 RuntimeException)
+     * 400 Internal Server Error - 런타임 예외 (명시적 처리되지 않은 RuntimeException)
      */
     @ExceptionHandler(RuntimeException.class)
-    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
     public APIResponse<Object> handleRuntimeException(RuntimeException e) {
         return APIResponse.fail(
-                HttpStatus.INTERNAL_SERVER_ERROR.value(),
+                HttpStatus.BAD_REQUEST.value(),
                 "서버 오류가 발생했습니다: " + e.getMessage()
         );
     }

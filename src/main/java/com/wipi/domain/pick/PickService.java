@@ -6,8 +6,8 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -17,13 +17,25 @@ public class PickService {
 
     @Transactional
     public void save(PickCommand.Save command) {
+        final Long productId = command.getProductId();
+        final String userId = command.getUserId();
+
+        findPick(productId, userId)
+                .ifPresent(pick -> {
+                    throw new RuntimeException("이미 찜한 상품입니다");
+                });
+
         Pick pick = Pick.create(command.getProductId(), command.getUserId());
         pickRepository.save(pick);
     }
 
     @Transactional
     public void delete(PickCommand.Delete command) {
-        pickRepository.delete(command.getPickId());
+        findPick(command.getProductId(), command.getUserId()).orElseThrow(
+                () -> new RuntimeException("찜상품이 존재하지 않습니다")
+        );
+
+        pickRepository.deleteByProductIdAndUserId(command.getProductId(),command.getUserId());
     }
 
     public List<PickInfo.GetUserPicks> getUserPicks(PickCommand.GetUserPicks command) {
@@ -34,6 +46,8 @@ public class PickService {
                 .toList();
     }
 
-
+    private Optional<Pick> findPick(Long productId, String userId) {
+        return pickRepository.findByProductIdAndUserId(productId, userId);
+    }
 
 }

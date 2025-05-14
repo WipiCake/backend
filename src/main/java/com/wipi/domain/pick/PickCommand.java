@@ -25,16 +25,16 @@ public class PickCommand {
 
     @Getter
     public static class Delete {
-        private final Long pickId;
+        private final Long productId;
         private final String userId;
 
-        private Delete(Long pickId, String userId) {
-            this.pickId = pickId;
+        private Delete(Long productId, String userId) {
+            this.productId = productId;
             this.userId = userId;
         }
 
-        public static PickCommand.Delete of(Long pickId, String userId) {
-            return new Delete(pickId, userId);
+        public static PickCommand.Delete of(Long productId, String userId) {
+            return new Delete(productId, userId);
         }
 
     }
