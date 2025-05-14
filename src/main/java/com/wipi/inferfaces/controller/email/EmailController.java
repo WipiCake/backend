@@ -1,7 +1,7 @@
 package com.wipi.inferfaces.controller.email;
 
 import com.wipi.app.mail.EmailFrontService;
-import com.wipi.model.APIResponse;
+import com.wipi.model.rest.APIResponse;
 import com.wipi.model.param.ProcessEmailVerificationParam;
 import com.wipi.model.param.VerifyFindIdByEmailParam;
 import com.wipi.model.param.VerifyRestPwByEmailParam;

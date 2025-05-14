@@ -6,7 +6,7 @@ import com.wipi.domain.pick.PickCommand;
 import com.wipi.domain.pick.PickService;
 import com.wipi.domain.user.User;
 import com.wipi.inferfaces.resolver.LoginUsers;
-import com.wipi.model.APIResponse;
+import com.wipi.model.rest.APIResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

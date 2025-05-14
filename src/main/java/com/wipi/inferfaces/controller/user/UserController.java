@@ -4,7 +4,7 @@ import com.wipi.app.user.UserFrontService;
 import com.wipi.domain.user.User;
 import com.wipi.domain.user.UserService;
 import com.wipi.inferfaces.resolver.LoginUsers;
-import com.wipi.model.APIResponse;
+import com.wipi.model.rest.APIResponse;
 import com.wipi.model.dto.res.ResUserSignupDto;
 import com.wipi.model.param.UserSignupParam;
 import com.wipi.model.param.UserUpdatePwParam;

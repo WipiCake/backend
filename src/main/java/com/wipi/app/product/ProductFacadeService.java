@@ -13,13 +13,10 @@ public class ProductFacadeService {
 
     @Transactional
     public void registerProduct(ProductCriteria.Register criteria){
-        //todo 1. 상품/재고 등록
         Long savedProductId = productService.register(criteria.toRegisterCommand());
 
-        //todo 2. 썸네일 이미지 등록
         productService.registerThumbnailImage(criteria.toRegisterThumbnailImageCommand(savedProductId));
 
-        //todo 3. 디테일 이미지 등록
         productService.registerDetailImages(criteria.toRegisterDetailImages(savedProductId));
     }
 

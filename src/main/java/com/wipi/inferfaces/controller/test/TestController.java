@@ -1,6 +1,6 @@
 package com.wipi.inferfaces.controller.test;
 
-import com.wipi.model.APIResponse;
+import com.wipi.model.rest.APIResponse;
 import com.wipi.model.param.ProcessSendSmsCoolParam;
 import jakarta.validation.Valid;
 import org.springframework.web.bind.annotation.PostMapping;

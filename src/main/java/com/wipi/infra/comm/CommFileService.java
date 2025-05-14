@@ -16,7 +16,7 @@ public class CommFileService {
 
     public String loadImage(String savedFileName, String basePath) {
         try {
-            String uploadDir = imagesPathProperties.getPath().replace("file:", "") + basePath;
+            String uploadDir = imagesPathProperties.getPath().replace("file:", "") +imagesPathProperties.getSrc() + basePath;
             File file = new File(uploadDir, savedFileName);
 
             if (!file.exists()) {

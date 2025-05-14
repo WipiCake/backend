@@ -2,7 +2,7 @@ package com.wipi.inferfaces.controller.product;
 
 import com.wipi.app.product.ProductFacadeService;
 import com.wipi.domain.product.ProductService;
-import com.wipi.model.APIResponse;
+import com.wipi.model.rest.APIResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.MediaType;

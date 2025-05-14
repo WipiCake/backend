@@ -1,7 +1,7 @@
 package com.wipi.inferfaces.controller.sms;
 
 import com.wipi.app.sms.SmsCoolFrontService;
-import com.wipi.model.APIResponse;
+import com.wipi.model.rest.APIResponse;
 import com.wipi.model.param.VerifyFindIdBySmsCoolParam;
 import com.wipi.model.param.VerifyResetPwByCoolSmsParam;
 import com.wipi.model.param.ProcessSendSmsCoolParam;
