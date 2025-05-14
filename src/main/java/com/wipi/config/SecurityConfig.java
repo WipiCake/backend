@@ -42,6 +42,7 @@ public class SecurityConfig {
                         .requestMatchers("/login", "/reissue", "/user/signup/**").permitAll()
                         .requestMatchers("/admin/**").hasRole("ADMIN")
                         .requestMatchers("/user/**").hasRole("USER")
+                        .requestMatchers("/delivery/**").hasRole("USER")
                        // .requestMatchers("/user/updatePw").hasAnyRole("USER","ADMIN")
                         .requestMatchers(
                                 "/swagger-ui.html",

@@ -55,5 +55,7 @@ public class DeliveryAddress {
     ) {
         return new DeliveryAddress(userId, title,zipAddress, mainAddress, detailAddress, phoneNumber, defaultDelivery);
     }
-
+    public void changeToNonDefault() {
+        this.defaultDelivery = DefaultDelivery.FALSE;
+    }
 }

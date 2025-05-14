@@ -3,6 +3,7 @@ package com.wipi.domain.delivery;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class DeliveryAddressCommand {
@@ -15,6 +16,8 @@ public class DeliveryAddressCommand {
         private final String mainAddress;
         private final String detailAddress;
         private final String phoneNumber;
+
+        @Setter(AccessLevel.PROTECTED)
         private final DefaultDelivery defaultDelivery;
 
         private Save(
@@ -59,4 +62,5 @@ public class DeliveryAddressCommand {
             );
         }
     }
+
 }

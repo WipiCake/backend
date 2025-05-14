@@ -1,9 +1,12 @@
 package com.wipi.infra.delivery;
 
+import com.wipi.domain.delivery.DefaultDelivery;
 import com.wipi.domain.delivery.DeliveryAddress;
 import com.wipi.domain.delivery.DeliveryAddressRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
+
+import java.util.Optional;
 
 @Repository
 @RequiredArgsConstructor
@@ -14,5 +17,10 @@ public class DeliveryRepositoryImpl implements DeliveryAddressRepository {
     @Override
     public void save(DeliveryAddress deliveryAddress) {
         deliveryJpaRepository.save(deliveryAddress);
+    }
+
+    @Override
+    public Optional<DeliveryAddress> findByUserIdAndDefaultDelivery(String userId, DefaultDelivery defaultDelivery) {
+        return deliveryJpaRepository.findByUserIdAndDefaultDelivery(userId, defaultDelivery);
     }
 }

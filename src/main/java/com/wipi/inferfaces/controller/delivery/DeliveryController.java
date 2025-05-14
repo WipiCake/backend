@@ -9,6 +9,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -22,7 +23,8 @@ public class DeliveryController {
 
     private final DeliveryAddressService deliveryAddressService;
 
-    public APIResponse<Void> save(@Valid @RequestBody DeliveryAddressRequest.Save request,
+    @PostMapping("/register")
+    public APIResponse<Void> register(@Valid @RequestBody DeliveryAddressRequest.Save request,
                                   @Parameter(hidden = true) @LoginUsers User user) {
         deliveryAddressService.save(request.toCommand(user.getUserId()));
         return APIResponse.success();
