@@ -33,23 +33,56 @@ public class SmsController {
 
     private final SmsCoolFrontService smsCoolFrontService;
     private final JwtProperties jwtProperties;
-
+    @Operation(
+            summary = "sms 인증코드 발송",
+            description = "휴대폰 번호로 sms 인증 코드 발송"
+    )
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "전송 성공",
+                    content = @Content(
+                            mediaType = "application/json",
+                            schema = @Schema(implementation = APIResponse.class)
+                    )
+            )
+    })
     @PostMapping("/code/issue")
     public APIResponse<String> issueEmailVerificationCode(@Valid @RequestBody ProcessSendSmsCoolParam param) {
         smsCoolFrontService.sendSmsCoolProcess(param);
         return APIResponse.success("SMS 전송 성공");
     }
-
+    @Operation(
+            summary = "SMS 인증 후 비밀번호 재설정 토큰 발급",
+            description = "인증코드 검증 후 재설정용 JWT 토큰을 헤더·쿠키에 셋팅합니다."
+    )
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "인증 성공",
+                    content = @Content(
+                            mediaType = "application/json",
+                            schema = @Schema(implementation = APIResponse.class)
+                    )
+            )
+    })
     @PostMapping("/verify/reset-pw")
     public APIResponse<String> verifyRestPw(@Valid@RequestBody VerifyResetPwByCoolSmsParam param, HttpServletResponse response) {
         Map<String,Object> data = smsCoolFrontService.verifyResetPw(param);
         log.info("data : {}", Utils.toJson(data));
-
+        // 응답 헤더 / 쿠키에 jwt 설정
         response.setHeader(jwtProperties.getAccessHeaderName(),"Bearer " + data.get("accessToken"));
         response.addCookie((Cookie) data.get("refreshCookie"));
         return APIResponse.success("인증이 완료되었습니다.");
     }
-
+    @Operation(
+            summary = "SMS 인증 후 아이디 찾기",
+            description = "인증코드 검증 후, 해당 휴대폰 번호에 연관된 사용자 아이디를 반환합니다."
+    )
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "조회 성공",
+                    content = @Content(
+                            mediaType = "application/json",
+                            schema = @Schema(implementation = APIResponse.class)
+                    )
+            )
+    })
     @PostMapping("/verify/find-id")
     public APIResponse<String> verifyFindId(@Valid @RequestBody VerifyFindIdBySmsCoolParam param) {
         String userId = smsCoolFrontService.verifyFindId(param);

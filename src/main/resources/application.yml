@@ -11,7 +11,7 @@ spring:
   datasource:
     url: jdbc:mysql://my8003.gabiadb.com:3306/jmdb?useUnicode=true&characterEncoding=utf-8&characterSetResults=utf-8&serverTimezone=Asia/Seoul
     username: jmhost
-    password: jaemin202020
+    password: jaemin212121
     driver-class-name: com.mysql.cj.jdbc.Driver
     hikari:
       connection-test-query: 'select 1'
@@ -105,9 +105,10 @@ spring:
 
 springdoc:
   api-docs:
-    enabled: true
+    path: /v3/api-docs
   swagger-ui:
-    enabled: true
+    path: /swagger-ui.html # swagger ui 접근경로
+  packages-to-scan: []
 
 logging:
   level:
