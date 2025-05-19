@@ -1,4 +1,5 @@
 # .github/workflows/azure-deploy.yml
+
 name: Build and deploy JAR app to Azure Web App - wipi-backend
 
 on:
@@ -10,10 +11,10 @@ jobs:
   build:
     runs-on: ubuntu-latest
     permissions:
-      contents: read    # actions/checkout에 필요
+      contents: read
 
     steps:
-      - name: Checkout repository
+      - name: Checkout repo
         uses: actions/checkout@v4
 
       - name: Set up Java 21
@@ -30,42 +31,39 @@ jobs:
       - name: Build with Gradle
         run: gradle clean build --no-daemon
 
-      # ─── 여기서 build/libs 에 생긴 JAR 중 하나만 app.jar로 복사 ───
-      - name: Prepare single JAR artifact
-        run: |
-          mkdir -p artifact
-          # build/libs/*.jar 중 첫 번째(가장 먼저 매칭) 파일을 artifact/app.jar 로 복사
-          cp build/libs/*.jar artifact/app.jar
-          ls -l artifact
-
-      # ─── 이제 artifact/app.jar 한 개만 업로드 ───
       - name: Upload JAR artifact
         uses: actions/upload-artifact@v4
         with:
           name: java-app
-          path: artifact/app.jar
+          path: build/libs/*.jar
 
   deploy:
     runs-on: ubuntu-latest
     needs: build
+    permissions:
+      contents: read
     environment:
       name: Production
       url: ${{ steps.deploy-to-webapp.outputs.webapp-url }}
-    permissions:
-      contents: read
 
     steps:
       - name: Download JAR artifact
         uses: actions/download-artifact@v4
         with:
           name: java-app
-          path: artifact
+		  path: build/libs
 
-      # ─── 딱 하나뿐인 artifact/app.jar 만 배포에 사용 ───
+      - name: Prepare JAR for deploy
+        run: |
+          mkdir deploy
+          cp build/libs/pro-0.0.1-SNAPSHOT.jar deploy/app.jar
+          ls -l deploy
+
+      # Azure에 배포
       - name: Deploy to Azure Web App
         id: deploy-to-webapp
         uses: azure/webapps-deploy@v3
         with:
           app-name: 'wipi-backend'
           publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_B6FDEDBFBDB54590BC6DAD37985E8B9B }}
-          package: 'artifact/app.jar'
+          package: 'deploy/app.jar'
