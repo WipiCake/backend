@@ -1,18 +1,21 @@
-name: CI/CD to Azure Web App
+# .github/workflows/azure-deploy.yml
+name: Build and deploy JAR app to Azure Web App - wipi-backend
 
 on:
   push:
-    branches: [ prod ]
+    branches:
+      - prod
   workflow_dispatch:
 
 jobs:
   build:
     runs-on: ubuntu-latest
     permissions:
-      contents: read
+      contents: read  # required for actions/checkout
 
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout repository
+        uses: actions/checkout@v4
 
       - name: Set up Java 21
         uses: actions/setup-java@v4
@@ -28,23 +31,27 @@ jobs:
       - name: Build with Gradle
         run: gradle clean build --no-daemon
 
-      - name: Upload artifact
+      - name: Upload JAR artifact
         uses: actions/upload-artifact@v4
         with:
           name: java-app
           path: build/libs/*.jar
 
   deploy:
-    needs: build
     runs-on: ubuntu-latest
-    environment: Production
+    needs: build
+    environment:
+      name: Production
+      url: ${{ steps.deploy-to-webapp.outputs.webapp-url }}
     permissions:
       contents: read
 
     steps:
-      - uses: actions/download-artifact@v4
+      - name: Download JAR artifact
+        uses: actions/download-artifact@v4
         with:
           name: java-app
+          path: build/libs
 
       - name: Deploy to Azure Web App
         id: deploy-to-webapp
