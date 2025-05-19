@@ -4,17 +4,18 @@ name: Build and deploy JAR app to Azure Web App - wipi-backend
 
 on:
   push:
-    branches: [ prod ]
+    branches:
+      - prod
   workflow_dispatch:
 
 jobs:
-  build:
+  build-and-deploy:
     runs-on: ubuntu-latest
     permissions:
-      contents: read
+      contents: read    # actions/checkout에 필요
 
     steps:
-      - name: Checkout repo
+      - name: Checkout repository
         uses: actions/checkout@v4
 
       - name: Set up Java 21
@@ -31,38 +32,10 @@ jobs:
       - name: Build with Gradle
         run: gradle clean build --no-daemon
 
-      - name: Upload JAR artifact
-        uses: actions/upload-artifact@v4
-        with:
-          name: java-app
-          path: build/libs/*.jar
-
-  deploy:
-    runs-on: ubuntu-latest
-    needs: build
-    permissions:
-      contents: read
-    environment:
-      name: Production
-      url: ${{ steps.deploy-to-webapp.outputs.webapp-url }}
-
-    steps:
-      - name: Download JAR artifact
-        uses: actions/download-artifact@v4
-        with:
-          name: java-app
-
-      - name: Prepare JAR for deploy
-        run: |
-          mkdir deploy
-          cp build/libs/pro-0.0.1-SNAPSHOT.jar deploy/app.jar
-          ls -l deploy
-
-      # Azure에 배포
       - name: Deploy to Azure Web App
         id: deploy-to-webapp
         uses: azure/webapps-deploy@v3
         with:
-          app-name: 'wipi-backend'
+          app-name: 'wipi-backend'  
           publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_B6FDEDBFBDB54590BC6DAD37985E8B9B }}
-          package: 'deploy/app.jar'
+          package: 'build/libs/*.jar'
