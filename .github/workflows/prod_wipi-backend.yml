@@ -1,42 +1,49 @@
 # .github/workflows/azure-deploy.yml
-
 name: Build and deploy JAR app to Azure Web App - wipi-backend
 
 on:
   push:
-    branches:
-      - prod
+    branches: [ prod ]
   workflow_dispatch:
 
 jobs:
-  build-and-deploy:
+  build:
     runs-on: ubuntu-latest
     permissions:
-      contents: read    # actions/checkout에 필요
+      contents: read
 
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
-
-      - name: Set up Java 21
-        uses: actions/setup-java@v4
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
         with:
           distribution: temurin
           java-version: '21'
-
-      - name: Set up Gradle CLI
-        uses: gradle/gradle-build-action@v2
+      - uses: gradle/gradle-build-action@v2
         with:
           cache-enabled: true
+      - run: gradle clean build --no-daemon
 
-      - name: Build with Gradle
-        run: gradle clean build --no-daemon
+      - uses: actions/upload-artifact@v4
+        with:
+          name: java-app
+          path: build/libs/*.jar
+
+  deploy:
+    runs-on: ubuntu-latest
+    needs: build
+    permissions:
+      contents: read
+
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          name: java-app
+          path: build/libs
 
       - name: Deploy to Azure Web App
-        id: deploy-to-webapp
         uses: azure/webapps-deploy@v3
         with:
-          app-name: 'wipi-backend'  
-          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_B6FDEDBFBDB54590BC6DAD37985E8B9B }}
-          package: 'build/libs/wipi-backend-0.0.1-SNAPSHOT.jar'
-
+          app-name: 'wipi-backend'
+          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_… }}
+          # 정확히 하나만 매칭
+          package: 'build/libs/*-SNAPSHOT.jar'
