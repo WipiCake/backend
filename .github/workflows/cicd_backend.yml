@@ -54,5 +54,5 @@ jobs:
         uses: azure/webapps-deploy@v3
         with:
           app-name: 'wipi-backend'
-          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_B6FDEDBFBDB54590BC6DAD37985E8B9B }}
+          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_9402E59BD09E41B695CEBBCF31DCAF46 }}
           package: 'build/libs/*-SNAPSHOT.jar'
