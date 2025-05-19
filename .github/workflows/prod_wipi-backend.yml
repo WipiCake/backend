@@ -51,7 +51,6 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           name: java-app
-	  path: build/libs
 
       - name: Prepare JAR for deploy
         run: |
