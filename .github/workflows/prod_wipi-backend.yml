@@ -1,4 +1,5 @@
 # .github/workflows/azure-deploy.yml
+
 name: Build and deploy JAR app to Azure Web App - wipi-backend
 
 on:
@@ -46,20 +47,20 @@ jobs:
       url: ${{ steps.deploy-to-webapp.outputs.webapp-url }}
 
     steps:
+      # 1) 아티팩트 루트(워크스페이스)에 그대로 다운로드
       - name: Download JAR artifact
         uses: actions/download-artifact@v4
         with:
           name: java-app
-          path: build/libs
 
-      # build/libs 안의 모든 JAR 중 단 하나만 선택해 복사
+      # 2) build/libs/*.jar 에서 딱 하나만 deploy/app.jar 로 복사
       - name: Prepare single JAR for deploy
         run: |
           mkdir deploy
-          # 가장 먼저 매칭되는 JAR 하나만 app.jar 로 복사
           cp build/libs/*.jar deploy/app.jar
           ls -l deploy
 
+      # 3) Azure에 배포
       - name: Deploy to Azure Web App
         id: deploy-to-webapp
         uses: azure/webapps-deploy@v3
