@@ -1,8 +1,8 @@
-# Docs for the Azure Web Apps Deploy action: https://github.com/Azure/webapps-deploy
-# More GitHub Actions for Azure: https://github.com/Azure/actions
+# .github/workflows/azure-deploy.yml
 
 name: Build and deploy JAR app to Azure Web App - wipi-backend
 
+# prod 브랜치에 푸시될 때, 또는 수동 워크플로우 트리거 시 실행
 on:
   push:
     branches:
@@ -13,21 +13,30 @@ jobs:
   build:
     runs-on: ubuntu-latest
     permissions:
-      contents: read #This is required for actions/checkout
+      contents: read          # actions/checkout 에 필요
 
     steps:
-      - uses: actions/checkout@v4
+      # 소스코드 체크아웃
+      - name: Checkout repository
+        uses: actions/checkout@v4
 
+      # JDK 21 세팅 (Eclipse Temurin)
       - name: Set up Java 21
         uses: actions/setup-java@v4
         with:
           distribution: temurin
           java-version: '21'
 
-      - name: Build with Gradle
-        run: ./gradle clean build --no-daemon
+      # Gradle Wrapper 실행 권한 부여
+      - name: Grant execute permission for Gradle wrapper
+        run: chmod +x gradlew
 
-      - name: Upload artifact for deployment job
+      # 프로젝트 빌드
+      - name: Build with Gradle
+        run: ./gradlew clean build --no-daemon
+
+      # 빌드된 JAR 아티팩트 업로드
+      - name: Upload JAR artifact
         uses: actions/upload-artifact@v4
         with:
           name: java-app
@@ -37,20 +46,24 @@ jobs:
     runs-on: ubuntu-latest
     needs: build
     environment:
-      name: 'Production'
+      name: Production
+      # Azure Web App URL 을 출력에 담아줍니다
       url: ${{ steps.deploy-to-webapp.outputs.webapp-url }}
-      
+    permissions:
+      contents: read
+
     steps:
-      - name: Download artifact from build job
+      # 빌드 아티팩트 다운로드
+      - name: Download JAR artifact
         uses: actions/download-artifact@v4
         with:
           name: java-app
-      
+
+      # Azure Web App 배포
       - name: Deploy to Azure Web App
         id: deploy-to-webapp
         uses: azure/webapps-deploy@v3
         with:
-          app-name: 'wipi-backend'
-          # slot-name: 'Production'
-          package: '*.jar'
-          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_B6FDEDBFBDB54590BC6DAD37985E8B9B }}
+          app-name: 'wipi-backend'                                                 # Azure Portal에 생성한 Web App 이름
+          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_B6FDEDBFBDB54590BC6DAD37985E8B9B }}  # 자동 생성된 시크릿 이름
+          package: '*.jar'                                                         # 다운로드된 JAR 패턴
