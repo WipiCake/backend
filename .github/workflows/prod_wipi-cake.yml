@@ -1,6 +1,6 @@
 # .github/workflows/azure-deploy.yml
 
-name: Build and deploy JAR app to Azure Web App - wipi-backend
+name: Build and deploy JAR app to Azure Web App - wipi-cake
 
 on:
   push:
@@ -40,8 +40,9 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
     needs: build
-    permissions:
-      contents: read
+    environment:
+      name: 'Production'
+      url: ${{ steps.deploy-to-webapp.outputs.webapp-url }}
 
     steps:
       - name: Download JAR artifact
@@ -53,6 +54,6 @@ jobs:
       - name: Deploy to Azure Web App
         uses: azure/webapps-deploy@v3
         with:
-          app-name: 'wipi-backend'
+          app-name: 'wipi-cake'
           publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_9402E59BD09E41B695CEBBCF31DCAF46 }}
           package: 'build/libs/*-SNAPSHOT.jar'
