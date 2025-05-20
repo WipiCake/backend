@@ -1,9 +1,10 @@
 # .github/workflows/ping.yml
 name: Keep App Alive
 
+# 매 5분마다 실행
 on:
   schedule:
-    - cron: '*/5 * * * *'   # 5분마다 실행
+    - cron: '*/5 * * * *'
 
 jobs:
   ping:
@@ -11,4 +12,5 @@ jobs:
     steps:
       - name: Ping App Service
         run: |
-          curl -fsS https://wipi-backend-dpe6cxe4b4dya4g9.koreacentral-01.azurewebsites.net/actuator/health || true
+          # actuator/health 엔드포인트를 호출해서 앱을 깨움
+          curl -fsS https://wipi-cake-enhjerf3btg0apg3.koreasouth-01.azurewebsites.net/actuator/health || true
