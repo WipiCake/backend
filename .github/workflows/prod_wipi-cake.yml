@@ -37,6 +37,7 @@ jobs:
       name: 'Production'
       url: ${{ steps.deploy-to-webapp.outputs.webapp-url }}
     permissions:
+  
       id-token: write
       contents: read
 
@@ -45,8 +46,8 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           name: java-app
-          path: build/libs/*.jar
-
+      
+          path: build/libs
 
       - name: Login to Azure
         uses: azure/login@v2
