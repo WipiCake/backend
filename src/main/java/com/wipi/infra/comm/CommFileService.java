@@ -23,7 +23,7 @@ public class CommFileService {
                 throw new RuntimeException("이미지를 찾을 수 없습니다: " + savedFileName);
             }
 
-            String urlPath = basePath + "/" + savedFileName;
+            String urlPath = "img"+ basePath + "/" + savedFileName;
             return urlPath.replace("\\", "/");
         } catch (Exception e) {
             throw new RuntimeException("이미지 로드 중 오류 발생: " + savedFileName, e);

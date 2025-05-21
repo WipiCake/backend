@@ -1,7 +1,6 @@
 package com.wipi.infra.sms;
 
-import com.wipi.config.RabbitmqConfig;
-import com.wipi.inferfaces.model.dto.req.ReqSmsCoolSendDto;
+import com.wipi.model.dto.req.ReqSmsCoolSendDto;
 import com.wipi.support.constants.RabbitmqConstants;
 import com.wipi.support.util.SmsUtils;
 import lombok.RequiredArgsConstructor;

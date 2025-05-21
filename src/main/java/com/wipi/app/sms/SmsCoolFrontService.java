@@ -4,20 +4,19 @@ import com.wipi.domain.jwt.JwtService;
 import com.wipi.domain.sms.SmsCoolService;
 import com.wipi.domain.user.User;
 import com.wipi.domain.user.UserService;
-import com.wipi.inferfaces.model.dto.req.ReqSmsCoolSendDto;
-import com.wipi.inferfaces.model.dto.res.ResIssueJwtDto;
-import com.wipi.inferfaces.model.param.VerifyFindIdBySmsCoolParam;
-import com.wipi.inferfaces.model.param.VerifyResetPwByCoolSmsParam;
-import com.wipi.inferfaces.model.param.ProcessSendSmsCoolParam;
+import com.wipi.model.dto.req.ReqSmsCoolSendDto;
+import com.wipi.model.dto.res.ResIssueJwtDto;
+import com.wipi.model.param.VerifyAuthBySmsCoolParam;
+import com.wipi.model.param.VerifyFindIdBySmsCoolParam;
+import com.wipi.model.param.VerifyResetPwByCoolSmsParam;
+import com.wipi.model.param.ProcessSendSmsCoolParam;
 import com.wipi.support.constants.RabbitmqConstants;
 import com.wipi.support.util.Utils;
 import com.wipi.support.util.ValidUtils;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.hibernate.proxy.map.MapProxy;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.stereotype.Service;
-
 import java.util.List;
 import java.util.Map;
 
@@ -80,8 +79,12 @@ public class SmsCoolFrontService {
         );
     }
 
+    public void verifyAuth(VerifyAuthBySmsCoolParam param) {
+        ValidUtils.validVerifyPurpose(param.getPurpose(), List.of("AUTH","TEST"));
+        final String reqPhoneNumber = param.getPhoneNumber();
+        final String reqVerificationCode = param.getVerificationCode();
 
-
-
+        smsCoolService.verifySmsCoolVerificationCode(reqPhoneNumber,reqVerificationCode);
+    }
 
 }

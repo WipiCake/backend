@@ -1,6 +1,7 @@
 package com.wipi.config;
 
 import com.wipi.domain.jwt.JwtService;
+import com.wipi.filter.auth.AuthLogoutFilter;
 import com.wipi.filter.auth.JwtFilter;
 import com.wipi.filter.auth.LoginFilter;
 import com.wipi.support.properties.JwtProperties;
@@ -15,6 +16,7 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.security.web.authentication.logout.LogoutFilter;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
@@ -40,14 +42,15 @@ public class SecurityConfig {
                         .requestMatchers("/login", "/reissue", "/user/signup/**").permitAll()
                         .requestMatchers("/admin/**").hasRole("ADMIN")
                         .requestMatchers("/user/**").hasRole("USER")
-                        // .requestMatchers("/user/updatePw").hasAnyRole("USER","ADMIN")
+                        .requestMatchers("/delivery/**").hasRole("USER")
+                       // .requestMatchers("/user/updatePw").hasAnyRole("USER","ADMIN")
                         .requestMatchers(
                                 "/swagger-ui.html",
                                 "/swagger-ui/**",
                                 "/v3/api-docs/**",
                                 "/swagger-resources/**",
                                 "/webjars/**",
-                                "/actuator/**"
+                                "/img/**"
                         ).permitAll()
                         .requestMatchers(
                                 "/email/**",
@@ -72,10 +75,10 @@ public class SecurityConfig {
     private void addCustomFilters(HttpSecurity http) throws Exception {
         http.addFilterBefore(new JwtFilter(jwtService), LoginFilter.class);
         http.addFilterAt(new LoginFilter(
-                        authenticationManager(authenticationConfiguration),jwtService,jwtProperties),
+                authenticationManager(authenticationConfiguration),jwtService,jwtProperties),
                 UsernamePasswordAuthenticationFilter.class
         );
-        // http.addFilterBefore(new AuthLogoutFilter(jwtService), LogoutFilter.class);
+         http.addFilterBefore(new AuthLogoutFilter(jwtService), LogoutFilter.class);
     }
 
     @Bean
@@ -100,7 +103,6 @@ public class SecurityConfig {
         config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
         config.setAllowedHeaders(List.of("Authorization", "Content-Type","access","refresh","Set-Cookie"));
         config.setAllowCredentials(true);
-        config.setExposedHeaders(List.of("Authorization"));
 
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", config);

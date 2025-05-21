@@ -2,8 +2,8 @@ package com.wipi.app.user;
 
 import com.wipi.domain.user.User;
 import com.wipi.domain.user.UserService;
-import com.wipi.inferfaces.model.dto.res.ResUserSignupDto;
-import com.wipi.inferfaces.model.param.UserSignupParam;
+import com.wipi.model.dto.res.ResUserSignupDto;
+import com.wipi.model.param.UserSignupParam;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
