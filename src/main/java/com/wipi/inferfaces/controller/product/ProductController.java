@@ -3,6 +3,7 @@ package com.wipi.inferfaces.controller.product;
 import com.wipi.app.product.ProductFacadeService;
 import com.wipi.domain.product.ProductService;
 import com.wipi.model.rest.APIResponse;
+import com.wipi.support.util.Utils;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.MediaType;
@@ -23,11 +24,17 @@ public class ProductController {
     public APIResponse<Void> register(
             @ModelAttribute ProductRequest.Register request,
             @RequestPart("thumbNailImage") MultipartFile thumbnail,
-            @RequestPart("detailImages") List<MultipartFile> detailImages)
-    {
+            @RequestPart("detailImages") List<MultipartFile> detailImages) {
+
+        log.info("[register] request: {}", Utils.toJson(request));
+        log.info("[register] thumbnail : {}",Utils.toJson(thumbnail));
+        log.info("[register] detailImages: {}", Utils.toJson(detailImages));
+
+
         request.setThumbNailImage(thumbnail);
         request.setDetailImages(detailImages);
         productFacadeService.registerProduct(request.toCriteria());
+
         return APIResponse.success();
     }
 
