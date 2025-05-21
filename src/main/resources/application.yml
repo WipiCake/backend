@@ -38,8 +38,8 @@ spring:
 
 
   rabbitmq:
-    #host: rabbitmq-1
-    host: localhost
+    host: rabbitmq-1
+    #host: localhost
     port: 5672
     username: guest
     password: guest
@@ -63,8 +63,8 @@ spring:
 
   data:
     redis:
-      #host: redis-1
-      host: localhost
+      host: redis-1
+      #host: localhost
       port: 6379
       timeout: 0
   cache:
