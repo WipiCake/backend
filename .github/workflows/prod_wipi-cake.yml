@@ -41,7 +41,7 @@ jobs:
     runs-on: ubuntu-latest
     needs: build
     environment:
-      name: 'Production'
+      name: Production
       url: ${{ steps.deploy-to-webapp.outputs.webapp-url }}
 
     steps:
@@ -53,7 +53,9 @@ jobs:
 
       - name: Deploy to Azure Web App
         uses: azure/webapps-deploy@v3
+        id: deploy-to-webapp
         with:
           app-name: 'wipi-cake'
           publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_9402E59BD09E41B695CEBBCF31DCAF46 }}
+          # 한 개의 JAR만 매칭되도록 패턴 제한
           package: 'build/libs/*-SNAPSHOT.jar'
