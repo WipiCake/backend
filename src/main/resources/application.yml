@@ -98,6 +98,14 @@ spring:
             user-info-uri: https://kapi.kakao.com/v2/user/me
             user-name-attribute: id
 
+management:
+  endpoints:
+    web:
+      exposure:
+        include:
+          - health
+          - info
+
 
 springdoc:
   api-docs:

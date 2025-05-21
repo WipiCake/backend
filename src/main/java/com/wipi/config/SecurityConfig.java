@@ -40,13 +40,14 @@ public class SecurityConfig {
                         .requestMatchers("/login", "/reissue", "/user/signup/**").permitAll()
                         .requestMatchers("/admin/**").hasRole("ADMIN")
                         .requestMatchers("/user/**").hasRole("USER")
-                       // .requestMatchers("/user/updatePw").hasAnyRole("USER","ADMIN")
+                        // .requestMatchers("/user/updatePw").hasAnyRole("USER","ADMIN")
                         .requestMatchers(
                                 "/swagger-ui.html",
                                 "/swagger-ui/**",
                                 "/v3/api-docs/**",
                                 "/swagger-resources/**",
-                                "/webjars/**"
+                                "/webjars/**",
+                                "/actuator/**"
                         ).permitAll()
                         .requestMatchers(
                                 "/email/**",
@@ -71,7 +72,7 @@ public class SecurityConfig {
     private void addCustomFilters(HttpSecurity http) throws Exception {
         http.addFilterBefore(new JwtFilter(jwtService), LoginFilter.class);
         http.addFilterAt(new LoginFilter(
-                authenticationManager(authenticationConfiguration),jwtService,jwtProperties),
+                        authenticationManager(authenticationConfiguration),jwtService,jwtProperties),
                 UsernamePasswordAuthenticationFilter.class
         );
         // http.addFilterBefore(new AuthLogoutFilter(jwtService), LogoutFilter.class);
