@@ -6,6 +6,7 @@ import com.wipi.domain.user.User;
 import com.wipi.domain.user.UserService;
 import com.wipi.model.dto.req.ReqSmsCoolSendDto;
 import com.wipi.model.dto.res.ResIssueJwtDto;
+import com.wipi.model.param.VerifyAuthBySmsCoolParam;
 import com.wipi.model.param.VerifyFindIdBySmsCoolParam;
 import com.wipi.model.param.VerifyResetPwByCoolSmsParam;
 import com.wipi.model.param.ProcessSendSmsCoolParam;
@@ -16,7 +17,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.stereotype.Service;
-
 import java.util.List;
 import java.util.Map;
 
@@ -79,8 +79,12 @@ public class SmsCoolFrontService {
         );
     }
 
+    public void verifyAuth(VerifyAuthBySmsCoolParam param) {
+        ValidUtils.validVerifyPurpose(param.getPurpose(), List.of("AUTH","TEST"));
+        final String reqPhoneNumber = param.getPhoneNumber();
+        final String reqVerificationCode = param.getVerificationCode();
 
-
-
+        smsCoolService.verifySmsCoolVerificationCode(reqPhoneNumber,reqVerificationCode);
+    }
 
 }
