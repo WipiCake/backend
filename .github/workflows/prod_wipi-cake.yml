@@ -62,5 +62,5 @@ jobs:
         with:
           app-name: 'wipi-cake'
           slot-name: 'Production'
-          package: '*.jar'
+          package: 'build/libs/*-SNAPSHOT.jar'
           
