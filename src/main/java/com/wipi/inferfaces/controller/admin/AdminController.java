@@ -5,6 +5,7 @@ import com.wipi.app.admin.AdminFrontService;
 import com.wipi.model.dto.res.ResGetJwtInfoAll;
 import com.wipi.model.rest.RestResponse;
 import com.wipi.model.rest.RestResponseEntity;
+import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -23,6 +24,7 @@ public class AdminController {
 
     private final AdminFrontService adminFrontService;
 
+    @Operation(description = "관리자 권한 필요한 사항, 현재 Redis에 존재하는 AccessToken, RefreshToken을 전체 조회합니다.")
     @GetMapping("/getJwtInfoAll")
     public ResponseEntity<RestResponse<List<ResGetJwtInfoAll>>> getJwtInfoAll(){
         List<ResGetJwtInfoAll> resDto = adminFrontService.getJwtInfoAll();

@@ -11,6 +11,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -29,16 +30,16 @@ public class EmailController {
     private final EmailFrontService emailFrontService;
     private final JwtProperties jwtProperties;
 
-    @Operation(description = "purpose -> 아이디 찾기 : FIND-ID, 비밀번호 찾기 : FIND-PW, 회원가입 인증 : AUTH")
+    @Operation(summary = "이메일 인증코드 발급" , description = "purpose -> 아이디 찾기 : FIND-ID, 비밀번호 찾기 : FIND-PW, 회원가입 인증 : AUTH")
     @PostMapping("/code/issue")
-    public APIResponse<String> issueEmailVerificationCode(@RequestBody ProcessEmailVerificationParam param) {
+    public APIResponse<String> issueEmailVerificationCode(@Valid @RequestBody ProcessEmailVerificationParam param) {
         emailFrontService.processEmailVerification(param);
         return APIResponse.success("인증코드 발급에 성공하였습니다.");
     }
 
-    @Operation(description = "비밀번호 변경 검증")
+    @Operation(summary = "비밀번호 변경 검증" , description = "purpose: FIND-PW")
     @PostMapping("/verify/reset-pw")
-    public APIResponse<String> verifyEmailVerificationCode(@RequestBody VerifyRestPwByEmailParam param, HttpServletResponse response) {
+    public APIResponse<String> verifyEmailVerificationCode(@Valid @RequestBody VerifyRestPwByEmailParam param, HttpServletResponse response) {
         Map<String,Object> data =  emailFrontService.verifyResetPw(param);
         log.info("data : {}", Utils.toJson(data));
 
@@ -48,9 +49,9 @@ public class EmailController {
     }
 
 
-    @Operation(description = "아이디 찾기 검증")
+    @Operation(summary = "아이디 찾기 검증" ,description = "purpose: FIND-ID")
     @PostMapping("/verify/find-id")
-    public APIResponse<String> verifyFindId(@RequestBody VerifyFindIdByEmailParam param) {
+    public APIResponse<String> verifyFindId(@Valid @RequestBody VerifyFindIdByEmailParam param) {
         String userId = emailFrontService.verifyFindId(param);
         return APIResponse.success(userId);
     }

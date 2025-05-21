@@ -31,14 +31,16 @@ public class SmsController {
     private final SmsCoolFrontService smsCoolFrontService;
     private final JwtProperties jwtProperties;
 
-    @Operation(description = "purpose -> 아이디 찾기 : FIND-ID, 비밀번호 찾기 : FIND-PW, 회원가입 인증 : AUTH")
+    @Operation(summary = "SMS 인증 코드 발급", description = "purpose -> 아이디 찾기 : FIND-ID, 비밀번호 찾기 : FIND-PW, 회원가입 인증 : AUTH")
     @PostMapping("/code/issue")
     public APIResponse<String> issueEmailVerificationCode(@Valid @RequestBody ProcessSendSmsCoolParam param) {
         smsCoolFrontService.sendSmsCoolProcess(param);
         return APIResponse.success("SMS 전송 성공");
     }
 
-    @Operation(description = "비밀번호 변경 검증")
+    @Operation(summary = "비밀번호 변경 검증", description = "purpose : FIND-PW, " +
+            "인증코드가 검증이 완료되면 JWT 토큰을 Header에 발급하고, " +
+            "user//updatePw API를 요청하여 비밀번호를 변경합니다. ")
     @PostMapping("/verify/reset-pw")
     public APIResponse<String> verifyRestPw(@Valid@RequestBody VerifyResetPwByCoolSmsParam param, HttpServletResponse response) {
         Map<String,Object> data = smsCoolFrontService.verifyResetPw(param);
@@ -49,14 +51,14 @@ public class SmsController {
         return APIResponse.success("인증이 완료되었습니다.");
     }
 
-    @Operation(description = "아이디 찾기 검증")
+    @Operation(summary = "아이디 찾기 검증", description = "purpose : FIND-ID")
     @PostMapping("/verify/find-id")
     public APIResponse<String> verifyFindId(@Valid @RequestBody VerifyFindIdBySmsCoolParam param) {
         String userId = smsCoolFrontService.verifyFindId(param);
         return APIResponse.success(userId);
     }
 
-    @Operation(description = "회원가입 검증")
+    @Operation(summary = "회원가입 검증", description = "purpose : AUTH")
     @PostMapping("/verify/auth")
     public APIResponse<Void> auth(@Valid @RequestBody VerifyAuthBySmsCoolParam param) {
         smsCoolFrontService.verifyAuth(param);
