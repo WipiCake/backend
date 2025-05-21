@@ -2,7 +2,6 @@ package com.wipi.inferfaces.controller.product;
 
 import com.wipi.app.product.ProductCriteria;
 import com.wipi.domain.product.ProductSellingStatus;
-import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -18,28 +17,27 @@ public class ProductRequest {
     @Getter
     @Setter
     @NoArgsConstructor
-    @Schema(description = "신규 상품등록 요청 dto")
     public static class Register {
-        @Schema(description = "상품명", example = "초코 케이크")
+        @Schema(description = "상품명", example = "애플 에어팟 프로")
         private String name;
-        @Schema(description = "가격 (원)", example = "25000")
+
+        @Schema(description = "상품 가격", example = "329000")
         private long price;
-        @Schema(description = "상품 설명", example = "달콤한 초코 케이크입니다.")
+
+        @Schema(description = "상품 설명", example = "노이즈 캔슬링 기능이 있는 무선 이어폰")
         private String description;
-        @Schema(description = "상품 타입", example = "CAKE")
+
+        @Schema(description = "상품 종류", example = "전자기기")
         private String type;
-        @Schema(description = "판매 상태", example = "SELLING")
+
+        @Schema(description = "판매 상태", example = "SELLING", implementation = ProductSellingStatus.class)
         private ProductSellingStatus sellStatus;
-        @Schema(description = "재고 수량", example = "10")
+
+        @Schema(description = "재고 수량", example = "100")
         private long quantity;
-        @Schema(description = "썸네일 이미지 파일 (binary)", type = "string", format = "binary")
+
         private MultipartFile thumbNailImage;
-        @ArraySchema(
-                schema = @Schema(
-                        description = "상세 이미지 파일 목록 (binary)",
-                        type = "string", format = "binary"
-                )
-        )
+
         private List<MultipartFile> detailImages;
 
         private Register(String name, long price, String description, String type, ProductSellingStatus sellStatus, long quantity) {
