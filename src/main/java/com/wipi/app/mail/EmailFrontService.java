@@ -22,6 +22,7 @@ import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Map;
 
 @Service
 @RequiredArgsConstructor
@@ -39,7 +40,8 @@ public class EmailFrontService {
         ValidUtils.validVerifyPurpose(param.getPurpose(), List.of("FIND-PW", "FIND-ID", "AUTH", "TEST"));
 
         final String reqEmail = param.getToEmail();
-        emailService.canReissueVerificationCode(reqEmail);
+        final String reqPurpose = param.getPurpose();
+        emailService.canReissueVerificationCode(reqEmail, reqPurpose);
 
         final String reqVerificationCode = Utils.generateCode6();
         final String reqSubject = MailUtils.getSubjectForVerificationEmail();
@@ -73,7 +75,7 @@ public class EmailFrontService {
     }
 
     //이메일 인증코드 검증, 비밀번호 찾기
-    public void verifyResetPw(VerifyRestPwByEmailParam param){
+    public Map<String,Object> verifyResetPw(VerifyRestPwByEmailParam param){
         ValidUtils.validVerifyPurpose(param.getPurpose(), List.of("FIND-PW","TEST"));
 
         emailService.verifyEmailVerificationCode(new ReqVerifyEmailVerificationCode(
@@ -83,6 +85,10 @@ public class EmailFrontService {
 
         ResIssueJwtDto resIssueJwtDto = jwtService.issueJwtAuth(user.getUserId(),user.getRole());
         log.info("resIssueJwtDto:{}", resIssueJwtDto);
+        return Map.of(
+                "accessToken", resIssueJwtDto.getAccessToken(),
+                "refreshCookie", resIssueJwtDto.getCookie()
+        );
     }
 
 

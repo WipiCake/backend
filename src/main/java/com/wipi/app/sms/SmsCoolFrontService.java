@@ -14,10 +14,12 @@ import com.wipi.support.util.Utils;
 import com.wipi.support.util.ValidUtils;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.hibernate.proxy.map.MapProxy;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Map;
 
 @Service
 @RequiredArgsConstructor
@@ -60,7 +62,7 @@ public class SmsCoolFrontService {
 
 
     //휴대폰 인증코드 검증, 비밀번호 찾기
-    public void verifyResetPw(VerifyResetPwByCoolSmsParam param){
+    public Map<String,Object> verifyResetPw(VerifyResetPwByCoolSmsParam param){
         ValidUtils.validVerifyPurpose(param.getPurpose(), List.of("FIND-PW","TEST"));
 
         final String reqPhoneNumber = param.getPhoneNumber();
@@ -71,6 +73,11 @@ public class SmsCoolFrontService {
         User user = userService.findUserByPhoneNumber(param.getPhoneNumber());
         ResIssueJwtDto resIssueJwtDto = jwtService.issueJwtAuth(user.getUserId(),user.getRole());
         log.info("resIssueJwtDto:{}", Utils.toJson(resIssueJwtDto));
+
+        return Map.of(
+                "accessToken", resIssueJwtDto.getAccessToken(),
+                "refreshCookie", resIssueJwtDto.getCookie()
+        );
     }
 
 

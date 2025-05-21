@@ -4,6 +4,8 @@ import com.wipi.domain.email.EmailRepository;
 import com.wipi.domain.email.EmailVerification;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
+
+import java.util.List;
 import java.util.Optional;
 import java.util.stream.StreamSupport;
 
@@ -43,4 +45,8 @@ public class EmailRepositoryImpl implements EmailRepository {
                 .forEach(emailVerification -> emailRedisRepository.deleteById(emailVerification.getId()));
     }
 
+    @Override
+    public Optional<List<EmailVerification>> findByEmailAndPurpose(String toEmail, String purpose) {
+        return emailRedisRepository.findByEmailAndPurpose(toEmail, purpose);
+    }
 }

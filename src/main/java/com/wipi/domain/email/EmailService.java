@@ -2,12 +2,16 @@ package com.wipi.domain.email;
 
 import com.wipi.inferfaces.model.dto.req.ReqSaveEmailVerificationDto;
 import com.wipi.inferfaces.model.dto.req.ReqVerifyEmailVerificationCode;
+import com.wipi.infra.sms.SmsCoolRedisRepository;
 import com.wipi.support.util.Utils;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import java.time.LocalDateTime;
+import java.util.Comparator;
+import java.util.List;
+import java.util.Optional;
 
 @Service
 @Slf4j
@@ -15,6 +19,7 @@ import java.time.LocalDateTime;
 public class EmailService {
 
     private final EmailRepository emailRepository;
+    private final SmsCoolRedisRepository smsCoolRedisRepository;
 
     @Transactional
     public EmailVerification verifyEmailVerificationCode(ReqVerifyEmailVerificationCode DTO) {
@@ -54,24 +59,27 @@ public class EmailService {
     }
 
     @Transactional
-    public void canReissueVerificationCode(String toEmail) {
-        EmailVerification resEmailVerification = emailRepository.findByEmail(toEmail)
-                .orElse(null);
+    public void canReissueVerificationCode(String toEmail, String purpose) {
+        Optional<List<EmailVerification>> resEmailVerification = emailRepository.findByEmailAndPurpose(toEmail, purpose);
 
-        log.info("resEmailVerification : {}", Utils.toJson(resEmailVerification));
+        if(resEmailVerification.isPresent()){
+            List<EmailVerification> resEmailVerificationList = resEmailVerification.get();
 
-        if (resEmailVerification != null) {
-            final LocalDateTime createdAt = resEmailVerification.getCreateAt();
+            log.info("resEmailVerification : {}", Utils.toJson(resEmailVerificationList));
+            EmailVerification latest = resEmailVerificationList.stream()
+                    .max(Comparator.comparing(EmailVerification::getCreateAt))
+                    .orElse(null);
 
-            if (createdAt.plusMinutes(2).isAfter(LocalDateTime.now())) {
-                log.info("2분 이내에는 재발급이 불가능합니다.");
-                throw new RuntimeException("2분 이내에는 재발급이 불가능합니다.");
+            if(latest != null && latest.getCreateAt().plusMinutes(2).isAfter(LocalDateTime.now())){
+                log.warn("2분 이내에는 재발급이 불가능합니다.");
+                throw new RuntimeException("2분 이내에 재발급이 불가능합니다.");
             }
 
             emailRepository.deleteAllByEmail(toEmail);
             log.info("Email 정상적으로 삭제 : {}",Utils.toJson(emailRepository.findByEmail(toEmail)
                     .orElse(null)));
         }
+
     }
 
 
