@@ -37,7 +37,6 @@ jobs:
       name: 'Production'
       url: ${{ steps.deploy-to-webapp.outputs.webapp-url }}
     permissions:
-  
       id-token: write
       contents: read
 
@@ -46,20 +45,19 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           name: java-app
-      
           path: build/libs
 
       - name: Login to Azure
         uses: azure/login@v2
         with:
-          client-id: ${{ secrets.AZUREAPPSERVICE_CLIENTID_65C78A62ED2B45A2B082BE53554D2B68 }}
-          tenant-id: ${{ secrets.AZUREAPPSERVICE_TENANTID_0156D80C76EB4219A676948785DE5767 }}
-          subscription-id: ${{ secrets.AZUREAPPSERVICE_SUBSCRIPTIONID_0D97944EE3A04951ACBB7E6F5C294F04 }}
+          client-id: ${{ secrets.__clientidsecretname__ }}
+          tenant-id: ${{ secrets.__tenantidsecretname__ }}
+          subscription-id: ${{ secrets.__subscriptionidsecretname__ }}
 
       - name: Deploy to Azure Web App
         id: deploy-to-webapp
         uses: azure/webapps-deploy@v3
         with:
-          app-name: 'wipi-cake'
+          app-name: 'wipi-backend'
           slot-name: 'Production'
           package: 'build/libs/*-SNAPSHOT.jar'
