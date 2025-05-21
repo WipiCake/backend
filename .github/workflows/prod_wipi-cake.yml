@@ -45,11 +45,8 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           name: java-app
-          path: build/libs
+          path: build/libs/*.jar
 
-      - name: Rename downloaded Jar to app.jar
-        run: |
-          mv build/libs/*-SNAPSHOT.jar app.jar
 
       - name: Login to Azure
         uses: azure/login@v2
@@ -64,5 +61,4 @@ jobs:
         with:
           app-name: 'wipi-cake'
           slot-name: 'Production'
-          package: 'app.jar'
-          startup-command: 'java -jar /home/site/wwwroot/app.jar --server.port=80'
+          package: 'build/libs/*-SNAPSHOT.jar'
