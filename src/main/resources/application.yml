@@ -14,13 +14,10 @@ spring:
     password: jaemin242424
     driver-class-name: com.mysql.cj.jdbc.Driver
     hikari:
-      connection-test-query: 'SELECT 1'
-      pool-name: jm-admin-pool
-      maximum-pool-size: 10
+      connection-test-query: 'select 1'
       connection-timeout: 10000
-      validation-timeout: 3000
-      idle-timeout: 300000
-      max-lifetime: 240000
+      maximum-pool-size: 5
+      pool-name: jm-admin-pool
 
 
   jackson:
