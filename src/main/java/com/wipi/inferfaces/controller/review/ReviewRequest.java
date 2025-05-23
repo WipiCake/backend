@@ -14,7 +14,6 @@ public class ReviewRequest {
 
     @Getter
     public static class Register {
-
         @NotNull(message = "상품 ID는 필수입니다.")
         @Positive(message = "상품 ID는 0보다 커야 합니다.")
         @Schema(description = "리뷰 대상 상품 ID", example = "101")
@@ -43,6 +42,38 @@ public class ReviewRequest {
 
         public static Register of (Long productId, String title, String content, Long starCount) {
             return new Register(productId, title, content, starCount);
+        }
+    }
+
+    @Getter
+    public static class Update{
+
+        @Schema(description = "리뷰 ID", example = "1")
+        private final Long reviewId;
+
+        @Schema(description = "리뷰 대상 상품 ID", example = "101")
+        private final Long productId;
+
+        @Schema(description = "리뷰 제목", example = "정말 좋아요!")
+        private final String title;
+
+        @Schema(description = "리뷰 내용", example = "배송도 빠르고 품질도 좋네요.")
+        private final String content;
+
+        @Schema(description = "별점 (1~5)", example = "5")
+        private final Long starCount;
+
+
+        private Update(Long reviewId, Long productId, String title, String content, Long starCount) {
+            this.reviewId = reviewId;
+            this.productId = productId;
+            this.title = title;
+            this.content = content;
+            this.starCount = starCount;
+        }
+
+        public static Update of (Long reviewId, Long productId, String title, String content, Long starCount) {
+            return new Update(reviewId, productId, title, content, starCount);
         }
     }
 

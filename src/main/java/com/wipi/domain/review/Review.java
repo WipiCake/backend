@@ -36,8 +36,21 @@ public class Review extends BaseTimeEntity {
         this.starCount = starCount;
     }
 
+    private Review(Long reviewId, Long productId, String userId, String title, String content, Long starCount) {
+        this.reviewId = reviewId;
+        this.productId = productId;
+        this.userId = userId;
+        this.title = title;
+        this.content = content;
+        this.starCount = starCount;
+    }
+
     public static Review of(Long productId, String userId, String title, String content, Long starCount) {
         return new Review(productId, userId, title, content, starCount);
+    }
+
+    public static Review of(Long reviewId, Long productId, String userId, String title, String content,Long starCount) {
+        return new Review(reviewId,productId,userId,title,content,starCount);
     }
 
 }

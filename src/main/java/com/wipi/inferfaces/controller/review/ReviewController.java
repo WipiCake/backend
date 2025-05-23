@@ -51,6 +51,17 @@ public class ReviewController {
         return APIResponse.success(list);
     }
 
+    @Operation(summary = "리뷰 수정", description = "form-data 형식으로 리뷰를 수정합니다.")
+    @PostMapping(value = "/update", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public APIResponse<Void> update(
+            @ModelAttribute @Valid ReviewRequest.Update request,
+            @Parameter(hidden = true) @LoginUsers User user,
+            @RequestPart("images") List<MultipartFile> images
+    ) {
+        reviewService.update(ReviewCommand.Update.of(request.getReviewId(),request.getProductId(),
+        user.getUserId(),request.getTitle(),request.getContent(),request.getStarCount(),images));
+        return APIResponse.success();
+    }
 
 
 }

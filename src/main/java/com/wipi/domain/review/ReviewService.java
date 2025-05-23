@@ -44,6 +44,47 @@ public class ReviewService {
         }
     }
 
+    @Transactional
+    public void update(ReviewCommand.Update command) {
+        reviewRepository.save(Review.of(
+                command.getReviewId(), command.getProductId(), command.getUserId(),
+                command.getTitle(), command.getContent(), command.getStarCount()
+        ));
+
+        List<ReviewImage> existingImages = reviewImageRepository.findAllByReviewId(command.getReviewId());
+        reviewImageRepository.deleteAllByReviewId(command.getReviewId());
+
+        List<Map<String, String>> savedImages = new ArrayList<>();
+        try {
+            for (MultipartFile file : command.getImages()) {
+                Map<String, String> image = commFileService.saveImagesForPath(file, basePath);
+                savedImages.add(image);
+                reviewImageRepository.save(ReviewImage.of(
+                        command.getReviewId(),
+                        image.get("originalFileName"),
+                        image.get("savedFileName"),
+                        image.get("webPath")
+                ));
+            }
+        } catch (Exception e) {
+            for (Map<String, String> image : savedImages) {
+                commFileService.deleteFile(basePath, image.get("savedFileName"));
+            }
+            throw new RuntimeException("리뷰 이미지 수정 중 오류 발생", e);
+        }
+
+        try {
+            for (ReviewImage image : existingImages) {
+                commFileService.deleteFile(basePath, image.getSavedFileName());
+            }
+        } catch (Exception ex) {
+            log.warn("기존 리뷰 이미지 파일 삭제 중 오류 발생", ex);
+        }
+
+        log.info("리뷰 수정 성공");
+    }
+
+
     public List<ReviewResult.GetAll> getAll(Long productId){
         List<Review> reviewList = reviewRepository.findAllByProductId(productId);
         List<ReviewResult.GetAll> resultList = new ArrayList<>();
