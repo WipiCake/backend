@@ -96,7 +96,7 @@ public class UserService {
         userRepository.save(user);
     }
 
-    private User findUser(String userId){
+    public User findUser(String userId){
         return userRepository.findByUserId(userId)
                 .orElseThrow(() -> new RuntimeException("유저를 찾을 수 없습니다"));
     }
