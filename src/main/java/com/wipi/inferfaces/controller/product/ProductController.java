@@ -9,6 +9,7 @@ import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.MediaType;
@@ -28,7 +29,7 @@ public class ProductController {
 
     @PostMapping(value = "/register", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public APIResponse<Void> register(
-            ProductRequest.Register request,
+            @Valid ProductRequest.Register request,
             @RequestPart("thumbNailImage") MultipartFile thumbnail,
             @RequestPart("detailImages") List<MultipartFile> detailImages
     ) {
@@ -41,18 +42,18 @@ public class ProductController {
     @Operation(
             summary = "메인페이지 전체 상품 조회",
             description = """
-전체 판매중인 상품 목록을 조회합니다.
-
-- 각 상품 객체에는 이미지 파일명이 포함되어 있으며, 이를 다음과 같이 조합해 이미지 URL을 구성할 수 있습니다:
-
-  `https://wipi-backend-dpe6cxe4b4dya4g9.koreacentral-01.azurewebsites.net/{thumbnail}`
-
-- 예시:
-  `https://wipi-backend-dpe6cxe4b4dya4g9.koreacentral-01.azurewebsites.net/img/product/123a1bbd-caa7-45d7-b826-47c93dd37812_Cake.jfif`
-
-이 URL은 `<img src="...">`로 사용 가능하며, 메인페이지 이미지 노출에 활용됩니다.
-"""
-    )
+            전체 판매중인 상품 목록을 조회합니다.
+            
+            - 각 상품 객체에는 이미지 파일명이 포함되어 있으며, 이를 다음과 같이 조합해 이미지 URL을 구성할 수 있습니다:
+            
+              `https://wipi-backend-dpe6cxe4b4dya4g9.koreacentral-01.azurewebsites.net/{thumbnail}`
+            
+            - 예시:
+              `https://wipi-backend-dpe6cxe4b4dya4g9.koreacentral-01.azurewebsites.net/img/product/123a1bbd-caa7-45d7-b826-47c93dd37812_Cake.jfif`
+            
+            이 URL은 `<img src="...">`로 사용 가능하며, 메인페이지 이미지 노출에 활용됩니다.
+            """
+                )
     @GetMapping("/getSelling")
     public APIResponse<List<ProductResponse.GetSelling>> getSelling() {
         List<ProductResponse.GetSelling> list = productService.getAllSellingList()

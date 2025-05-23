@@ -44,5 +44,25 @@ public class ReviewService {
         }
     }
 
+    public List<ReviewResult.GetAll> getAll(Long productId){
+        List<Review> reviewList = reviewRepository.findAllByProductId(productId);
+        List<ReviewResult.GetAll> resultList = new ArrayList<>();
+
+        for(Review review : reviewList){
+            List<ReviewImage> imageList = reviewImageRepository.findAllByReviewId(review.getReviewId());
+            List<String> resourceList = new ArrayList<>();
+
+            for(ReviewImage image : imageList){
+                String imageResource = commFileService.loadImage(image.getSavedFileName(), basePath);
+                resourceList.add(imageResource);
+            }
+            ReviewResult.GetAll result = ReviewResult.GetAll.of(review.getReviewId(),review.getUserId(),review.getTitle(),
+            review.getContent(),review.getStarCount(),resourceList);
+            resultList.add(result);
+        }
+
+        return resultList;
+    }
+
 
 }
