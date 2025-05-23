@@ -39,24 +39,30 @@ public class SecurityConfig {
                 .httpBasic(AbstractHttpConfigurer::disable)
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/login", "/reissue", "/user/signup/**").permitAll()
-                        .requestMatchers("/admin/**").hasRole("ADMIN")
-                        .requestMatchers("/user/**").hasRole("USER")
-                        .requestMatchers("/delivery/**").hasRole("USER")
-                       // .requestMatchers("/user/updatePw").hasAnyRole("USER","ADMIN")
                         .requestMatchers(
+                                "/login",
+                                "/reissue",
+                                "/user/signup/**",
                                 "/swagger-ui.html",
                                 "/swagger-ui/**",
                                 "/v3/api-docs/**",
                                 "/swagger-resources/**",
                                 "/webjars/**",
-                                "/img/**"
-                        ).permitAll()
-                        .requestMatchers(
+                                "/img/**",
                                 "/email/**",
                                 "/sms/**",
-                                "/product/**"
+                                "/product/**",
+                                "/review/**"
                         ).permitAll()
+
+                        .requestMatchers("/admin/**").hasRole("ADMIN")
+
+                        .requestMatchers(
+                                "/user/**",
+                                "/delivery/**"
+                        ).hasRole("USER")
+
+                        // ✅ 그 외 모든 요청은 인증 필요
                         .anyRequest().authenticated()
                 )
                 .logout(logout -> logout.logoutSuccessUrl("/logout"));

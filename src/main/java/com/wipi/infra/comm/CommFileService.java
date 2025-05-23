@@ -55,5 +55,20 @@ public class CommFileService {
         }
     }
 
+    public void deleteFile(String basePath, String savedFileName) {
+        try {
+            String uploadDir = imagesPathProperties.getPath().replace("file:", "") + basePath;
+            File file = new File(uploadDir, savedFileName);
+
+            if (file.exists()) {
+                boolean deleted = file.delete();
+                if (!deleted) {
+                    throw new RuntimeException("파일 삭제 실패: " + savedFileName);
+                }
+            }
+        } catch (Exception e) {
+            throw new RuntimeException("파일 삭제 중 오류 발생: " + savedFileName, e);
+        }
+    }
 
 }
