@@ -189,6 +189,16 @@ public class ProductService {
         return result;
     }
 
+    public long calculatePrice(List<ProductCommand.CalculateProductsPrice> commandList) {
+        return commandList.stream()
+                .mapToLong(command -> {
+                    Product product = productRepository.findByProductId(command.getProductId())
+                            .orElseThrow(() -> new RuntimeException("존재하지 않는 상품입니다."));
+                    return product.getPrice() * command.getQuantity();
+                })
+                .sum();
+    }
+
 
     private Stock findValidStock(Long productId){
         Stock stock =  stockRepository.findByProductId(productId).orElseThrow(

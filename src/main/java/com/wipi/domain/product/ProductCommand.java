@@ -69,6 +69,21 @@ public class ProductCommand {
         }
     }
 
+    @Getter
+    public static class CalculateProductsPrice{
+        private final Long productId;
+        private final Long quantity;
+
+        public CalculateProductsPrice(Long productId, Long quantity) {
+            this.productId = productId;
+            this.quantity = quantity;
+        }
+
+        public static CalculateProductsPrice of(Long productId, Long quantity) {
+            return new CalculateProductsPrice(productId,quantity);
+        }
+    }
+
 
 
 }
