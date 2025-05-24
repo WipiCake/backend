@@ -52,5 +52,5 @@ jobs:
         with:
           app-name: 'wipi-cake-backend'
           slot-name: 'Production'
-          package: 'build/libs/*-SNAPSHOT.jar'
+          package: 'java-app/build/libs/*-SNAPSHOT.jar'
           publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_470D0DB7D756455CAE96377781125570 }}
