@@ -57,5 +57,5 @@ jobs:
         with:
           app-name: wipi-cake-backend
           slot-name: Production
-          package: '**/*.jar'       # 여기서 workspace 어디에 있든 JAR을 찾습니다.
+          package: '**/*-SNAPSHOT.jar'       # 여기서 workspace 어디에 있든 JAR을 찾습니다.
           publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_470D0DB7D756455CAE96377781125570 }}
