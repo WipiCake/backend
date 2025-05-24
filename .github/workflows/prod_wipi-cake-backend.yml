@@ -10,7 +10,7 @@ jobs:
   build:
     runs-on: ubuntu-latest
     permissions:
-      contents: read
+      contents: read 
 
     steps:
       - uses: actions/checkout@v4
@@ -44,12 +44,12 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           name: java-app
-          path: .            # 워크스페이스 루트에 압축 풀기
+          # path 생략 → 기본값인 $GITHUB_WORKSPACE 로 풀립니다.
 
-      - name: Debug show where the JAR landed
+      - name: list all JARs
         run: |
-          echo "=== workspace files ==="
-          find "${{ github.workspace }}/build/libs" -type f | sed 's/^/  /'
+          echo "JAR 파일 위치 확인"
+          find . -type f -name '*.jar' | sed 's/^/  /'
 
       - name: Deploy to Azure Web App
         id: deploy-to-webapp
@@ -57,6 +57,5 @@ jobs:
         with:
           app-name: wipi-cake-backend
           slot-name: Production
-          # 절대 경로로 glob 지정 (github.workspace 는 워크스페이스 루트)
-          package: '${{ github.workspace }}/build/libs/*.jar'
+          package: '**/*.jar'       # 여기서 workspace 어디에 있든 JAR을 찾습니다.
           publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_470D0DB7D756455CAE96377781125570 }}
