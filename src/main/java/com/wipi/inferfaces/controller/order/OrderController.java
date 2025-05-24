@@ -22,8 +22,8 @@ public class OrderController {
 
     @Operation(summary = "주문 생성", description = "장바구니 주문 생성")
     @PostMapping
-    public APIResponse<Void> createOrder(@Valid @RequestBody OrderRequest.Order request, @Parameter(hidden = true) @LoginUsers User user) {
-        orderFacade.createOrder(request.toCriteria(user.getUserId()));
-        return APIResponse.success();
+    public APIResponse<Long> createOrder(@Valid @RequestBody OrderRequest.Order request, @Parameter(hidden = true) @LoginUsers User user) {
+        Long orderId = orderFacade.createOrder(request.toCriteria(user.getUserId()));
+        return APIResponse.success(orderId);
     }
 }
