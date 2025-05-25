@@ -84,6 +84,21 @@ public class ProductCommand {
         }
     }
 
+    @Getter
+    public static class DeductStock{
+        private final Long productId;
+        private final Long quantity;
+
+        private DeductStock(Long productId, Long quantity) {
+            this.productId = productId;
+            this.quantity = quantity;
+        }
+
+        public static DeductStock of(Long productId, Long quantity) {
+            return new DeductStock(productId,quantity);
+        }
+    }
+
 
 
 }
