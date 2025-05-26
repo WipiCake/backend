@@ -50,7 +50,7 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
 
         log.info("login success : {}", Utils.toJson(resDto));
         response.setHeader(jwtProperties.getAccessHeaderName(),"Bearer " + resDto.getAccessToken());
-        response.addCookie(resDto.getCookie());
+        response.setHeader("Set-Cookie", resDto.getRefreshToken());
         response.setStatus(HttpStatus.OK.value());
     }
 

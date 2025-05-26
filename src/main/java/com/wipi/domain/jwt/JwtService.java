@@ -8,6 +8,7 @@ import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.ResponseCookie;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -88,7 +89,7 @@ public class JwtService {
 
 
         JwtAuthRedis jwtAuth = jwtRepository.saveOrUpdateJwtAuth(savedJwt);
-        Cookie cookie = jwtUtil.createRefreshCookie(refresh);
+        ResponseCookie cookie = jwtUtil.createRefreshCookie(refresh);
 
         log.info("save jwtAuth issue : {}", Utils.toJson(jwtAuth));
 
@@ -123,7 +124,7 @@ public class JwtService {
         }
 
         JwtAuthRedis jwtAuth = jwtRepository.saveOrUpdateJwtAuth(savedJwt);
-        Cookie cookie = jwtUtil.createRefreshCookie(refresh);
+        ResponseCookie cookie = jwtUtil.createRefreshCookie(refresh);
 
 
         return new ResIssueJwtDto(

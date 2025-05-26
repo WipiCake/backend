@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.springframework.http.ResponseCookie;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -13,5 +14,5 @@ import lombok.Setter;
 public class ResIssueJwtDto {
     private String accessToken;
     private String refreshToken;
-    private Cookie cookie;
+    private ResponseCookie cookie;
 }
