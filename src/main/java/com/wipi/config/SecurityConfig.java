@@ -62,7 +62,6 @@ public class SecurityConfig {
                                 "/delivery/**"
                         ).hasRole("USER")
 
-                        // ✅ 그 외 모든 요청은 인증 필요
                         .anyRequest().authenticated()
                 )
                 .logout(logout -> logout.logoutSuccessUrl("/logout"));
@@ -109,6 +108,7 @@ public class SecurityConfig {
         config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
         config.setAllowedHeaders(List.of("Authorization", "Content-Type","access","refresh","Set-Cookie"));
         config.setAllowCredentials(true);
+        config.setExposedHeaders(List.of("Authorization", "Set-Cookie", "X-Refresh-Token"));
 
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", config);
