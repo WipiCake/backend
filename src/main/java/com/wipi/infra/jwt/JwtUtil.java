@@ -96,6 +96,7 @@ public class JwtUtil {
                 .sameSite("None")
                 .secure(false)
                 .httpOnly(false)
+                .domain("localhost")
                 .path("/")
                 .maxAge((int) (jwtProperties.getRefreshExpirationDays() * 24 * 60 * 60))
                 .build();
