@@ -109,6 +109,11 @@ public class JwtService {
                 }
             }
         }
+
+        if(request.getHeader("refresh-token") != null && refreshToken == null) {
+            refreshToken = request.getHeader("refresh-token");
+        }
+
         log.info("refrsh Token : {}", refreshToken);
 
         if (refreshToken == null) {

@@ -108,7 +108,7 @@ public class SecurityConfig {
         config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
         config.setAllowedHeaders(List.of("Authorization", "Content-Type","access","refresh","Set-Cookie"));
         config.setAllowCredentials(true);
-        config.setExposedHeaders(List.of("Authorization", "Set-Cookie", "X-Refresh-Token"));
+        config.setExposedHeaders(List.of("Set-Cookie", "X-Refresh-Token","Authorization","Authorization", "Content-Type","refresh-token"));
 
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", config);

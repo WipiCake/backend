@@ -95,8 +95,7 @@ public class JwtUtil {
         return ResponseCookie.from("X-Refresh-Token", refreshToken)
                 .sameSite("None")
                 .secure(false)
-                .httpOnly(false)
-                .domain("localhost")
+                .httpOnly(true)
                 .path("/")
                 .maxAge((int) (jwtProperties.getRefreshExpirationDays() * 24 * 60 * 60))
                 .build();

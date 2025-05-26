@@ -52,14 +52,15 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
 
         log.info("login success : {}", Utils.toJson(resDto));
         response.setHeader(jwtProperties.getAccessHeaderName(),"Bearer " + resDto.getAccessToken());
-        response.setHeader(HttpHeaders.SET_COOKIE, ResponseCookie.from("X-Refresh-Token",
+        response.setHeader("refresh-token", resDto.getRefreshToken());
+/*        response.setHeader(HttpHeaders.SET_COOKIE, ResponseCookie.from("X-Refresh-Token",
                  resDto.getRefreshToken())
                 .sameSite("None")
                 .secure(false)
                 .httpOnly(false)
                 .path("/")
                 .maxAge((int) (jwtProperties.getRefreshExpirationDays() * 24 * 60 * 60))
-                .build().toString());
+                .build().toString());*/
 
         response.setStatus(HttpStatus.OK.value());
     }
