@@ -15,6 +15,9 @@ public class ProductResponse {
     @Getter
     @Schema(description = "판매 중 상품정보 응답 DTO")
     public static class GetSelling {
+        @Schema(description = "상품 식별 ID", example = "1")
+        private final Long id;
+
         @Schema(description = "상품명", example = "초코 케이크")
         private final String name;
 
@@ -43,7 +46,7 @@ public class ProductResponse {
         private final List<String> detailImages;
 
         private GetSelling(
-                String name,
+                Long id, String name,
                 long price,
                 String description,
                 String type,
@@ -52,6 +55,7 @@ public class ProductResponse {
                 String thumbnail,
                 List<String> detailImages
         ) {
+            this.id = id;
             this.name = name;
             this.price = price;
             this.description = description;
@@ -63,6 +67,7 @@ public class ProductResponse {
         }
 
         public static GetSelling of(
+                Long productId,
                 String name,
                 long price,
                 String description,
@@ -72,11 +77,12 @@ public class ProductResponse {
                 String thumbnail,
                 List<String> detailImages
         ) {
-            return new GetSelling(name, price, description, type, sellStatus, quantity, thumbnail, detailImages);
+            return new GetSelling(productId, name, price, description, type, sellStatus, quantity, thumbnail, detailImages);
         }
 
         public static GetSelling fromGetSellingInfo(ProductInfo.ListSelling listSelling) {
             return new GetSelling(
+                    listSelling.getProductId(),
                     listSelling.getName(),
                     listSelling.getPrice(),
                     listSelling.getDescription(),

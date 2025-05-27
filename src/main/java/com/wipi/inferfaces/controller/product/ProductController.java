@@ -46,10 +46,10 @@ public class ProductController {
             
             - 각 상품 객체에는 이미지 파일명이 포함되어 있으며, 이를 다음과 같이 조합해 이미지 URL을 구성할 수 있습니다:
             
-              `https://wipi-backend-dpe6cxe4b4dya4g9.koreacentral-01.azurewebsites.net/{thumbnail}`
+              `http://104.197.93.245:8080/{thumbnail}`
             
             - 예시:
-              `https://wipi-backend-dpe6cxe4b4dya4g9.koreacentral-01.azurewebsites.net/img/product/123a1bbd-caa7-45d7-b826-47c93dd37812_Cake.jfif`
+              `http://104.197.93.245:8080/img/product/123a1bbd-caa7-45d7-b826-47c93dd37812_Cake.jfif`
             
             이 URL은 `<img src="...">`로 사용 가능하며, 메인페이지 이미지 노출에 활용됩니다.
             """
