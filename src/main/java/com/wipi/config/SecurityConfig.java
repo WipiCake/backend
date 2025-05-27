@@ -106,7 +106,7 @@ public class SecurityConfig {
                 "http://localhost:3000/api/v1"
         ));
         config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
-        config.setAllowedHeaders(List.of("Authorization", "Content-Type","access","refresh","Set-Cookie"));
+        config.setAllowedHeaders(List.of("Authorization", "Content-Type","access","refresh-token","Set-Cookie"));
         config.setAllowCredentials(true);
         config.setExposedHeaders(List.of("Set-Cookie", "X-Refresh-Token","Authorization","Authorization", "Content-Type","refresh-token"));
 
