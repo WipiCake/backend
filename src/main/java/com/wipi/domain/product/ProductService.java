@@ -1,12 +1,11 @@
 package com.wipi.domain.product;
 
-import com.wipi.domain.pick.Pick;
 import com.wipi.infra.comm.CommFileService;
+import com.wipi.support.aop.DistributedLock;
 import com.wipi.support.util.Utils;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.logging.log4j.util.ProcessIdUtil;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import java.util.ArrayList;
@@ -23,6 +22,17 @@ public class ProductService {
     private final ProductImageRepository productImageRepository;
     private final CommFileService commFileService;
     public final static String basePath = "/product";
+
+    @DistributedLock(key = "'lock:stock:deduct:' + #command.productId", waitTime = 5, leaseTime = 3)
+    @Transactional
+    public void deductStock(ProductCommand.DeductStock command) {
+        Stock stock = stockRepository.findByProductId(command.getProductId()).
+        orElseThrow(()-> new RuntimeException("재고가 존재하지 않습니다."));
+
+        stock.deduct(command.getQuantity());
+        stockRepository.save(stock);
+    }
+
 
     @Transactional
     public Long register(ProductCommand.Register command){
@@ -187,6 +197,16 @@ public class ProductService {
         }
 
         return result;
+    }
+
+    public long calculatePrice(List<ProductCommand.CalculateProductsPrice> commandList) {
+        return commandList.stream()
+                .mapToLong(command -> {
+                    Product product = productRepository.findByProductId(command.getProductId())
+                            .orElseThrow(() -> new RuntimeException("존재하지 않는 상품입니다."));
+                    return product.getPrice() * command.getQuantity();
+                })
+                .sum();
     }
 
 

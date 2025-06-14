@@ -39,24 +39,29 @@ public class SecurityConfig {
                 .httpBasic(AbstractHttpConfigurer::disable)
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/login", "/reissue", "/user/signup/**").permitAll()
-                        .requestMatchers("/admin/**").hasRole("ADMIN")
-                        .requestMatchers("/user/**").hasRole("USER")
-                        .requestMatchers("/delivery/**").hasRole("USER")
-                       // .requestMatchers("/user/updatePw").hasAnyRole("USER","ADMIN")
                         .requestMatchers(
+                                "/login",
+                                "/reissue",
+                                "/user/signup/**",
                                 "/swagger-ui.html",
                                 "/swagger-ui/**",
                                 "/v3/api-docs/**",
                                 "/swagger-resources/**",
                                 "/webjars/**",
-                                "/img/**"
-                        ).permitAll()
-                        .requestMatchers(
+                                "/img/**",
                                 "/email/**",
                                 "/sms/**",
-                                "/product/**"
+                                "/product/**",
+                                "/review/**"
                         ).permitAll()
+
+                        .requestMatchers("/admin/**").hasRole("ADMIN")
+
+                        .requestMatchers(
+                                "/user/**",
+                                "/delivery/**"
+                        ).hasRole("USER")
+
                         .anyRequest().authenticated()
                 )
                 .logout(logout -> logout.logoutSuccessUrl("/logout"));
@@ -101,8 +106,9 @@ public class SecurityConfig {
                 "http://localhost:3000/api/v1"
         ));
         config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
-        config.setAllowedHeaders(List.of("Authorization", "Content-Type","access","refresh","Set-Cookie"));
+        config.setAllowedHeaders(List.of("Authorization", "Content-Type","access","refresh-token","Set-Cookie"));
         config.setAllowCredentials(true);
+        config.setExposedHeaders(List.of("Set-Cookie", "X-Refresh-Token","Authorization","Authorization", "Content-Type","refresh-token"));
 
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", config);

@@ -39,6 +39,7 @@ dependencies {
     runtimeOnly ("com.mysql:mysql-connector-j")
     compileOnly("org.projectlombok:lombok")
     annotationProcessor("org.projectlombok:lombok")
+    implementation 'org.redisson:redisson-spring-boot-starter:3.27.0'
 
     testImplementation("org.springframework.security:spring-security-test")
     testImplementation("org.springframework.boot:spring-boot-starter-test")

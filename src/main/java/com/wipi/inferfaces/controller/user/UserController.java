@@ -41,7 +41,7 @@ public class UserController {
         return RestResponseEntity.ok("회원가입에 성공하였습니다.", resDto);
     }
 
-    @Operation(summary = "비밀번호 찾기 검증 완료후 비밀번호 변경",description = "유저 권한이 필요한 사항, 비밀번호찾기 인증이 완료되면 이 API를 호출하면됩니다. ", tags = "유저 비밀번호 변경")
+    @Operation(summary = "비밀번호 찾기 검증 완료후 비밀번호 변경",description = "유저 권한이 필요한 사항, 비밀번호찾기 인증이 완료되면 이 API를 호출하면됩니다. ,Refresh,Access 토큰 같이 요청 필요")
     @PostMapping(value = "/updatePw")
     public APIResponse<Void> updatePw(@RequestBody @Valid UserUpdatePwParam param,
                                       @Parameter(hidden = true) @LoginUsers User user) {
@@ -59,13 +59,20 @@ public class UserController {
 //        return APIResponse.success();
 //    }
 
-    @Operation(summary= "개인정보 수정", description = "유저의 개인정보를 변경합니다.")
+    @Operation(summary= "개인정보 수정", description = "유저의 개인정보를 변경합니다., Refresh,Access 토큰 같이 요청 필요")
     @PostMapping(value = "/modify/personal")
     public APIResponse<Void> modifyPersonal(@RequestBody @Valid UserRequest.ModifyPersonal request,
                                             @Parameter(hidden = true) @LoginUsers User user){
 
         userService.modifyPersonal(request.toCommandModifyPersonal(user.getUserId()));
         return APIResponse.success();
+    }
+
+    @Operation(summary = "유저 상세 정보 조회", description = "Refresh,Access 토큰 같이 요청 필요")
+    @PostMapping(value = "/getDetail")
+    public APIResponse<User> getDetail(@Parameter(hidden = true) @LoginUsers User user){
+        User findUser = userService.findUser(user.getUserId());
+        return APIResponse.success(findUser);
     }
 
 

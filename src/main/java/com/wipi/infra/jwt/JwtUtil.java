@@ -8,6 +8,7 @@ import jakarta.annotation.PostConstruct;
 import jakarta.servlet.http.Cookie;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.ResponseCookie;
 import org.springframework.stereotype.Component;
 import javax.crypto.SecretKey;
 import javax.crypto.spec.SecretKeySpec;
@@ -90,15 +91,14 @@ public class JwtUtil {
 
     // ===================== 쿠키 =====================
 
-    public Cookie createRefreshCookie(String refreshToken) {
-        int maxAge = (int) (jwtProperties.getRefreshExpirationDays() * 24 * 60 * 60); // 일 → 초 변환
-
-        Cookie cookie = new Cookie(jwtProperties.getRefreshCookieName(), refreshToken);
-        cookie.setMaxAge(maxAge);
-        cookie.setHttpOnly(true);
-        cookie.setPath("/");
-
-        return cookie;
+    public ResponseCookie createRefreshCookie(String refreshToken) {
+        return ResponseCookie.from("X-Refresh-Token", refreshToken)
+                .sameSite("None")
+                .secure(false)
+                .httpOnly(true)
+                .path("/")
+                .maxAge((int) (jwtProperties.getRefreshExpirationDays() * 24 * 60 * 60))
+                .build();
     }
 
     public Cookie createLogoutCookie() {
